@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+ http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
+
+	<persistence-unit name="test">
+		<description>Bupro Test Persistence</description>
+		<class>cz.cvut.fel.bupro.model.BaseEntity</class>
+		<class>cz.cvut.fel.bupro.model.User</class>
+		<class>cz.cvut.fel.bupro.model.Comment</class>
+		<class>cz.cvut.fel.bupro.model.CommentableEntity</class>
+		<class>cz.cvut.fel.bupro.model.Authorship</class>
+		<class>cz.cvut.fel.bupro.model.Membership</class>
+		<class>cz.cvut.fel.bupro.model.Project</class>
+		<class>cz.cvut.fel.bupro.model.Tag</class>
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
+			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:spring" />
+			<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
+			<property name="hibernate.connection.username" value="sa" />
+			<property name="hibernate.connection.password" value="" />
+			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+		</properties>
+	</persistence-unit>
+
+</persistence>

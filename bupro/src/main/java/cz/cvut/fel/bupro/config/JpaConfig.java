@@ -3,11 +3,13 @@ package cz.cvut.fel.bupro.config;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.PersistenceContexts;
 import javax.sql.DataSource;
 
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -16,6 +18,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
+@EnableJpaRepositories
 @EnableTransactionManagement
 public class JpaConfig {
 	
