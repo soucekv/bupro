@@ -3,6 +3,7 @@ package cz.cvut.fel.bupro.model;
 import java.io.Serializable;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
@@ -10,9 +11,11 @@ import javax.persistence.OneToMany;
 public class User extends CommentableEntity implements Serializable {
 	private static final long serialVersionUID = -5431213892674807472L;
 
+	@Column(unique=true, nullable=false)
 	private String username;
 	private String firstName;
 	private String lastName;
+	@Column(unique=true, nullable=false)
 	private String email;
 
 	@OneToMany

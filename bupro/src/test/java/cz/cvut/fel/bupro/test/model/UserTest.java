@@ -3,6 +3,7 @@ package cz.cvut.fel.bupro.test.model;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -19,7 +20,7 @@ public class UserTest {
 	private UserRepository userRepository;
 
 	@Test
-	public void testPersistNewUser() {
+	public void shouldPersistUser() {
 		User user = new User();
 		user.setFirstName("Frantisek");
 		user.setLastName("Vomacka");
@@ -31,5 +32,44 @@ public class UserTest {
 		assert user.getId() != null;
 	}
 
+	@Test(expected=DataIntegrityViolationException.class)
+	public void shouldPreventNullUsername() {
+		User user = new User();
+		user.setFirstName("Frantisek");
+		user.setLastName("Vomacka");
+		user.setEmail("vomacka@exmple.com");
+	
+		userRepository.saveAndFlush(user);
+	}
+	
+	@Test(expected=DataIntegrityViolationException.class)
+	public void shouldPreventDuplicateUsername() {
+		User user1 = new User();
+		user1.setFirstName("Frantisek");
+		user1.setLastName("Vomacka");
+		user1.setUsername("vomacka");
+	
+		userRepository.saveAndFlush(user1);
+		
+		User user2 = new User();
+		user2.setFirstName("Karel");
+		user2.setLastName("Vomacka");
+		user2.setUsername("vomacka");
+		
+		assert user1.getUsername().equals(user2.getUsername());
+		
+		userRepository.saveAndFlush(user2);
+	}
+
+	
+	@Test(expected=DataIntegrityViolationException.class)
+	public void shouldPreventNullEmail() {
+		User user = new User();
+		user.setFirstName("Frantisek");
+		user.setLastName("Vomacka");
+		user.setUsername("vomacka");
+	
+		userRepository.saveAndFlush(user);
+	}	
 
 }
