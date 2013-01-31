@@ -34,5 +34,19 @@ public class TagTest {
 		
 		tagRepository.saveAndFlush(tag);
 	}
+	
+	@Test(expected=DataIntegrityViolationException.class)
+	public void shouldPreventDuplicateName() {
+		Tag tag1 = new Tag();
+		tag1.setName("Java");
+		tagRepository.saveAndFlush(tag1);
+	
+		Tag tag2 = new Tag();
+		tag2.setName("Java");
+		
+		assert tag1.getName().equals(tag2.getName());
+		
+		tagRepository.saveAndFlush(tag2);		
+	}
 
 }

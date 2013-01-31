@@ -11,7 +11,7 @@ import javax.persistence.ManyToMany;
 public class Tag extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = -3709930348866558631L;
 
-	@Column(nullable = false)
+	@Column(unique = true, nullable = false)
 	private String name;
 
 	@ManyToMany

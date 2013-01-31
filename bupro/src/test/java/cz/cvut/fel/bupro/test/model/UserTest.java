@@ -48,6 +48,7 @@ public class UserTest {
 		user1.setFirstName("Frantisek");
 		user1.setLastName("Vomacka");
 		user1.setUsername("vomacka");
+		user1.setEmail("vomacka@exmple.com");
 	
 		userRepository.saveAndFlush(user1);
 		
@@ -55,6 +56,7 @@ public class UserTest {
 		user2.setFirstName("Karel");
 		user2.setLastName("Vomacka");
 		user2.setUsername("vomacka");
+		user2.setEmail("karel@exmple.com");
 		
 		assert user1.getUsername().equals(user2.getUsername());
 		
@@ -70,6 +72,28 @@ public class UserTest {
 		user.setUsername("vomacka");
 	
 		userRepository.saveAndFlush(user);
-	}	
+	}
+	
+	@Test(expected=DataIntegrityViolationException.class)
+	public void shouldPreventDuplicateEmail() {
+		User user1 = new User();
+		user1.setFirstName("Frantisek");
+		user1.setLastName("Vomacka");
+		user1.setUsername("vomacka");
+		user1.setEmail("vomacka@exmple.com");
+		
+		userRepository.saveAndFlush(user1);
+		
+		User user2 = new User();
+		user2.setFirstName("Karel");
+		user2.setLastName("Vomacka");
+		user2.setUsername("karelvomacka");
+		user2.setEmail("vomacka@exmple.com");
+		
+		assert user1.getEmail().equals(user2.getEmail());
+		
+		userRepository.saveAndFlush(user2);
+	}
+	
 
 }
