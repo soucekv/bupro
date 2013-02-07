@@ -7,8 +7,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
+import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
+
+import cz.cvut.fel.bupro.TimeUtils;
 
 @Entity
+@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "project_id" }) })
 public class Membership extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 5731617459882117644L;
 
@@ -25,7 +32,7 @@ public class Membership extends BaseEntity implements Serializable {
 
 	@Enumerated
 	@Column(nullable = false)
-	private MembershipState membershipState;
+	private MembershipState membershipState = MembershipState.WAITING_APPROVAL;
 
 	public User getUser() {
 		return user;
@@ -65,6 +72,33 @@ public class Membership extends BaseEntity implements Serializable {
 
 	public void setMembershipState(MembershipState membershipState) {
 		this.membershipState = membershipState;
+	}
+
+	@PrePersist
+	public void onPrepesist() {
+		autosetTimestamps();
+		autoApprove();
+	}
+
+	private void autosetTimestamps() {
+		if (getCreated() == null) {
+			setCreated(TimeUtils.createCurrentTimestamp());
+		}
+		if (getChanged() == null) {
+			setChanged(getCreated());
+		}
+	}
+
+	private void autoApprove() {
+		Project project = getProject();
+		if (project != null && project.isAutoApprove()) {
+			setMembershipState(MembershipState.APPROVED);
+		}
+	}
+
+	@PreUpdate
+	public void autosetLastChangeTimestamp() {
+		setChanged(TimeUtils.createCurrentTimestamp());
 	}
 
 }
