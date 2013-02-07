@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.ManyToOne;
 
+import cz.cvut.fel.bupro.TimeUtils;
+
 @Embeddable
 public class Authorship implements Serializable {
 	private static final long serialVersionUID = -6239486295089657373L;
@@ -22,7 +24,7 @@ public class Authorship implements Serializable {
 	}
 
 	public Authorship(User author) {
-		this(author, new Timestamp(new Date().getTime()));
+		this(author, TimeUtils.createCurrentTimestamp());
 	}
 
 	public Authorship(User author, Timestamp creationTime) {
