@@ -1,12 +1,11 @@
 package cz.cvut.fel.bupro.test.model;
 
-import java.util.List;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
@@ -17,6 +16,7 @@ import cz.cvut.fel.bupro.model.User;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:testContext.xml" })
+@Transactional
 public class CommentTest {
 
 	@Autowired
@@ -24,47 +24,28 @@ public class CommentTest {
 	@Autowired
 	private ProjectRepository projectRepository;
 
-	public User getAuthor() {
-		User user = userRepository.findOne(1L);
-		if (user != null) {
-			return user;
-		}
-		user = new User();
-		user.setFirstName("Frantisek");
-		user.setLastName("Vomacka");
-		user.setEmail("vomacka@exmple.com");
-		user.setUsername("vomacka");
-
+	private User createUser(String firstName, String lastName, String email, String username) {
+		User user = new User();
+		user.setFirstName(firstName);
+		user.setLastName(lastName);
+		user.setEmail(email);
+		user.setUsername(username);
 		userRepository.save(user);
-
 		return user;
 	}
 
-	public Project getProject() {
-		List<Project> projects = projectRepository.findAll();
-		Project project = null;
-		if (projects.isEmpty()) {
-			project = new Project();
-			project.setAuthorship(new Authorship(getAuthor()));
-			project.setName("Comment Test Project");
-			projectRepository.save(project);
-		} else {
-			project = projects.get(0);
-		}
+	private Project createProject(String name, User author) {
+		Project project = new Project();
+		project.setName(name);
+		project.setAuthorship(new Authorship(author));
+		projectRepository.save(project);
 		return project;
 	}
 
 	@Test
 	public void testCommentOnUser() {
-		User user = new User();
-		user = new User();
-		user.setFirstName("Karel");
-		user.setLastName("Novak");
-		user.setEmail("novak@exmple.com");
-		user.setUsername("novak");
-		userRepository.save(user);
-
-		User author = getAuthor();
+		User user = createUser("Karel", "Novak", "novak@exmple.com", "novak");
+		User author = createUser("Frantisek", "Vomacka", "vomacka@exmple.com", "vomacka");
 
 		Comment comment = new Comment();
 		comment.setAuthorship(new Authorship(author));
@@ -78,7 +59,7 @@ public class CommentTest {
 
 	@Test
 	public void testCommentOnSelf() {
-		User author = getAuthor();
+		User author = createUser("Frantisek", "Vomacka", "vomacka@exmple.com", "vomacka");
 		User user = author;
 
 		Comment comment = new Comment();
@@ -92,10 +73,11 @@ public class CommentTest {
 
 	@Test
 	public void testCommentOnProject() {
-		Project project = getProject();
+		User author = createUser("Frantisek", "Vomacka", "vomacka@exmple.com", "vomacka");
+		Project project = createProject("Test Project", author);
 
 		Comment comment = new Comment();
-		comment.setAuthorship(new Authorship(getAuthor()));
+		comment.setAuthorship(new Authorship(author));
 		comment.setTitle("Test project comment");
 		comment.setText("Some text");
 

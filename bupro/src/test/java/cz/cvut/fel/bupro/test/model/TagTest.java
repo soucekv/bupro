@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.TagRepository;
 import cz.cvut.fel.bupro.model.Tag;
@@ -14,6 +15,7 @@ import cz.cvut.fel.bupro.model.Tag;
 @ContextConfiguration(locations={
 "classpath:testContext.xml"
 })
+@Transactional
 public class TagTest {
 	
 	@Autowired
