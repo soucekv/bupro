@@ -2,6 +2,7 @@ package cz.cvut.fel.bupro.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 
@@ -12,7 +13,9 @@ public class Comment extends BaseEntity implements Serializable {
 	@Embedded
 	private Authorship authorship;
 
+	@Column(nullable = false)
 	private String title;
+	@Column(nullable = false)
 	private String text;
 
 	public Authorship getAuthorship() {

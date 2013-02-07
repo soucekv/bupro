@@ -1,9 +1,5 @@
 package cz.cvut.fel.bupro.test.model;
 
-import java.sql.Timestamp;
-import java.util.Date;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,13 +47,9 @@ public class ProjectTest {
 		Project project = new Project();
 		project.setName("Test persist Project");
 		
-		Authorship authorship = new Authorship();
-		authorship.setCreationTime(new Timestamp(new Date().getTime()));
-		authorship.setCreator(getAuthor());
-
-		project.setAuthorship(authorship);
+		project.setAuthorship(new Authorship(getAuthor()));
 		
-		projectRepository.saveAndFlush(project);
+		projectRepository.save(project);
 
 		assert project.getId() != null;
 	}
@@ -68,42 +60,32 @@ public class ProjectTest {
 		project.setName("shouldPreventNullAuthor");
 
 		assert project.getAuthorship() == null;
-		projectRepository.saveAndFlush(project);
+		projectRepository.save(project);
 	}
 		
 	@Test(expected=DataIntegrityViolationException.class)	
 	public void shouldPreventNullName() {
 		Project project = new Project();
 		
-		Authorship authorship = new Authorship();
-		authorship.setCreationTime(new Timestamp(new Date().getTime()));
-		authorship.setCreator(getAuthor());
-		project.setAuthorship(authorship);
+		project.setAuthorship(new Authorship(getAuthor()));
 
 		assert project.getName() == null;
-		projectRepository.saveAndFlush(project);
+		projectRepository.save(project);
 	}
 	
 	@Test(expected=DataIntegrityViolationException.class)
 	public void shouldPreventDuplicateName() {
 		Project project1 = new Project();
 		project1.setName("Test Project");
-		
-		Authorship authorship = new Authorship();
-		authorship.setCreationTime(new Timestamp(new Date().getTime()));
-		authorship.setCreator(getAuthor());
-		
-		projectRepository.saveAndFlush(project1);
+		project1.setAuthorship(new Authorship(getAuthor()));
+		projectRepository.save(project1);
 
 		Project project2 = new Project();
 		project2.setName("Test Project");
-		authorship = new Authorship();
-		authorship.setCreationTime(new Timestamp(new Date().getTime()));
-		authorship.setCreator(getAuthor());
-		project2.setAuthorship(authorship);
+		project2.setAuthorship(new Authorship(getAuthor()));
 		
 		assert project1.getName().equals(project2.getName());
 		
-		projectRepository.saveAndFlush(project2);
+		projectRepository.save(project2);
 	}
 }
