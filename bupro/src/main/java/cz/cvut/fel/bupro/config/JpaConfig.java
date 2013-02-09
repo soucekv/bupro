@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
@@ -44,6 +45,11 @@ public class JpaConfig {
 		transactionManager.setJpaDialect(new HibernateJpaDialect());
 		return transactionManager;
 	}
+
+	@Bean
+	public HibernateExceptionTranslator hibernateExceptionTranslator() {
+		return new HibernateExceptionTranslator();
+	}
 	
 	@Bean
 	public DataSource dataSource() {
@@ -57,7 +63,7 @@ public class JpaConfig {
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);	
 		return dataSource;
-	}	
+	}
 	
 //	@Bean
 //	public DataSource datasource() {
