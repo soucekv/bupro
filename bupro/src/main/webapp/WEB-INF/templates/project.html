@@ -7,5 +7,21 @@
 <body>
 	Test thymeleaf
 	<p th:text="${projectList.size()}">Welcome to our grocery store!</p>
+	<table>
+		<thead>
+			<tr>
+				<th th:text="#{project.name}">Project Name</th>
+				<th th:text="#{project.leader}">Project Leader</th>
+				<th th:text="#{project.creation.time}">Created</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="project : ${projectList}">
+				<td th:text="${project.name}">Project name</td>
+				<td>Project Leader</td>
+				<td>Created</td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>
