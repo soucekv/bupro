@@ -13,7 +13,7 @@
 		<filter-class>net.sourceforge.stripes.controller.StripesFilter</filter-class>
 		<init-param>
 			<param-name>ActionResolver.Packages</param-name>
-			<param-value>action</param-value>
+			<param-value>cz.cvut.fel.bupro.controller</param-value>
 		</init-param>
 		<init-param>
 			<param-name>Interceptor.Classes</param-name>
