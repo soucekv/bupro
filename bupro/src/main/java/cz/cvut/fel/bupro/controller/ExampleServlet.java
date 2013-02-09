@@ -25,7 +25,7 @@ public class ExampleServlet extends HttpServlet {
 	                "<HEAD><TITLE>Hello WWW</TITLE></HEAD>\n" +
 	                "<BODY>\n" +
 	                "<H1>Hello WWW</H1>\n" +
-	                "</BODY></HTML>");		
+	                "</BODY></HTML>");
 		out.flush();
 		out.close();
 	}

@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence"
- xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
  http://java.sun.com/xml/ns/persistence/persistence_1_0.xsd" version="1.0">
- 
-   <persistence-unit name="bupro">
-     <description>Bupro Persistence</description>
-    	<provider>org.hibernate.ejb.HibernatePersistence</provider>
-     	<jar-file>bupro-${project.version}.jar</jar-file>
-     <properties>
-        <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/Icarus"/>
-            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.username" value="root"/>
-            <property name="hibernate.connection.password" value=""/>     
-     
-       <property name="javax.persistence.jdbc.url"
-                 value="objectdb://localhost/my.odb"/>
-       <property name="javax.persistence.jdbc.user" value="admin"/>
-       <property name="javax.persistence.jdbc.password" value="admin"/>
-       <property name="hibernate.dialect" 
-                  value="org.hibernate.dialect.PostgreSQLDialect"/>
-       <property name="hibernate.show_sql" value="true"/>
-       <property name="hibernate.format_sql" value="true"/>
-       <property name="hbm2ddl.auto" value="create-drop"/>
-     </properties>
-   </persistence-unit>
- 
+
+	<persistence-unit name="bupro">
+		<description>Bupro Persistence</description>
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<jar-file>bupro-${project.version}.jar</jar-file>
+		<properties>
+			<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/bupro" />
+			<property name="javax.persistence.jdbc.user" value="bupro" />
+			<property name="javax.persistence.jdbc.password" value="bupro_devel" />
+			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.format_sql" value="true" />
+			<property name="hbm2ddl.auto" value="create-drop" />
+		</properties>
+	</persistence-unit>
+
 </persistence>
