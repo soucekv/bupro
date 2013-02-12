@@ -6,7 +6,37 @@
 </head>
 <body>
 	<div th:include="header :: menu"></div>
-	<h1 th:text="#{project.list}">Project List</h1>
-	<span th:text="${project.name}"></span>
+	<h1 th:text="${project.name}"></h1>
+	<div>
+		<span th:text="#{authorship.author}">author:</span>
+		<span th:text="#{format.fullname(${project.authorship.author.firstName}, ${project.authorship.author.lastName})}">Karel Novak</span>
+	</div>
+	<div>
+		<span th:text="#{authorship.creation.time}">created:</span>
+		<span th:text="${creationTime}">01.02.2000</span>
+	</div>
+	<div>
+		<span th:text="#{project.description}">description:</span>
+		<span th:text="${project.description == null} ? #{project.nodescription} : ${project.description}" >Here is text describing project goals</span>
+	</div>
+	<div>
+		<span th:each="tag : ${project.tags}">
+			<a th:href="@{/tag/${tag.id}}" th:text="${tag.name}">Tag1</a>
+		</span>
+	</div>
+	<div>
+		<ul th:each="membership : ${project.memberships}" th:unless="${project.memberships.isEmpty()}">
+			<li th:text="#{format.fullname(${membership.user.firstName},${membership.user.lastName})">Milan Vomacka</li>
+		</ul>
+	</div>
+	<div>
+		<div th:each="comment : ${project.comments}">
+			<div>
+				<span th:text="#{format.fullname(${comment.authorship.author.firstName},${comment.authorship.author.lastName})}">Comment-Title</span>
+				<span th:text="${comment.title}">Comment-Title</span>
+			</div>
+			<div th:text="${comment.text}">Comment-Text</div>
+		</div>
+	</div>
 </body>
 </html>
