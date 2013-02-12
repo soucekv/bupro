@@ -2,11 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Project</title>
+	<title>Bupro</title>
 </head>
 <body>
-	<div th:include="header :: menu"></div>
-	<h1 th:text="#{project.list}">Project List</h1>
-	<span th:text="${project.name}"></span>
+	<div th:fragment="menu">
+		<a href="http://localhost:8080/" th:href="@{/project.html}" th:text="#{project.list}">Projects</a>
+		<a href="http://localhost:8080/" th:href="@{/user.html}" th:text="#{users.list}">Users</a>
+	</div>
 </body>
 </html>

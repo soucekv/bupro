@@ -22,5 +22,10 @@ public class ProjectService {
 		p2.setName("Test 2");		
 		return Arrays.asList(p1, p2);
 	}
+
+	public Object getProject(Long id) {
+		int index = id.intValue();
+		return getAllProjects().get(index);
+	}
 	
 }

@@ -1,0 +1,29 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Project (thymeleaf template)</title>
+</head>
+<body>
+	<div th:include="header :: menu"></div>
+	<h1 th:text="#{project.list}">Project List</h1>
+	<table>
+		<thead>
+			<tr>
+				<th></th>
+				<th th:text="#{project.name}">Project Name</th>
+				<th th:text="#{project.leader}">Project Leader</th>
+				<th th:text="#{project.creation.time}">Created</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="project : ${projectList}">
+				<td><a href="http://localhost:8080/" th:href="@{/project.html}" th:text="#{detail}">Detail</a></td>
+				<td th:text="${project.name}">Project name</td>
+				<td>Project Leader</td>
+				<td>Created</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
