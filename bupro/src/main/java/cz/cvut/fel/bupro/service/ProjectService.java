@@ -23,6 +23,7 @@ public class ProjectService {
 		u.setFirstName("Karel");
 		u.setLastName("Vomacka");
 		Project p1 = new Project();
+		p1.setId(0L);
 		p1.setName("Test 1");
 		p1.setAuthorship(new Authorship(u));
 		Comment comment = new Comment();
@@ -34,6 +35,7 @@ public class ProjectService {
 		u.setFirstName("Venca");
 		u.setLastName("Rohlik");
 		Project p2 = new Project();
+		p2.setId(1L);
 		p2.setName("Test 2");
 		p2.setAuthorship(new Authorship(u));
 		return Arrays.asList(p1, p2);
