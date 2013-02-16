@@ -7,15 +7,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 
-@Entity(name="bupro_user")
+@Entity(name = "bupro_user")
 public class User extends CommentableEntity implements Serializable {
 	private static final long serialVersionUID = -5431213892674807472L;
 
-	@Column(unique=true, nullable=false)
+	@Column(unique = true, nullable = false)
 	private String username;
 	private String firstName;
 	private String lastName;
-	@Column(unique=true, nullable=false)
+	@Column(unique = true, nullable = false)
 	private String email;
 
 	@OneToMany
