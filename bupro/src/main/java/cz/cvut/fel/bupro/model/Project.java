@@ -10,6 +10,7 @@ import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 @Entity
@@ -28,7 +29,10 @@ public class Project extends CommentableEntity implements Serializable {
 
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<Tag>();
-	
+
+	@ManyToOne
+	private Subject subject;
+
 	private boolean autoApprove;
 
 	public String getName() {
@@ -70,11 +74,19 @@ public class Project extends CommentableEntity implements Serializable {
 	public void setTags(Set<Tag> tags) {
 		this.tags = tags;
 	}
-	
+
+	public Subject getSubject() {
+		return subject;
+	}
+
+	public void setSubject(Subject subject) {
+		this.subject = subject;
+	}
+
 	public boolean isAutoApprove() {
 		return autoApprove;
 	}
-	
+
 	public void setAutoApprove(boolean autoApprove) {
 		this.autoApprove = autoApprove;
 	}
