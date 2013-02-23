@@ -12,17 +12,14 @@
 		<span th:text="#{format.fullname(${project.authorship.author.firstName}, ${project.authorship.author.lastName})}">Karel Novak</span>
 	</div>
 	<div>
-		<span th:text="#{authorship.creation.time}">created:</span>
-		<span th:text="${creationTime}">01.02.2000</span>
+		<span th:text="#{authorship.creation.time}">created:</span> <span th:text="${creationTime}">01.02.2000</span>
 	</div>
 	<div>
 		<span th:text="#{project.description}">description:</span>
-		<span th:text="${project.description == null} ? #{project.nodescription} : ${project.description}" >Here is text describing project goals</span>
+		<span th:text="${project.description == null} ? #{project.nodescription} : ${project.description}">Here is text describing project goals</span>
 	</div>
 	<div>
-		<span th:each="tag : ${project.tags}">
-			<a th:href="@{/tag/${tag.id}}" th:text="${tag.name}">Tag1</a>
-		</span>
+		<span th:each="tag : ${project.tags}"><a th:href="@{/tag/${tag.id}}" th:text="${tag.name}">Tag1</a></span>
 	</div>
 	<div>
 		<ul th:each="membership : ${project.memberships}" th:unless="${project.memberships.isEmpty()}">

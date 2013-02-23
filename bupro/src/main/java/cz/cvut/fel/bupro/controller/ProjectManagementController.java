@@ -19,24 +19,37 @@ public class ProjectManagementController {
 
 	@Autowired
 	private ProjectService projectService;
-	
+
 	@ModelAttribute("projectList")
 	public List<Project> getProjectList() {
 		return projectService.getAllProjects();
 	}
-	
-	@RequestMapping({"/","/project-list"})
+
+	@RequestMapping({ "/", "/project/list" })
 	public String showProjectList() {
 		return "project-list";
 	}
 
-	@RequestMapping({"/project/{id}"})
+	@RequestMapping({ "/project/view/{id}" })
 	public String showProjectDetail(Model model, Locale locale, @PathVariable Long id) {
 		Project project = projectService.getProject(id);
 		model.addAttribute("project", project);
 		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", locale);
 		model.addAttribute("creationTime", format.format(project.getAuthorship().getCreationTime()));
-		return "project";
+		return "project-view";
 	}
 
+	@RequestMapping({ "/project/edit/{id}" })
+	public String editProjectDetail(Model model, Locale locale, @PathVariable Long id) {
+		Project project = projectService.getProject(id);
+		model.addAttribute("project", project);
+		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", locale);
+		model.addAttribute("creationTime", format.format(project.getAuthorship().getCreationTime()));
+		return "project-edit";
+	}
+
+	@RequestMapping({ "/project/save" })
+	public String saveProject() {
+		return "project-list";
+	}
 }

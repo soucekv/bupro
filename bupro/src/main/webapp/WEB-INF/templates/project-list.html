@@ -18,7 +18,7 @@
 		</thead>
 		<tbody>
 			<tr th:each="project : ${projectList}">
-				<td><a href="http://localhost:8080/" th:href="@{'/project/' + ${project.id}}" th:text="#{detail}">Detail</a></td>
+				<td><a href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="#{detail}">Detail</a></td>
 				<td th:text="${project.name}">Project name</td>
 				<td>Project Leader</td>
 				<td>Created</td>
