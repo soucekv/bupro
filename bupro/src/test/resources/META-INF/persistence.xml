@@ -13,6 +13,9 @@
 		<class>cz.cvut.fel.bupro.model.Membership</class>
 		<class>cz.cvut.fel.bupro.model.Project</class>
 		<class>cz.cvut.fel.bupro.model.Tag</class>
+		<class>cz.cvut.fel.bupro.model.Subject</class>
+		<class>cz.cvut.fel.bupro.model.Enrolment</class>
+		<class>cz.cvut.fel.bupro.model.EnrolmentType</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
 			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:spring" />
