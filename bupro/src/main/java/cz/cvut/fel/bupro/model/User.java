@@ -1,6 +1,7 @@
 package cz.cvut.fel.bupro.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -19,7 +20,10 @@ public class User extends CommentableEntity implements Serializable {
 	private String email;
 
 	@OneToMany
-	private Set<Membership> memberships;
+	private Set<Membership> memberships = new HashSet<Membership>();
+
+	@OneToMany
+	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
 
 	public String getUsername() {
 		return username;
@@ -59,5 +63,13 @@ public class User extends CommentableEntity implements Serializable {
 
 	public void setMemberships(Set<Membership> memberships) {
 		this.memberships = memberships;
+	}
+
+	public Set<Enrolment> getEnrolments() {
+		return enrolments;
+	}
+
+	public void setEnrolments(Set<Enrolment> enrolments) {
+		this.enrolments = enrolments;
 	}
 }

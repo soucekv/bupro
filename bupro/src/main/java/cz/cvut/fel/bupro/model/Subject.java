@@ -15,6 +15,8 @@ public class Subject extends BaseEntity {
 	private String name;
 	@OneToMany
 	private Set<Project> projects = new HashSet<Project>();
+	@OneToMany
+	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
 
 	public String getName() {
 		return name;
@@ -30,6 +32,14 @@ public class Subject extends BaseEntity {
 
 	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
+	}
+
+	public Set<Enrolment> getEnrolments() {
+		return enrolments;
+	}
+
+	public void setEnrolments(Set<Enrolment> enrolments) {
+		this.enrolments = enrolments;
 	}
 
 }
