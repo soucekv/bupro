@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -19,7 +20,7 @@ import cz.cvut.fel.bupro.TimeUtils;
 public class Membership extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 5731617459882117644L;
 
-	@ManyToOne(optional = false)
+	@ManyToOne(optional = false, fetch = FetchType.EAGER)
 	private User user;
 
 	@ManyToOne(optional = false)
