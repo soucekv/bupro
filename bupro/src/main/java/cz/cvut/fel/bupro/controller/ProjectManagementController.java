@@ -3,10 +3,13 @@ package cz.cvut.fel.bupro.controller;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,8 +51,21 @@ public class ProjectManagementController {
 		return "project-edit";
 	}
 
+	@RequestMapping({ "/project/create" })
+	public String createProject(Model model, Locale locale) {
+		Project project = new Project();
+		model.addAttribute("project", project);
+		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", locale);
+		model.addAttribute("creationTime", format.format(project.getAuthorship().getCreationTime()));
+		return "project-edit";
+	}
+
 	@RequestMapping({ "/project/save" })
-	public String saveProject() {
-		return "project-list";
+	public String saveProject(@Validated Project project, BindingResult errors, Map<String, Object> model) {
+		project = projectService.save(project);
+		// User user = getCurrentUser();
+		// project.setAuthorship(new Authorship());
+		System.out.println("Project saved " + project);
+		return "redirect:/project/view/" + project.getId();
 	}
 }
