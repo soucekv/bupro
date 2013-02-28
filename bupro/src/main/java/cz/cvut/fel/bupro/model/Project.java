@@ -22,7 +22,7 @@ public class Project extends CommentableEntity implements Serializable {
 	private String description;
 
 	@Embedded
-	private Authorship authorship;
+	private Authorship authorship = new Authorship();
 
 	@OneToMany
 	private List<Membership> memberships = new LinkedList<Membership>();

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cz.cvut.fel.bupro.TimeUtils;
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.model.Project;
 
@@ -43,6 +44,9 @@ public class ProjectService {
 			p.setDescription(project.getDescription());
 			return p;
 		} else {
+			if (project.getAuthorship().getCreationTime() == null) {
+				project.getAuthorship().setCreationTime(TimeUtils.createCurrentTimestamp());
+			}
 			return projectRepository.save(project);
 		}
 	}
