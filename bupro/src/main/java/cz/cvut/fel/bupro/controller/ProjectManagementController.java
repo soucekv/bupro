@@ -28,7 +28,7 @@ public class ProjectManagementController {
 		return projectService.getAllProjects();
 	}
 
-	@RequestMapping({ "/", "/project/list" })
+	@RequestMapping({ "*", "/project/list" })
 	public String showProjectList() {
 		return "project-list";
 	}
