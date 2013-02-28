@@ -20,7 +20,7 @@ import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.service.ProjectService;
 
 @Controller
-public class ProjectManagementController {
+public class ProjectController {
 	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
