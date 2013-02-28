@@ -7,6 +7,7 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
+		<input type="hidden" th:field="*{id}" />
 		<table>
 			<tbody>
 				<tr>
@@ -19,6 +20,7 @@
 				</tr>
 			</tbody>
 		</table>
+		<input type="submit" value="Save" th:value="#{form.save}" />
 	</form>
 </body>
 </html>
