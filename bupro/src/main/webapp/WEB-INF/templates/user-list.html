@@ -1,0 +1,30 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>User List</title>
+</head>
+<body>
+	<div th:include="header :: menu"></div>
+	<h1 th:text="#{user.list}">User List</h1>
+	<table>
+		<thead>
+			<tr>
+				<th></th>
+				<th th:text="#{user.firstName}">First Name</th>
+				<th th:text="#{user.lastName}">Last Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="user : ${userList}">
+				<td>
+					<a href="http://localhost:8080/" th:href="@{'/user/view/' + ${user.id}}" th:text="#{detail}">Detail</a>
+					<a href="http://localhost:8080/" th:href="@{'/user/edit/' + ${user.id}}" th:text="#{edit}">Edit</a>
+				</td>
+				<td th:text="${user.firstName}">first name</td>
+				<td th:text="${user.lastName}">last name</td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>
