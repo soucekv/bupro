@@ -49,6 +49,6 @@ public class Authorship implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Authorship [creator=" + author + ", creationTime=" + creationTime + "]";
+		return getClass().getName() + " [creator=" + author + ", creationTime=" + creationTime + "]";
 	}
 }
