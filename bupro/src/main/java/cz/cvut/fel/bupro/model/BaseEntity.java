@@ -47,4 +47,9 @@ public abstract class BaseEntity implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getName() + " [id=" + id + ", hash=" + hashCode() + "]";
+	}
+
 }
