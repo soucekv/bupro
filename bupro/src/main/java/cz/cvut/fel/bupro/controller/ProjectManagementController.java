@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,6 +21,7 @@ import cz.cvut.fel.bupro.service.ProjectService;
 
 @Controller
 public class ProjectManagementController {
+	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
 	private ProjectService projectService;
@@ -53,10 +56,9 @@ public class ProjectManagementController {
 
 	@RequestMapping({ "/project/create" })
 	public String createProject(Model model, Locale locale) {
+		log.trace("ProjectManagementController.createProject()");
 		Project project = new Project();
 		model.addAttribute("project", project);
-		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", locale);
-		model.addAttribute("creationTime", format.format(project.getAuthorship().getCreationTime()));
 		return "project-edit";
 	}
 
@@ -65,7 +67,7 @@ public class ProjectManagementController {
 		project = projectService.save(project);
 		// User user = getCurrentUser();
 		// project.setAuthorship(new Authorship());
-		System.out.println("Project saved " + project);
+		log.info("Project saved " + project);
 		return "redirect:/project/view/" + project.getId();
 	}
 }
