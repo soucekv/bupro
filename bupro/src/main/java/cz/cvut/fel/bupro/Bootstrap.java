@@ -4,7 +4,6 @@ import java.io.File;
 
 import org.apache.catalina.core.StandardContext;
 import org.apache.catalina.startup.Tomcat;
-import org.apache.naming.resources.VirtualDirContext;
 import org.apache.tomcat.util.scan.StandardJarScanner;
 
 public class Bootstrap {
