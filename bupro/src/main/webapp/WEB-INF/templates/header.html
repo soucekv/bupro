@@ -6,6 +6,7 @@
 </head>
 <body>
 	<div th:fragment="menu">
+		<a href="http://localhost:8080/" th:href="@{/subject/list/}" th:text="#{subject.list}">Subjects</a>
 		<a href="http://localhost:8080/" th:href="@{/project/list/}" th:text="#{project.list}">Projects</a>
 		<a href="http://localhost:8080/" th:href="@{/user/list/}" th:text="#{user.list}">Users</a>
 	</div>
