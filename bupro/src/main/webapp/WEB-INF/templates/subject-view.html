@@ -7,6 +7,25 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<h1 th:text="${subject.name}">Subject name</h1>
-
+	<table>
+		<thead>
+			<tr>
+				<th th:text="#{project.name}">Project Name</th>
+				<th th:text="#{project.leader}">Project Leader</th>
+				<th th:text="#{project.creation.time}">Created</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="project : ${subject.projects}">
+				<td>
+					<a href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="${project.name}">Project name</a>
+				</td>
+				<td>
+					<a href="http://localhost:8080/" th:href="@{'/user/view/' + ${project.authorship.author.id}}" th:text="#{format.fullname(${project.authorship.author.firstName}, ${project.authorship.author.lastName})}">Project Leader</a>
+				</td>
+				<td th:text="${project.authorship.creationTime}">Created</td>
+			</tr>
+		</tbody>
+	</table>
 </body>
 </html>

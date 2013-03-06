@@ -2,21 +2,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title th:text="#{project(${project.name == null ? '' : project.name})}" >Project</title>
+	<title th:text="#{subject(${subject.name == null ? '' : subject.name})}" >Subject</title>
 </head>
 <body>
 	<div th:include="header :: menu"></div>
-	<form action="#" th:action="@{/project/save}" th:object="${project}" method="post">
+	<form action="#" th:action="@{/subject/save}" th:object="${subject}" method="post">
 		<input type="hidden" th:field="*{id}" />
 		<table>
 			<tbody>
 				<tr>
 					<td><label th:for="${'name'}">name:</label></td>
 					<td><input type="text" th:field="*{name}" /></td>
-				</tr>
-				<tr>
-					<td><label th:for="${'description'}">description:</label></td>
-					<td><textarea th:field="*{description}"></textarea></td>
 				</tr>
 			</tbody>
 		</table>

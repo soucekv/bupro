@@ -6,12 +6,17 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
+import cz.cvut.fel.bupro.dao.SubjectRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.Authorship;
 import cz.cvut.fel.bupro.model.Comment;
+import cz.cvut.fel.bupro.model.Enrolment;
+import cz.cvut.fel.bupro.model.EnrolmentType;
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.User;
 
 @Service
@@ -23,8 +28,11 @@ public class InitDevelService {
 	private UserRepository userRepository;
 	@Autowired
 	private ProjectRepository projectRepository;
+	@Autowired
+	private SubjectRepository subjectRepository;
 
 	@PostConstruct
+	@Transactional
 	public void initDevelData() {
 		log.info("Init Devel data");
 		User user1 = new User();
@@ -41,9 +49,19 @@ public class InitDevelService {
 		user2.setUsername("rohlik");
 		userRepository.save(user2);
 
+		Subject subject = new Subject();
+		subject.setName("X7 - Happy Subject");
+		Enrolment enrolment = new Enrolment();
+		enrolment.setEnrolmentType(EnrolmentType.TEACHER);
+		enrolment.setUser(user1);
+		enrolment.setSubject(subject);
+		subject.getEnrolments().add(enrolment);
+		subjectRepository.save(subject);
+
 		Project p1 = new Project();
 		p1.setName("Test 1");
 		p1.setAuthorship(new Authorship(user1));
+		p1.setSubject(subject);
 		Comment comment = new Comment();
 		comment.setAuthorship(new Authorship(user1));
 		comment.setTitle("Some extra notes");
@@ -52,9 +70,15 @@ public class InitDevelService {
 
 		projectRepository.save(p1);
 
+		subject.getProjects().add(p1);
+		p1.setSubject(subject);
+		subjectRepository.save(subject);
+		projectRepository.save(p1);
+
 		Project p2 = new Project();
 		p2.setName("Test 2");
 		p2.setAuthorship(new Authorship(user2));
+		p2.setSubject(subject);
 
 		projectRepository.save(p2);
 	}

@@ -3,6 +3,7 @@ package cz.cvut.fel.bupro.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
@@ -15,7 +16,7 @@ public class Subject extends BaseEntity {
 	private String name;
 	@OneToMany
 	private Set<Project> projects = new HashSet<Project>();
-	@OneToMany
+	@OneToMany(cascade = {CascadeType.ALL})
 	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
 
 	public String getName() {
