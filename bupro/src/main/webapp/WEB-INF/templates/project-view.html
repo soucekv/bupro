@@ -1,7 +1,6 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<head th:include="header :: head">
 	<title th:text="#{project(${project.name})}" >Project</title>
 </head>
 <body>
@@ -33,6 +32,10 @@
 				<span th:text="${comment.title}">Comment-Title</span>
 			</div>
 			<div th:text="${comment.text}">Comment-Text</div>
+		</div>
+		<div>
+			<form action="#" th:action="@{/comment/save}" th:object="${comment}" method="post">
+			</form>
 		</div>
 	</div>
 </body>
