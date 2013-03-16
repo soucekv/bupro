@@ -39,11 +39,13 @@ public class ProjectService {
 	@Transactional
 	public Project save(Project project) {
 		if (project.getId() != null) {
+			log.info("save project NEW");
 			Project p = projectRepository.findOne(project.getId());
 			p.setName(project.getName());
 			p.setDescription(project.getDescription());
 			return p;
 		} else {
+			log.info("save project " + project.getId());
 			if (project.getAuthorship().getCreationTime() == null) {
 				project.getAuthorship().setCreationTime(TimeUtils.createCurrentTimestamp());
 			}
