@@ -2,3 +2,7 @@
 body {
 	font-family: "Trebuchet MS", sans-serif;
 }
+
+.comment {
+	padding: 0.4em 0em;
+}
