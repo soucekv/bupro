@@ -1,6 +1,5 @@
 package cz.cvut.fel.bupro.controller;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -40,8 +39,6 @@ public class ProjectController {
 	public String showProjectDetail(Model model, Locale locale, @PathVariable Long id) {
 		Project project = projectService.getProject(id);
 		model.addAttribute("project", project);
-		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", locale);
-		model.addAttribute("creationTime", format.format(project.getAuthorship().getCreationTime()));
 		return "project-view";
 	}
 
@@ -49,8 +46,6 @@ public class ProjectController {
 	public String editProjectDetail(Model model, Locale locale, @PathVariable Long id) {
 		Project project = projectService.getProject(id);
 		model.addAttribute("project", project);
-		SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", locale);
-		model.addAttribute("creationTime", format.format(project.getAuthorship().getCreationTime()));
 		return "project-edit";
 	}
 
