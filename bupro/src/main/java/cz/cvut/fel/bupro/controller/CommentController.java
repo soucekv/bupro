@@ -16,10 +16,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cz.cvut.fel.bupro.model.Authorship;
 import cz.cvut.fel.bupro.model.Comment;
-import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.CommentableEntity;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.service.LoginService;
 import cz.cvut.fel.bupro.service.ProjectService;
+import cz.cvut.fel.bupro.service.UserService;
 
 @Controller
 public class CommentController {
@@ -29,6 +30,8 @@ public class CommentController {
 	private LoginService loginService;
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private UserService userService;
 
 	@SuppressWarnings("unchecked")
 	private String asJSON(Locale locale, Comment comment) {
@@ -41,13 +44,23 @@ public class CommentController {
 			}
 			Timestamp timestamp = comment.getAuthorship().getCreationTime();
 			if (timestamp != null) {
-				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy", locale);
+				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss", locale);
 				jsonObject.put("creationtime", format.format(timestamp));
 			}
 		}
 		jsonObject.put("title", comment.getTitle());
 		jsonObject.put("text", comment.getText());
 		return jsonObject.toJSONString();
+	}
+
+	private CommentableEntity find(String type, Long id) {
+		if ("project".equalsIgnoreCase(type)) {
+			return projectService.getProject(id);
+		}
+		if ("user".equalsIgnoreCase(type)) {
+			return userService.getUser(id);
+		}
+		throw new IllegalArgumentException("Unknown type " + type);
 	}
 
 	@RequestMapping("/comment")
@@ -58,10 +71,8 @@ public class CommentController {
 		comment.setAuthorship(new Authorship(loginService.getLoggedInUser()));
 		comment.setTitle(title);
 		comment.setText(text);
-		if ("project".equalsIgnoreCase(type)) {
-			Project project = projectService.getProject(id);
-			project.add(comment);
-		}
+		CommentableEntity commentable = find(type, id);
+		commentable.add(comment);
 		return asJSON(locale, comment);
 	}
 
