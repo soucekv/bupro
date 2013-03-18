@@ -44,7 +44,7 @@ public class CommentController {
 			}
 			Timestamp timestamp = comment.getAuthorship().getCreationTime();
 			if (timestamp != null) {
-				SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss", locale);
+				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", locale);
 				jsonObject.put("creationtime", format.format(timestamp));
 			}
 		}
