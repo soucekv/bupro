@@ -27,6 +27,8 @@ public class UserService {
 	@Transactional
 	public User getUser(Long id) {
 		log.info("get user " + id);
-		return userRepository.findOne(id);
+		User user = userRepository.findOne(id);
+		user.getComments().size(); // force fetch
+		return user;
 	}
 }
