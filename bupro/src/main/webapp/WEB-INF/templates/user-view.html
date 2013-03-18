@@ -6,5 +6,42 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<h1 th:text="#{format.fullname(${user.firstName}, ${user.lastName})}">User name</h1>
+	<div id="comments">
+		<div class="comment" th:each="comment : ${user.comments}">
+			<div>
+				<span th:text="#{format.fullname(${comment.authorship.author.firstName},${comment.authorship.author.lastName})}">Comment-Title</span>
+				<span th:text="${comment.title}">Comment-Title</span>
+				<span th:text="${#dates.format(comment.authorship.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
+			</div>
+			<div th:text="${comment.text}">Comment-Text</div>
+		</div>
+	</div>
+	<div>
+		<form action="#">
+			<table>
+				<tbody>
+					<tr>
+						<td><label for="comment-title" th:text="#{comment.title}" >title:</label></td>
+						<td><input id="comment-title" type="text" /></td>
+					</tr>
+					<tr>
+						<td><label for="comment-text" th:text="#{comment.text}">comment:</label></td>
+						<td><textarea id="comment-text"></textarea></td>
+					</tr>
+				</tbody>
+			</table>
+			<script type="text/javascript" th:inline="javascript">
+			/*<![CDATA[*/
+				function submitComment() {
+					var id = /*[[${user.id}]]*/ 0;
+					var title = $("#comment-title")[0].value;
+					var text = $("#comment-text")[0].value;
+					client.comment('user', id , title, text);
+				}
+			/*]]>*/
+			</script>
+			<input type="button" value="Comment" th:value="#{comment}" onclick="submitComment();" />
+		</form>
+	</div>
 </body>
 </html>
