@@ -11,7 +11,7 @@
 		<span th:text="#{format.fullname(${project.authorship.author.firstName}, ${project.authorship.author.lastName})}">Karel Novak</span>
 	</div>
 	<div>
-		<span th:text="#{authorship.creation.time}">created:</span> <span th:text="${creationTime}">01.02.2000</span>
+		<span th:text="#{authorship.creation.time}">created:</span> <span th:text="${#dates.format(project.authorship.creationTime,'yyyy-MM-dd')}">01.02.2000</span>
 	</div>
 	<div>
 		<span th:text="#{project.description}">description:</span>
@@ -30,6 +30,7 @@
 			<div>
 				<span th:text="#{format.fullname(${comment.authorship.author.firstName},${comment.authorship.author.lastName})}">Comment-Title</span>
 				<span th:text="${comment.title}">Comment-Title</span>
+				<span th:text="${#dates.format(comment.authorship.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 			</div>
 			<div th:text="${comment.text}">Comment-Text</div>
 		</div>
