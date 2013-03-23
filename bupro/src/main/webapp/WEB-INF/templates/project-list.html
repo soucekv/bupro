@@ -23,8 +23,8 @@
 					<a href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
 				</td>
 				<td th:text="${project.name}">Project name</td>
-				<td th:text="#{format.fullname(${project.authorship.author.firstName}, ${project.authorship.author.lastName})}">Project Leader</td>
-				<td th:text="${project.authorship.creationTime}">Created</td>
+				<td th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</td>
+				<td th:text="${project.creationTime}">Created</td>
 			</tr>
 		</tbody>
 	</table>

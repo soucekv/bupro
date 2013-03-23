@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import cz.cvut.fel.bupro.dao.MembershipRepository;
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
-import cz.cvut.fel.bupro.model.Authorship;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
@@ -44,7 +43,7 @@ public class MembershipTest {
 	private Project createProject(String name, User author) {
 		Project project = new Project();
 		project.setName(name);
-		project.setAuthorship(new Authorship(author));
+		project.setOwner(author);
 		projectRepository.save(project);
 		return project;
 	}

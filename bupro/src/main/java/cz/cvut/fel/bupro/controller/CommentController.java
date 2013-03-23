@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cz.cvut.fel.bupro.model.Authorship;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.CommentableEntity;
 import cz.cvut.fel.bupro.model.User;
@@ -36,13 +35,13 @@ public class CommentController {
 	@SuppressWarnings("unchecked")
 	private String asJSON(Locale locale, Comment comment) {
 		JSONObject jsonObject = new JSONObject();
-		if (comment.getAuthorship() != null) {
-			User user = comment.getAuthorship().getAuthor();
+		if (comment.getUser() != null) {
+			User user = comment.getUser();
 			if (user != null) {
 				String name = user.getFirstName() + " " + user.getLastName();
 				jsonObject.put("author", name);
 			}
-			Timestamp timestamp = comment.getAuthorship().getCreationTime();
+			Timestamp timestamp = comment.getCreationTime();
 			if (timestamp != null) {
 				SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", locale);
 				jsonObject.put("creationtime", format.format(timestamp));
@@ -68,7 +67,7 @@ public class CommentController {
 	public @ResponseBody String save(Locale locale, @RequestParam String type, @RequestParam Long id, @RequestParam String title, @RequestParam String text) {
 		log.info("comment on " + type + " by id:" + id + " title:'" + title + "' text:'" + text + "'");
 		Comment comment = new Comment();
-		comment.setAuthorship(new Authorship(loginService.getLoggedInUser()));
+		comment.setUser(loginService.getLoggedInUser());
 		comment.setTitle(title);
 		comment.setText(text);
 		CommentableEntity commentable = find(type, id);

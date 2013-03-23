@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
-import cz.cvut.fel.bupro.model.Authorship;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.User;
@@ -34,10 +33,10 @@ public class CommentTest {
 		return user;
 	}
 
-	private Project createProject(String name, User author) {
+	private Project createProject(String name, User owner) {
 		Project project = new Project();
 		project.setName(name);
-		project.setAuthorship(new Authorship(author));
+		project.setOwner(owner);
 		projectRepository.save(project);
 		return project;
 	}
@@ -48,7 +47,7 @@ public class CommentTest {
 		User author = createUser("Frantisek", "Vomacka", "vomacka@exmple.com", "vomacka");
 
 		Comment comment = new Comment();
-		comment.setAuthorship(new Authorship(author));
+		comment.setUser(author);
 
 		comment.setTitle("Test comment");
 		comment.setText("Some text");
@@ -63,7 +62,7 @@ public class CommentTest {
 		User user = author;
 
 		Comment comment = new Comment();
-		comment.setAuthorship(new Authorship(author));
+		comment.setUser(author);
 		comment.setTitle("Test comment");
 		comment.setText("Some text");
 
@@ -77,7 +76,7 @@ public class CommentTest {
 		Project project = createProject("Test Project", author);
 
 		Comment comment = new Comment();
-		comment.setAuthorship(new Authorship(author));
+		comment.setUser(author);
 		comment.setTitle("Test project comment");
 		comment.setText("Some text");
 

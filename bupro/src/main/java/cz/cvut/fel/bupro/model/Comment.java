@@ -1,29 +1,46 @@
 package cz.cvut.fel.bupro.model;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+
+import cz.cvut.fel.bupro.TimeUtils;
 
 @Entity
 public class Comment extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 4002491472087708215L;
 
-	@Embedded
-	private Authorship authorship;
+	@ManyToOne(optional = false)
+	private User user;
+	@Column(nullable = false)
+	private Timestamp creationTime;
 
 	@Column(nullable = false)
 	private String title;
 	@Column(nullable = false)
 	private String text;
-
-	public Authorship getAuthorship() {
-		return authorship;
+	
+	public Comment() {
+		creationTime = TimeUtils.createCurrentTimestamp();
 	}
 
-	public void setAuthorship(Authorship authorship) {
-		this.authorship = authorship;
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+	
+	public Timestamp getCreationTime() {
+		return creationTime;
+	}
+	
+	public void setCreationTime(Timestamp creationTime) {
+		this.creationTime = creationTime;
 	}
 
 	public String getTitle() {

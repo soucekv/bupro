@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.SubjectRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
-import cz.cvut.fel.bupro.model.Authorship;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.Enrolment;
 import cz.cvut.fel.bupro.model.EnrolmentType;
@@ -60,10 +59,10 @@ public class InitDevelService {
 
 		Project p1 = new Project();
 		p1.setName("Test 1");
-		p1.setAuthorship(new Authorship(user1));
+		p1.setOwner(user1);		
 		p1.setSubject(subject);
 		Comment comment = new Comment();
-		comment.setAuthorship(new Authorship(user1));
+		comment.setUser(user1);
 		comment.setTitle("Some extra notes");
 		comment.setText("Dont forget to get extra reward for this project");
 		p1.add(comment);
@@ -77,7 +76,7 @@ public class InitDevelService {
 
 		Project p2 = new Project();
 		p2.setName("Test 2");
-		p2.setAuthorship(new Authorship(user2));
+		p2.setOwner(user2);
 		p2.setSubject(subject);
 
 		projectRepository.save(p2);

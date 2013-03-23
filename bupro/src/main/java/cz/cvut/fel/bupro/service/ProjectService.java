@@ -46,8 +46,8 @@ public class ProjectService {
 			return p;
 		} else {
 			log.info("save project " + project.getId());
-			if (project.getAuthorship().getCreationTime() == null) {
-				project.getAuthorship().setCreationTime(TimeUtils.createCurrentTimestamp());
+			if (project.getCreationTime() == null) {
+				project.setCreationTime(TimeUtils.createCurrentTimestamp());
 			}
 			return projectRepository.save(project);
 		}
