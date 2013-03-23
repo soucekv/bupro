@@ -14,6 +14,15 @@
 					<td><input type="text" th:field="*{name}" /></td>
 				</tr>
 				<tr>
+					<td><label th:for="${'subject'}">subject:</label></td>
+					<td>
+						<select th:field="*{subject}" >
+							<option th:each="subject : ${subjectList}" th:value="${subject.id}" th:text="${subject.name}">Subject 1</option>
+						</select>
+						<span class="error" th:errors="*{subject}"></span>
+					</td>
+				</tr>
+				<tr>
 					<td><label th:for="${'description'}">description:</label></td>
 					<td><textarea th:field="*{description}"></textarea></td>
 				</tr>
