@@ -784,8 +784,10 @@ body .ui-tooltip {
 /* Component containers
 ----------------------------------*/
 .ui-widget {
-	font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
-	font-size: 1.1em;
+	font-family: "Trebuchet MS", Tahoma, Verdana, Arial, sans-serif;
+	font-size: 0.9em;
+/*	font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;
+	font-size: 1.1em;*/
 }
 .ui-widget .ui-widget {
 	font-size: 1em;
