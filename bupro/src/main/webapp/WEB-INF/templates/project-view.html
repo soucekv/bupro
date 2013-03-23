@@ -25,6 +25,9 @@
 			<li th:text="#{format.fullname(${membership.user.firstName},${membership.user.lastName})">Milan Vomacka</li>
 		</ul>
 	</div>
+	<div>
+		<a href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+	</div>
 	<div id="comments">
 		<div class="comment" th:each="comment : ${project.comments}">
 			<div>
