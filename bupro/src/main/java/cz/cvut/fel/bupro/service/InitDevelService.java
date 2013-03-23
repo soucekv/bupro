@@ -59,7 +59,7 @@ public class InitDevelService {
 
 		Project p1 = new Project();
 		p1.setName("Test 1");
-		p1.setOwner(user1);		
+		p1.setOwner(user1);
 		p1.setSubject(subject);
 		Comment comment = new Comment();
 		comment.setUser(user1);
@@ -67,11 +67,6 @@ public class InitDevelService {
 		comment.setText("Dont forget to get extra reward for this project");
 		p1.add(comment);
 
-		projectRepository.save(p1);
-
-		subject.getProjects().add(p1);
-		p1.setSubject(subject);
-		subjectRepository.save(subject);
 		projectRepository.save(p1);
 
 		Project p2 = new Project();
