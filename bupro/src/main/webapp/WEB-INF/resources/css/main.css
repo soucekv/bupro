@@ -1,6 +1,8 @@
 @CHARSET "UTF-8";
+
 body {
 	font-family: "Trebuchet MS", sans-serif;
+	font-size: 1em;
 }
 
 .comment {
