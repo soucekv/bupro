@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
@@ -34,7 +35,7 @@ public class Project extends CommentableEntity implements Serializable {
 	@ManyToMany
 	private Set<Tag> tags = new HashSet<Tag>();
 
-	@ManyToOne
+	@ManyToOne(cascade = {CascadeType.MERGE})
 	private Subject subject;
 
 	private int capacity;

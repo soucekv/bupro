@@ -14,7 +14,7 @@ public class Subject extends BaseEntity {
 
 	@Column(nullable = false, unique = true)
 	private String name;
-	@OneToMany
+	@OneToMany(mappedBy = "subject")
 	private Set<Project> projects = new HashSet<Project>();
 	@OneToMany(cascade = {CascadeType.ALL})
 	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
