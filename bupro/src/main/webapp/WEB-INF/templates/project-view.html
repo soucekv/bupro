@@ -26,7 +26,7 @@
 		</ul>
 	</div>
 	<div>
-		<a href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+		<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
 	</div>
 	<div id="comments">
 		<div class="comment" th:each="comment : ${project.comments}">

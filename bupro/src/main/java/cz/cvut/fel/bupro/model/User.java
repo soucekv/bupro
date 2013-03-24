@@ -19,10 +19,10 @@ public class User extends CommentableEntity implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String email;
 
-	@OneToMany
+	@OneToMany(mappedBy = "user")
 	private Set<Membership> memberships = new HashSet<Membership>();
 
-	@OneToMany
+	@OneToMany(mappedBy = "user")
 	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
 
 	public String getUsername() {
@@ -72,4 +72,57 @@ public class User extends CommentableEntity implements Serializable {
 	public void setEnrolments(Set<Enrolment> enrolments) {
 		this.enrolments = enrolments;
 	}
+
+	private Set<Subject> getSubjects(EnrolmentType enrolmentType) {
+		Set<Subject> set = new HashSet<Subject>();
+		for (Enrolment enrolment : getEnrolments()) {
+			if (enrolment.getEnrolmentType() == enrolmentType) {
+				set.add(enrolment.getSubject());
+			}
+		}
+		return set;
+	}
+
+	public Set<Subject> getTeachedSubjects() {
+		return getSubjects(EnrolmentType.TEACHER);
+	}
+
+	public Set<Subject> getStudiedSubjects() {
+		return getSubjects(EnrolmentType.STUDENT);
+	}
+
+	public boolean isTeacher() {
+		return !getTeachedSubjects().isEmpty();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((getUsername() == null) ? 0 : getUsername().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof User)) {
+			return false;
+		}
+		User other = (User) obj;
+		if (getUsername() == null) {
+			if (other.getUsername() != null) {
+				return false;
+			}
+		} else if (!getUsername().equals(other.getUsername())) {
+			return false;
+		}
+		return true;
+	}
+
 }

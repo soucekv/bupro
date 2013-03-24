@@ -14,7 +14,7 @@ public class Tag extends BaseEntity implements Serializable {
 	@Column(unique = true, nullable = false)
 	private String name;
 
-	@ManyToMany
+	@ManyToMany(mappedBy = "tags")
 	private Set<Project> projects;
 
 	public String getName() {

@@ -6,7 +6,7 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<h1 th:text="#{project.list}">Project List</h1>
-	<a href="http://localhost:8080/" th:href="@{'/project/create/'}" th:text="#{create}">Create</a>
+	<a th:if="${user.teacher}" href="http://localhost:8080/" th:href="@{'/project/create/'}" th:text="#{create}">Create</a>
 	<table>
 		<thead>
 			<tr>
@@ -20,7 +20,7 @@
 			<tr th:each="project : ${projectList}">
 				<td>
 					<a href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="#{detail}">Detail</a>
-					<a href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+					<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
 				</td>
 				<td th:text="${project.name}">Project name</td>
 				<td th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</td>

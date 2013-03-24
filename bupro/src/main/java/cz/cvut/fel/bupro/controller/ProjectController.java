@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.service.LoginService;
 import cz.cvut.fel.bupro.service.ProjectService;
 import cz.cvut.fel.bupro.service.SubjectService;
@@ -31,6 +32,14 @@ public class ProjectController {
 	private SubjectService subjectService;
 	@Autowired
 	private LoginService loginService;
+
+	@ModelAttribute("user")
+	@Transactional
+	public User getLoggedInUser() {
+		User user = loginService.getLoggedInUser();
+		user.getEnrolments().size(); // force fetch
+		return user;
+	}
 
 	@ModelAttribute("projectList")
 	public List<Project> getProjectList() {
@@ -54,29 +63,38 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "/project/edit/{id}" })
+	@Transactional
 	public String editProjectDetail(Model model, Locale locale, @PathVariable Long id) {
 		Project project = projectService.getProject(id);
 		model.addAttribute("project", project);
+		model.addAttribute("subjectList", project.getOwner().getTeachedSubjects());
 		return "project-edit";
 	}
 
 	@RequestMapping({ "/project/create" })
+	@Transactional
 	public String createProject(Model model, Locale locale) {
 		log.trace("ProjectManagementController.createProject()");
+		User user = loginService.getLoggedInUser();
 		Project project = new Project();
 		model.addAttribute("project", project);
-		model.addAttribute("subjectList", subjectService.getAllSubjects());
+		model.addAttribute("subjectList", user.getTeachedSubjects());
 		return "project-edit";
 	}
 
 	@RequestMapping({ "/project/save" })
 	@Transactional
 	public String saveProject(@Validated Project project, BindingResult errors, Map<String, Object> model) {
+		User user = loginService.getLoggedInUser();
 		if (project.getOwner() == null) {
-			project.setOwner(loginService.getLoggedInUser());
+			project.setOwner(user);
 		}
-		project = projectService.save(project);
-		log.info("Project saved " + project);
+		if (project.getOwner().equals(user)) {
+			project = projectService.save(project);
+			log.info("Project saved " + project);
+		} else {
+			log.error("Can't save " + project + " user " + user + " is not owner");
+		}
 		return "redirect:/project/view/" + project.getId();
 	}
 }
