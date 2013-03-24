@@ -29,7 +29,7 @@ public class Project extends CommentableEntity implements Serializable {
 	@Column(nullable = false)
 	private Timestamp creationTime;
 
-	@OneToMany
+	@OneToMany(mappedBy = "project")
 	private List<Membership> memberships = new LinkedList<Membership>();
 
 	@ManyToMany
@@ -139,4 +139,8 @@ public class Project extends CommentableEntity implements Serializable {
 		this.endSemester = endSemester;
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getName() + " [id=" + getId() + ", name=" + name + ", owner=" + owner + "]";
+	}
 }
