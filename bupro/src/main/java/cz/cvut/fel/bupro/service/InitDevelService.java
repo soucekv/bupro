@@ -57,6 +57,10 @@ public class InitDevelService {
 		subject.getEnrolments().add(enrolment);
 		subjectRepository.save(subject);
 
+		Subject subject2 = new Subject();
+		subject2.setName("X13 - Sad Subject");
+		subjectRepository.save(subject2);
+
 		Project p1 = new Project();
 		p1.setName("Test 1");
 		p1.setOwner(user1);
