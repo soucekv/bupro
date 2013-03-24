@@ -26,30 +26,35 @@ public abstract class BaseEntity implements Serializable {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
-		if (this == obj)
+		if (this == obj) {
 			return true;
-		if (obj == null)
+		}
+		if (obj == null) {
 			return false;
-		if (getClass() != obj.getClass())
+		}
+		if (!(obj instanceof BaseEntity)) {
 			return false;
+		}
 		BaseEntity other = (BaseEntity) obj;
-		if (id == null) {
-			if (other.id != null)
+		if (getId() == null) {
+			if (other.getId() != null) {
 				return false;
-		} else if (!id.equals(other.id))
+			}
+		} else if (!getId().equals(other.getId())) {
 			return false;
+		}
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " [id=" + id + ", hash=" + hashCode() + "]";
+		return getClass().getName() + " [id=" + getId() + ", hash=" + hashCode() + "]";
 	}
 
 }
