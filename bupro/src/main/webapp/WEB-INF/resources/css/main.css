@@ -34,3 +34,11 @@ table.list {
 .project-name {
 	font-weight: bold;
 }
+
+input.field-error {
+	border: 1px solid red;
+}
+
+span.field-error {
+	color: red;
+}

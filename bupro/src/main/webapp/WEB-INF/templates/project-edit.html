@@ -13,7 +13,7 @@
 					<td><label th:for="${'name'}">name:</label></td>
 					<td>
 						<input type="text" th:field="*{name}" th:class="${#fields.hasErrors('name')}? 'field-error'" />
-						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Invalid name</span>
+						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error" >Invalid name</span>
 					</td>
 				</tr>
 				<tr>
