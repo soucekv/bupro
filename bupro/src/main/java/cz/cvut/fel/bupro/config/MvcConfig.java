@@ -26,7 +26,7 @@ public class MvcConfig {
 	public SpringTemplateEngine templateEngine() {
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
-		//templateEngine.setCacheManager(null); //FIXME devel prevent caching
+		templateEngine.setCacheManager(null); //FIXME devel prevent caching
 		return templateEngine;
 	}
 
