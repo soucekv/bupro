@@ -14,12 +14,15 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import cz.cvut.fel.bupro.TimeUtils;
 
 @Entity
 public class Project extends CommentableEntity implements Serializable {
 	private static final long serialVersionUID = -4565743549559354326L;
 
+	@NotEmpty
 	@Column(unique = true, nullable = false)
 	private String name;
 	private String description;
