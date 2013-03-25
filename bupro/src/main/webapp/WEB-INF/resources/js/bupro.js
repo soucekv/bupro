@@ -9,11 +9,11 @@ var client = {
 				$("#comments:last").append('\
 					<div class="comment">\
 						<div>\
-							<span>' + (c.author == null ? '' : c.author) + '</span>\
-							<span>' + (c.creationtime == null ? '' : c.creationtime) + '</span>\
-							<span>' + c.title + '</span>\
+							<span class="author" >' + (c.author == null ? '' : c.author) + '</span>\
+							<span class="title">' + c.title + '</span>\
+							<span class="time">' + (c.creationtime == null ? '' : c.creationtime) + '</span>\
 						</div>\
-						<div>' + c.text + '</div>\
+						<div class="text">' + c.text + '</div>\
 					</div>\
 				');
 			},

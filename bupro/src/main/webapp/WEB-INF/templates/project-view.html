@@ -28,42 +28,46 @@
 	<div>
 		<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
 	</div>
-	<div id="comments">
-		<div class="comment" th:each="comment : ${project.comments}">
-			<div>
-				<span th:text="#{format.fullname(${comment.user.firstName},${comment.user.lastName})}">Comment-Author</span>
-				<span th:text="${comment.title}">Comment-Title</span>
-				<span th:text="${#dates.format(comment.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
-			</div>
-			<div th:text="${comment.text}">Comment-Text</div>
-		</div>
-	</div>
 	<div>
-		<form action="#">
-			<table>
-				<tbody>
-					<tr>
-						<td><label for="comment-title" th:text="#{comment.title}" >title:</label></td>
-						<td><input id="comment-title" type="text" /></td>
-					</tr>
-					<tr>
-						<td><label for="comment-text" th:text="#{comment.text}">comment:</label></td>
-						<td><textarea id="comment-text"></textarea></td>
-					</tr>
-				</tbody>
-			</table>
-			<script type="text/javascript" th:inline="javascript">
-			/*<![CDATA[*/
-				function submitComment() {
-					var id = /*[[${project.id}]]*/ 0;
-					var title = $("#comment-title")[0].value;
-					var text = $("#comment-text")[0].value;
-					client.comment('project', id , title, text);
-				}
-			/*]]>*/
-			</script>
-			<input type="button" value="Comment" th:value="#{comment}" onclick="submitComment();" />
-		</form>
+		<h2 th:text="#{comments}" >Comments</h2>
+		<div id="comments">
+			<div class="comment" th:each="comment : ${project.comments}">
+				<div>
+					<span class="author" th:text="#{format.fullname(${comment.user.firstName},${comment.user.lastName})}">Comment-Author</span>
+					<span class="title" th:text="${comment.title}">Comment-Title</span>
+					<span class="time" th:text="${#dates.format(comment.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
+				</div>
+				<div class="text" th:text="${comment.text}">Comment-Text</div>
+			</div>
+		</div>
+		<div>
+			<h3 th:text="#{comment.new}" >New Comment</h3>
+			<form action="#">
+				<table>
+					<tbody>
+						<tr>
+							<td><label for="comment-title" th:text="#{comment.title}" >title:</label></td>
+							<td><input id="comment-title" type="text" /></td>
+						</tr>
+						<tr>
+							<td><label for="comment-text" th:text="#{comment.text}">comment:</label></td>
+							<td><textarea id="comment-text"></textarea></td>
+						</tr>
+					</tbody>
+				</table>
+				<script type="text/javascript" th:inline="javascript">
+				/*<![CDATA[*/
+					function submitComment() {
+						var id = /*[[${project.id}]]*/ 0;
+						var title = $("#comment-title")[0].value;
+						var text = $("#comment-text")[0].value;
+						client.comment('project', id , title, text);
+					}
+				/*]]>*/
+				</script>
+				<input type="button" value="Comment" th:value="#{comment}" onclick="submitComment();" />
+			</form>
+		</div>
 	</div>
 </body>
 </html>
