@@ -16,6 +16,7 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaDialect;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 @Configuration
 @EnableJpaRepositories
@@ -62,6 +63,14 @@ public class JpaConfig {
 		dataSource.setUsername(username);
 		dataSource.setPassword(password);
 		return dataSource;
+	}
+
+	/*
+	 * Enable validation - default JSR-303 Validator as a Spring bean
+	 */
+	@Bean
+	public LocalValidatorFactoryBean validator() {
+		return new LocalValidatorFactoryBean();
 	}
 
 }
