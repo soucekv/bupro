@@ -2,7 +2,8 @@ package cz.cvut.fel.bupro.controller;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,8 +84,12 @@ public class ProjectController {
 
 	@RequestMapping({ "/project/save" })
 	@Transactional
-	public String saveProject(@Validated Project project, BindingResult errors, Map<String, Object> model) {
+	public String saveProject(@Valid Project project, BindingResult bindingResult, Model model) {
 		User user = loginService.getLoggedInUser();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("subjectList", user.getTeachedSubjects());
+			return "project-edit";
+		}
 		if (project.getOwner() == null) {
 			project.setOwner(user);
 		}
