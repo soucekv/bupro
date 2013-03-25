@@ -5,6 +5,32 @@ body {
 	font-size: 1em;
 }
 
+table.list thead tr {
+	background: url("http://download.jqueryui.com/themeroller/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png") 50% 50% repeat-x #5C9CCC;
+}
+
+table.list td {
+	border: 1px solid #C5DBEC;
+}
+
+table.list th {
+	border: 1px solid #C5DBEC;
+	color: #FFFFFF;
+}
+
+table.list {
+	border-collapse: collapse;
+	margin: 10px 0px;
+}
+
 .comment {
 	padding: 0.4em 0em;
+}
+
+.comment .text {
+	font-size: 0.8em;
+}
+
+.project-name {
+	font-weight: bold;
 }
