@@ -10,6 +10,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinTable;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -35,7 +37,8 @@ public class Project extends CommentableEntity implements Serializable {
 	@OneToMany(mappedBy = "project")
 	private List<Membership> memberships = new LinkedList<Membership>();
 
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.ALL})
+	@JoinTable(name = "project_tag", joinColumns = @JoinColumn(name = "projects_id"), inverseJoinColumns = @JoinColumn(name = "tags_id"))
 	private Set<Tag> tags = new HashSet<Tag>();
 
 	@ManyToOne(cascade = {CascadeType.MERGE})
@@ -144,6 +147,6 @@ public class Project extends CommentableEntity implements Serializable {
 
 	@Override
 	public String toString() {
-		return getClass().getName() + " [id=" + getId() + ", name=" + name + ", owner=" + owner + "]";
+		return getClass().getName() + " [id=" + getId() + ", name=" + name + ", owner=" + owner + ", tags=" + getTags() + "]";
 	}
 }

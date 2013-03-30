@@ -12,15 +12,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.service.LoginService;
 import cz.cvut.fel.bupro.service.ProjectService;
 import cz.cvut.fel.bupro.service.SubjectService;
+import cz.cvut.fel.bupro.service.TagService;
 
 @Controller
 public class ProjectController {
@@ -31,7 +34,16 @@ public class ProjectController {
 	@Autowired
 	private SubjectService subjectService;
 	@Autowired
+	private TagService tagService;
+	@Autowired
 	private LoginService loginService;
+
+	private void log(List<ObjectError> errors) {
+		log.info("Validation errors");
+		for (ObjectError error : errors) {
+			log.info(error.toString());
+		}
+	}
 
 	@ModelAttribute("user")
 	@Transactional
@@ -41,13 +53,9 @@ public class ProjectController {
 		return user;
 	}
 
-	@ModelAttribute("projectList")
-	public List<Project> getProjectList() {
-		return projectService.getAllProjects();
-	}
-
 	@RequestMapping({ "*", "/project/list" })
-	public String showProjectList() {
+	public String showProjectList(Model model, Locale locale) {
+		model.addAttribute("projectList", projectService.getAllProjects());
 		return "project-list";
 	}
 
@@ -68,6 +76,7 @@ public class ProjectController {
 		Project project = projectService.getProject(id);
 		model.addAttribute("project", project);
 		model.addAttribute("subjectList", project.getOwner().getTeachedSubjects());
+		model.addAttribute("tags", tagService.getAllTags());
 		return "project-edit";
 	}
 
@@ -79,6 +88,7 @@ public class ProjectController {
 		Project project = new Project();
 		model.addAttribute("project", project);
 		model.addAttribute("subjectList", user.getTeachedSubjects());
+		model.addAttribute("tags", tagService.getAllTags());
 		return "project-edit";
 	}
 
@@ -87,6 +97,7 @@ public class ProjectController {
 	public String saveProject(@Valid Project project, BindingResult bindingResult, Model model) {
 		User user = loginService.getLoggedInUser();
 		if (bindingResult.hasErrors()) {
+			log(bindingResult.getAllErrors());
 			model.addAttribute("subjectList", user.getTeachedSubjects());
 			return "project-edit";
 		}
@@ -94,6 +105,10 @@ public class ProjectController {
 			project.setOwner(user);
 		}
 		if (project.getOwner().equals(user)) {
+			project.setTags(tagService.refresh(project.getTags()));
+			for (Tag tag : project.getTags()) {
+				tag.getProjects().add(project);
+			}
 			project = projectService.save(project);
 			log.info("Project saved " + project);
 		} else {

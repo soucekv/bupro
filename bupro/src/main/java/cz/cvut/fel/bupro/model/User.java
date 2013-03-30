@@ -124,5 +124,4 @@ public class User extends CommentableEntity implements Serializable {
 		}
 		return true;
 	}
-
 }

@@ -29,6 +29,13 @@
 					<td><label th:for="${'description'}">description:</label></td>
 					<td><textarea th:field="*{description}"></textarea></td>
 				</tr>
+				<tr>
+					<td><label th:for="${'tags'}">tags:</label></td>
+					<td>
+						<span th:include="autocompletion :: multi" th:with="availableTags=${#strings.listToString(tags)}"></span>
+						<input type="text" th:field="*{tags}" />
+					</td>
+				</tr>
 			</tbody>
 		</table>
 		<input type="submit" value="Save" th:value="#{save}" />

@@ -18,7 +18,7 @@
 		<span th:text="${project.description == null} ? #{project.nodescription} : ${project.description}">Here is text describing project goals</span>
 	</div>
 	<div>
-		<span th:each="tag : ${project.tags}"><a th:href="@{/tag/${tag.id}}" th:text="${tag.name}">Tag1</a></span>
+		<span th:each="tag : ${project.tags}"><a th:href="@{'/tag/' + ${tag.id}}" th:text="${tag.name}">Tag1</a></span>
 	</div>
 	<div>
 		<ul th:each="membership : ${project.memberships}" th:unless="${project.memberships.isEmpty()}">

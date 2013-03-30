@@ -1,5 +1,7 @@
 package cz.cvut.fel.bupro.service;
 
+import java.util.Arrays;
+
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.logging.Log;
@@ -10,12 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.SubjectRepository;
+import cz.cvut.fel.bupro.dao.TagRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.Enrolment;
 import cz.cvut.fel.bupro.model.EnrolmentType;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.Subject;
+import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 
 @Service
@@ -29,6 +33,8 @@ public class InitDevelService {
 	private ProjectRepository projectRepository;
 	@Autowired
 	private SubjectRepository subjectRepository;
+	@Autowired
+	private TagRepository tagRepository;
 
 	@PostConstruct
 	@Transactional
@@ -79,6 +85,11 @@ public class InitDevelService {
 		p2.setSubject(subject);
 
 		projectRepository.save(p2);
+		Tag t1 = new Tag("tag1");
+		tagRepository.save(Arrays.asList(new Tag("tag2"), new Tag("special"), new Tag("one two")));
+
+		p1.getTags().add(t1);
+		projectRepository.save(p1);
 	}
 
 }

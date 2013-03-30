@@ -38,19 +38,11 @@ public class ProjectService {
 
 	@Transactional
 	public Project save(Project project) {
-		if (project.getId() != null) {
-			log.info("save project NEW");
-			Project p = projectRepository.findOne(project.getId());
-			p.setName(project.getName());
-			p.setDescription(project.getDescription());
-			return p;
-		} else {
-			log.info("save project " + project.getId());
-			if (project.getCreationTime() == null) {
-				project.setCreationTime(TimeUtils.createCurrentTimestamp());
-			}
-			return projectRepository.save(project);
+		log.info("save project " + ((project.getId() == null) ? "new" : project.getId()));
+		if (project.getCreationTime() == null) {
+			project.setCreationTime(TimeUtils.createCurrentTimestamp());
 		}
+		return projectRepository.save(project);
 	}
 
 }

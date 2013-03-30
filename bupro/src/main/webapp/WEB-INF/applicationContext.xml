@@ -23,7 +23,7 @@
 	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"/>
 	<mvc:annotation-driven conversion-service="conversionService" />
 	<bean id="conversionService" class="org.springframework.core.convert.support.DefaultConversionService"/>
-	<bean class="org.springframework.data.repository.support.DomainClassConverter">
+	<bean class="cz.cvut.fel.bupro.support.ExtendedDomainClassConverter">
 		<constructor-arg ref="conversionService" />
 	</bean>
 	<context:annotation-config/>
