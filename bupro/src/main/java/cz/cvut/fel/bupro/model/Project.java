@@ -2,6 +2,7 @@ package cz.cvut.fel.bupro.model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.EnumSet;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,11 +11,13 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.Min;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -34,23 +37,24 @@ public class Project extends CommentableEntity implements Serializable {
 	@Column(nullable = false)
 	private Timestamp creationTime;
 
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	private List<Membership> memberships = new LinkedList<Membership>();
 
-	@ManyToMany(cascade = {CascadeType.ALL})
+	@ManyToMany(cascade = { CascadeType.ALL })
 	@JoinTable(name = "project_tag", joinColumns = @JoinColumn(name = "projects_id"), inverseJoinColumns = @JoinColumn(name = "tags_id"))
 	private Set<Tag> tags = new HashSet<Tag>();
 
-	@ManyToOne(cascade = {CascadeType.MERGE})
+	@ManyToOne(cascade = { CascadeType.MERGE })
 	private Subject subject;
 
-	private int capacity;
+	@Min(value = 1)
+	private int capacity = 1;
 
 	private boolean autoApprove;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Semester startSemester;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Semester endSemester;
 
 	public Project() {
@@ -143,6 +147,32 @@ public class Project extends CommentableEntity implements Serializable {
 
 	public void setEndSemester(Semester endSemester) {
 		this.endSemester = endSemester;
+	}
+
+	public List<Membership> getMemberships(MembershipState membershipState) {
+		return getMemberships(EnumSet.of(membershipState));
+	}
+
+	public List<Membership> getMemberships(Set<MembershipState> membershipStates) {
+		List<Membership> list = new LinkedList<Membership>();
+		for (Membership membership : getMemberships()) {
+			if (membershipStates.contains(membership.getMembershipState())) {
+				list.add(membership);
+			}
+		}
+		return list;
+	}
+
+	public int getApprovedCount() {
+		return getMemberships(MembershipState.APPROVED).size();
+	}
+
+	public int getWaitingApprovalCount() {
+		return getMemberships(MembershipState.WAITING_APPROVAL).size();
+	}
+
+	public boolean isCapacityFull() {
+		return getCapacity() == getApprovedCount();
 	}
 
 	@Override

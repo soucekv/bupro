@@ -42,3 +42,20 @@ input.field-error {
 span.field-error {
 	color: red;
 }
+
+/*Membership states*/
+ul.memberships {
+	list-style:none;
+}
+
+.waiting_approval {
+	color: gray;
+}
+
+.approved {
+	color: #00C000;
+}
+
+.declined {
+	color: #EB0000;
+}

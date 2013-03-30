@@ -11,13 +11,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
+import cz.cvut.fel.bupro.dao.SemesterRepository;
 import cz.cvut.fel.bupro.dao.SubjectRepository;
 import cz.cvut.fel.bupro.dao.TagRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.Enrolment;
 import cz.cvut.fel.bupro.model.EnrolmentType;
+import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.Semester;
 import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
@@ -35,11 +38,23 @@ public class InitDevelService {
 	private SubjectRepository subjectRepository;
 	@Autowired
 	private TagRepository tagRepository;
+	@Autowired
+	private SemesterRepository semesterRepository;
 
 	@PostConstruct
 	@Transactional
 	public void initDevelData() {
 		log.info("Init Devel data");
+		Semester s1 = new Semester();
+		s1.setCode("201314Z");
+		s1.setName("Winter Semester 2013/2014");
+		semesterRepository.save(s1);
+
+		Semester s2 = new Semester();
+		s2.setCode("201314L");
+		s2.setName("Summer Semester 2013/2014");
+		semesterRepository.save(s2);
+
 		User user1 = new User();
 		user1.setFirstName("Frantisek");
 		user1.setLastName("Vomacka");
@@ -53,6 +68,13 @@ public class InitDevelService {
 		user2.setEmail("rohlik@exmple.com");
 		user2.setUsername("rohlik");
 		userRepository.save(user2);
+
+		User user3 = new User();
+		user3.setFirstName("Milan");
+		user3.setLastName("Opicka");
+		user3.setEmail("opicka@exmple.com");
+		user3.setUsername("opicka");
+		userRepository.save(user3);
 
 		Subject subject = new Subject();
 		subject.setName("X7 - Happy Subject");
@@ -71,6 +93,8 @@ public class InitDevelService {
 		p1.setName("Test 1");
 		p1.setOwner(user1);
 		p1.setSubject(subject);
+		p1.setStartSemester(s1);
+		p1.setEndSemester(s2);
 		Comment comment = new Comment();
 		comment.setUser(user1);
 		comment.setTitle("Some extra notes");
@@ -83,6 +107,12 @@ public class InitDevelService {
 		p2.setName("Test 2");
 		p2.setOwner(user2);
 		p2.setSubject(subject);
+		p2.setStartSemester(s1);
+		p2.setEndSemester(s2);
+		Membership membership = new Membership();
+		membership.setUser(user3);
+		membership.setProject(p2);
+		p2.getMemberships().add(membership);
 
 		projectRepository.save(p2);
 		Tag t1 = new Tag("tag1");

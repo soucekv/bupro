@@ -7,6 +7,9 @@
 	<div th:include="header :: menu"></div>
 	<h1 th:text="${project.name}"></h1>
 	<div>
+		<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+	</div>
+	<div>
 		<span th:text="#{owner}">owner:</span>
 		<span th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Karel Novak</span>
 	</div>
@@ -14,19 +17,33 @@
 		<span th:text="#{creation.time}">created:</span> <span th:text="${#dates.format(project.creationTime,'yyyy-MM-dd')}">01.02.2000</span>
 	</div>
 	<div>
-		<span th:text="#{project.description}">description:</span>
+		<div>
+			<span th:text="#{project.start}">Start:</span><span th:text="${project.startSemester.name}">Winter Semester 20XX/20XY</span>
+		</div>
+		<div>
+			<span th:text="#{project.end}">End:</span><span th:text="${project.endSemester.name}">Summer Semester 20XX/20XY</span>
+		</div>
+	</div>
+	<div>
+		<span th:text="#{project.capacity(${project.approvedCount}, ${project.waitingApprovalCount}, ${project.capacity})}">Capacity: 0(1)/1</span>
+	</div>
+	<div>
+		<h3 th:text="#{project.description}">description:</h3>
 		<span th:text="${project.description == null} ? #{project.nodescription} : ${project.description}">Here is text describing project goals</span>
 	</div>
 	<div>
 		<span th:each="tag : ${project.tags}"><a th:href="@{'/tag/' + ${tag.id}}" th:text="${tag.name}">Tag1</a></span>
 	</div>
 	<div>
-		<ul th:each="membership : ${project.memberships}" th:unless="${project.memberships.isEmpty()}">
-			<li th:text="#{format.fullname(${membership.user.firstName},${membership.user.lastName})">Milan Vomacka</li>
+		<h2 th:text="#{project.members}" >Members</h2>
+		<ul class="memberships" th:if="${not #lists.isEmpty(project.memberships)}">
+			<li th:each="membership : ${project.memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
+				<span th:text="#{format.fullname(${membership.user.firstName}, ${membership.user.lastName})}">Milan Vomacka</span>
+			</li>
 		</ul>
-	</div>
-	<div>
-		<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+		<span th:if="${#lists.isEmpty(project.memberships)}"  th:text="#{project.members.none}">This project has no members yet.</span>
+		<span th:if="${project.capacityFull}" th:text="#{project.members.capacity.full}">Sorry, project capacity is full.</span>
+		<a th:unless="${project.capacityFull or project.owner.equals(user)}" href="#" th:href="@{'/project/join/' + ${project.id}}" th:text="#{join}">Join</a>
 	</div>
 	<div>
 		<h2 th:text="#{comments}" >Comments</h2>
