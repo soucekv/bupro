@@ -6,7 +6,9 @@ body {
 }
 
 table.list thead tr {
-	background: url("http://download.jqueryui.com/themeroller/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png") 50% 50% repeat-x #5C9CCC;
+	background:
+		url("http://download.jqueryui.com/themeroller/images/ui-bg_gloss-wave_55_5c9ccc_500x100.png")
+		50% 50% repeat-x #5C9CCC;
 }
 
 table.list td {
@@ -24,7 +26,27 @@ table.list {
 }
 
 .comment {
-	padding: 0.4em 0em;
+	margin: 0.4em 0em;
+	padding: 0.1em;
+	background: url("images/ui-bg_inset-hard_100_fcfdfd_1x100.png") repeat-x
+		scroll 50% bottom #FCFDFD;
+	border: 1px solid #A6C9E2;
+	border-radius: 5px;
+	color: #222222;
+}
+
+.comment .author {
+	font-size: 0.8em;
+	font-weight: bold;
+}
+
+.comment .time {
+	font-size: 0.7em;
+}
+
+.comment .title {
+	font-size: 0.9em;
+	display: block;
 }
 
 .comment .text {
@@ -45,7 +67,7 @@ span.field-error {
 
 /*Membership states*/
 ul.memberships {
-	list-style:none;
+	list-style: none;
 }
 
 .waiting_approval {
