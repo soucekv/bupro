@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint;
 import cz.cvut.fel.bupro.TimeUtils;
 
 @Entity
-@Table(uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "project_id" }) })
+@Table(uniqueConstraints = @UniqueConstraint(name="one_membership_per_project", columnNames = { "user_id", "project_id" }))
 public class Membership extends BaseEntity implements Serializable {
 	private static final long serialVersionUID = 5731617459882117644L;
 
