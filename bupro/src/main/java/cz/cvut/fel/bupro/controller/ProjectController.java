@@ -25,6 +25,7 @@ import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.service.LoginService;
 import cz.cvut.fel.bupro.service.ProjectService;
+import cz.cvut.fel.bupro.service.SemesterService;
 import cz.cvut.fel.bupro.service.SubjectService;
 import cz.cvut.fel.bupro.service.TagService;
 
@@ -34,6 +35,8 @@ public class ProjectController {
 
 	@Autowired
 	private ProjectService projectService;
+	@Autowired
+	private SemesterService semesterService;
 	@Autowired
 	private SubjectService subjectService;
 	@Autowired
@@ -60,6 +63,7 @@ public class ProjectController {
 		model.addAttribute("project", project);
 		model.addAttribute("subjectList", subjects);
 		model.addAttribute("tags", tagService.getAllTags());
+		model.addAttribute("semesterList", semesterService.getAllSemesters());
 		return "project-edit";
 	}
 

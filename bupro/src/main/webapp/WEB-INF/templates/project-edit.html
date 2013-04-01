@@ -26,6 +26,24 @@
 					</td>
 				</tr>
 				<tr>
+					<td><label th:for="${'startSemester'}">start:</label></td>
+					<td>
+						<select th:field="*{startSemester}" >
+							<option th:each="semester : ${semesterList}" th:value="${semester.id}" th:text="${semester.name}">Semester name</option>
+						</select>
+						<span class="error" th:errors="*{startSemester}"></span>
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="${'endSemester'}">end:</label></td>
+					<td>
+						<select th:field="*{endSemester}" >
+							<option th:each="semester : ${semesterList}" th:value="${semester.id}" th:text="${semester.name}">Semester name</option>
+						</select>
+						<span class="error" th:errors="*{endSemester}"></span>
+					</td>
+				</tr>
+				<tr>
 					<td><label th:for="${'description'}">description:</label></td>
 					<td><textarea th:field="*{description}"></textarea></td>
 				</tr>
