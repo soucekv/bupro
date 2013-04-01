@@ -36,6 +36,7 @@ public class UserController {
 	public String showUserDetail(Model model, Locale locale, @PathVariable Long id) {
 		log.trace("UserController.showUserDetail()");
 		User user = userService.getUser(id);
+		user.getComments().size(); //force fetch
 		model.addAttribute("user", user);
 		return "user-view";
 	}
