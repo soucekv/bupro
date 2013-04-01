@@ -100,6 +100,10 @@ public class InitDevelService {
 		comment.setTitle("Some extra notes");
 		comment.setText("Dont forget to get extra reward for this project");
 		p1.add(comment);
+		Membership membership = new Membership();
+		membership.setUser(user3);
+		membership.setProject(p1);
+		p1.getMemberships().add(membership);
 
 		projectRepository.save(p1);
 
@@ -109,7 +113,7 @@ public class InitDevelService {
 		p2.setSubject(subject);
 		p2.setStartSemester(s1);
 		p2.setEndSemester(s2);
-		Membership membership = new Membership();
+		membership = new Membership();
 		membership.setUser(user3);
 		membership.setProject(p2);
 		p2.getMemberships().add(membership);
