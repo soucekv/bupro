@@ -133,6 +133,7 @@ public class ProjectController {
 				tag.getProjects().add(project);
 			}
 			project = projectService.save(project);
+			tagService.removeUnusedTags();
 			log.info("Project saved " + project);
 		} else {
 			log.error("Can't save " + project + " user " + user + " is not owner");

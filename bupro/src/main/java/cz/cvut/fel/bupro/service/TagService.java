@@ -41,4 +41,9 @@ public class TagService {
 		return set;
 	}
 
+	@Transactional
+	public void removeUnusedTags() {
+		tagRepository.removeUnusedTags();
+	}
+
 }
