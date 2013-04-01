@@ -175,6 +175,15 @@ public class Project extends CommentableEntity implements Serializable {
 		return getCapacity() == getApprovedCount();
 	}
 
+	public boolean hasMember(User user) {
+		for (Membership membership : getMemberships()) {
+			if (membership.getUser().equals(user)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public String toString() {
 		return getClass().getName() + " [id=" + getId() + ", name=" + name + ", owner=" + owner + ", tags=" + getTags() + "]";
