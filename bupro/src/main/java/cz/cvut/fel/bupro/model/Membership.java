@@ -102,4 +102,42 @@ public class Membership extends BaseEntity implements Serializable {
 		setChanged(TimeUtils.createCurrentTimestamp());
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((getProject() == null) ? 0 : getProject().hashCode());
+		result = prime * result + ((getUser() == null) ? 0 : getUser().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof Membership)) {
+			return false;
+		}
+		Membership other = (Membership) obj;
+		if (getProject() == null) {
+			if (other.getProject() != null) {
+				return false;
+			}
+		} else if (!getProject().equals(other.getProject())) {
+			return false;
+		}
+		if (getUser() == null) {
+			if (other.getUser() != null) {
+				return false;
+			}
+		} else if (!getUser().equals(other.getUser())) {
+			return false;
+		}
+		return true;
+	}
+
 }

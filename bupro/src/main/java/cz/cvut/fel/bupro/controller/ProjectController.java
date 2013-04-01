@@ -1,5 +1,6 @@
 package cz.cvut.fel.bupro.controller;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 
@@ -17,7 +18,9 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.service.LoginService;
@@ -45,6 +48,21 @@ public class ProjectController {
 		}
 	}
 
+	private String viewPage(Model model, Project project) {
+		project.getMemberships().size(); // force fetch
+		project.getComments().size(); // force fetch
+		project.getTags().size(); // force fetch
+		model.addAttribute("project", project);
+		return "project-view";
+	}
+
+	private String editPage(Model model, Project project, Collection<Subject> subjects) {
+		model.addAttribute("project", project);
+		model.addAttribute("subjectList", subjects);
+		model.addAttribute("tags", tagService.getAllTags());
+		return "project-edit";
+	}
+
 	@ModelAttribute("user")
 	@Transactional
 	public User getLoggedInUser() {
@@ -63,21 +81,16 @@ public class ProjectController {
 	@Transactional
 	public String showProjectDetail(Model model, Locale locale, @PathVariable Long id) {
 		Project project = projectService.getProject(id);
-		project.getMemberships().size(); // force fetch
-		project.getComments().size(); // force fetch
-		project.getTags().size(); // force fetch
-		model.addAttribute("project", project);
-		return "project-view";
+		return viewPage(model, project);
 	}
 
 	@RequestMapping({ "/project/edit/{id}" })
 	@Transactional
 	public String editProjectDetail(Model model, Locale locale, @PathVariable Long id) {
+		log.trace("ProjectManagementController.editProjectDetail()");
 		Project project = projectService.getProject(id);
-		model.addAttribute("project", project);
-		model.addAttribute("subjectList", project.getOwner().getTeachedSubjects());
-		model.addAttribute("tags", tagService.getAllTags());
-		return "project-edit";
+		Collection<Subject> subjects = project.getOwner().getTeachedSubjects();
+		return editPage(model, project, subjects);
 	}
 
 	@RequestMapping({ "/project/create" })
@@ -86,10 +99,8 @@ public class ProjectController {
 		log.trace("ProjectManagementController.createProject()");
 		User user = loginService.getLoggedInUser();
 		Project project = new Project();
-		model.addAttribute("project", project);
-		model.addAttribute("subjectList", user.getTeachedSubjects());
-		model.addAttribute("tags", tagService.getAllTags());
-		return "project-edit";
+		Collection<Subject> subjects = user.getTeachedSubjects();
+		return editPage(model, project, subjects);
 	}
 
 	@RequestMapping({ "/project/save" })
@@ -115,5 +126,22 @@ public class ProjectController {
 			log.error("Can't save " + project + " user " + user + " is not owner");
 		}
 		return "redirect:/project/view/" + project.getId();
+	}
+
+	@RequestMapping({ "/project/join/{id}" })
+	@Transactional
+	public String joinProject(Model model, Locale locale, @PathVariable Long id) {
+		User user = loginService.getLoggedInUser();
+		Project project = projectService.getProject(id);
+		if (project.getOwner().equals(user)) {
+			log.warn("Owner can't join project " + project);
+			return showProjectDetail(model, locale, id);
+		}
+		Membership membership = new Membership();
+		membership.setUser(user);
+		membership.setProject(project);
+		project.getMemberships().add(membership);
+		user.getMemberships().add(membership);
+		return viewPage(model, project);
 	}
 }
