@@ -9,9 +9,9 @@
 	<div id="comments">
 		<div class="comment" th:each="comment : ${user.comments}">
 			<div>
-				<span class="author" th:text="#{format.fullname(${comment.authorship.author.firstName},${comment.authorship.author.lastName})}">Comment-Title</span>
+				<span class="author" th:text="#{format.fullname(${comment.user.firstName},${comment.user.lastName})}">Comment-Author</span>
+				<span class="time" th:text="${#dates.format(comment.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 				<span class="title" th:text="${comment.title}">Comment-Title</span>
-				<span class="time" th:text="${#dates.format(comment.authorship.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 			</div>
 			<div class="text" th:text="${comment.text}">Comment-Text</div>
 		</div>
