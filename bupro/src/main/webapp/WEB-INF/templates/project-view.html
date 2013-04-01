@@ -40,6 +40,7 @@
 		<ul class="memberships" th:if="${not #lists.isEmpty(project.memberships)}">
 			<li th:each="membership : ${project.memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
 				<span th:text="#{format.fullname(${membership.user.firstName}, ${membership.user.lastName})}">Milan Vomacka</span>
+				<span th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 				<span th:if="${project.owner.equals(user)}" >
 					<a href="#" th:href="@{/project/membership/approve(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.accept}" >accept</a>
 					<a href="#" th:href="@{/project/membership/decline(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.decline}" >decline</a>

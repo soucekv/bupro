@@ -44,6 +44,26 @@
 					</td>
 				</tr>
 				<tr>
+					<td><label th:for="${'capacity'}">capacity:</label></td>
+					<td>
+						<script type="text/javascript">
+						/*<![CDATA[*/
+							$(function() { $( "#capacity" ).spinner({
+									spin: function( event, ui ) {
+										if ( ui.value < 1 ) {
+											$( this ).spinner( "value", 1 );
+											return false;
+										}
+									}
+								});
+							});
+						/*]]>*/
+						</script>
+						<input type="text" th:field="*{capacity}" th:class="${#fields.hasErrors('capacity')}? 'field-error'" />
+						<span th:if="${#fields.hasErrors('capacity')}" th:errors="*{capacity}" class="field-error" >Invalid value</span>
+					</td>
+				</tr>
+				<tr>
 					<td><label th:for="${'description'}">description:</label></td>
 					<td><textarea th:field="*{description}"></textarea></td>
 				</tr>
