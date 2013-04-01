@@ -1,5 +1,6 @@
 package cz.cvut.fel.bupro.config;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,13 @@ public class MvcConfig {
 	public MessageSource messageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("locale/messages");
+		return messageSource;
+	}
+
+	@Bean @Qualifier("email")
+	public MessageSource emailMessageSource() {
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("locale/emails");
 		return messageSource;
 	}
 

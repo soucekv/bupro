@@ -25,6 +25,7 @@ import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.bupro.service.EmailService;
 import cz.cvut.fel.bupro.service.LoginService;
 import cz.cvut.fel.bupro.service.MembershipService;
 import cz.cvut.fel.bupro.service.ProjectService;
@@ -48,6 +49,8 @@ public class ProjectController {
 	private MembershipService membershipService;
 	@Autowired
 	private LoginService loginService;
+	@Autowired
+	private EmailService emailService;
 
 	private void log(List<ObjectError> errors) {
 		log.info("Validation errors");
@@ -151,12 +154,14 @@ public class ProjectController {
 		membership.setProject(project);
 		project.getMemberships().add(membership);
 		user.getMemberships().add(membership);
+		emailService.sendMembershipRequest(locale, project, user);
 		return viewPage(model, project);
 	}
 
-	private String updateMembership(Model model, Long projectId, Long userId, MembershipState membershipState) {
+	private String updateMembership(Model model, Locale locale, Long projectId, Long userId, MembershipState membershipState) {
 		Membership membership = membershipService.getMembership(projectId, userId);
 		membership.setMembershipState(membershipState);
+		emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), membershipState);
 		return viewPage(model, membership.getProject());
 	}
 
@@ -164,14 +169,14 @@ public class ProjectController {
 	@Transactional
 	public String approveMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId) {
-		return updateMembership(model, projectId, userId, MembershipState.APPROVED);
+		return updateMembership(model, locale, projectId, userId, MembershipState.APPROVED);
 	}
 
 	@RequestMapping({ "/project/membership/decline" })
 	@Transactional
 	public String declineMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId) {
-		return updateMembership(model, projectId, userId, MembershipState.DECLINED);
+		return updateMembership(model, locale, projectId, userId, MembershipState.DECLINED);
 	}
 
 }
