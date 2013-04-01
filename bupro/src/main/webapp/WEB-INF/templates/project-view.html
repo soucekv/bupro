@@ -43,7 +43,7 @@
 		</ul>
 		<span th:if="${#lists.isEmpty(project.memberships)}"  th:text="#{project.members.none}">This project has no members yet.</span>
 		<span th:if="${project.capacityFull}" th:text="#{project.members.capacity.full}">Sorry, project capacity is full.</span>
-		<a th:unless="${project.capacityFull or project.owner.equals(user)}" href="#" th:href="@{'/project/join/' + ${project.id}}" th:text="#{join}">Join</a>
+		<a th:unless="${project.capacityFull or project.owner.equals(user) or project.hasMember(user)}" href="#" th:href="@{'/project/join/' + ${project.id}}" th:text="#{join}">Join</a>
 	</div>
 	<div>
 		<h2 th:text="#{comments}" >Comments</h2>
@@ -51,8 +51,8 @@
 			<div class="comment" th:each="comment : ${project.comments}">
 				<div>
 					<span class="author" th:text="#{format.fullname(${comment.user.firstName},${comment.user.lastName})}">Comment-Author</span>
-					<span class="title" th:text="${comment.title}">Comment-Title</span>
 					<span class="time" th:text="${#dates.format(comment.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
+					<span class="title" th:text="${comment.title}">Comment-Title</span>
 				</div>
 				<div class="text" th:text="${comment.text}">Comment-Text</div>
 			</div>

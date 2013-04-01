@@ -10,8 +10,8 @@ var client = {
 					<div class="comment">\
 						<div>\
 							<span class="author" >' + (c.author == null ? '' : c.author) + '</span>\
-							<span class="title">' + c.title + '</span>\
 							<span class="time">' + (c.creationtime == null ? '' : c.creationtime) + '</span>\
+							<span class="title">' + c.title + '</span>\
 						</div>\
 						<div class="text">' + c.text + '</div>\
 					</div>\
