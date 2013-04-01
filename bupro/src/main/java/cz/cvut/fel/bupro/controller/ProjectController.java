@@ -17,13 +17,16 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import cz.cvut.fel.bupro.model.Membership;
+import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.service.LoginService;
+import cz.cvut.fel.bupro.service.MembershipService;
 import cz.cvut.fel.bupro.service.ProjectService;
 import cz.cvut.fel.bupro.service.SemesterService;
 import cz.cvut.fel.bupro.service.SubjectService;
@@ -41,6 +44,8 @@ public class ProjectController {
 	private SubjectService subjectService;
 	@Autowired
 	private TagService tagService;
+	@Autowired
+	private MembershipService membershipService;
 	@Autowired
 	private LoginService loginService;
 
@@ -148,4 +153,25 @@ public class ProjectController {
 		user.getMemberships().add(membership);
 		return viewPage(model, project);
 	}
+
+	private String updateMembership(Model model, Long projectId, Long userId, MembershipState membershipState) {
+		Membership membership = membershipService.getMembership(projectId, userId);
+		membership.setMembershipState(membershipState);
+		return viewPage(model, membership.getProject());
+	}
+
+	@RequestMapping({ "/project/membership/approve" })
+	@Transactional
+	public String approveMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
+			@RequestParam(value = "userId", required = true) Long userId) {
+		return updateMembership(model, projectId, userId, MembershipState.APPROVED);
+	}
+
+	@RequestMapping({ "/project/membership/decline" })
+	@Transactional
+	public String declineMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
+			@RequestParam(value = "userId", required = true) Long userId) {
+		return updateMembership(model, projectId, userId, MembershipState.DECLINED);
+	}
+
 }
