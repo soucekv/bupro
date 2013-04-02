@@ -81,3 +81,24 @@ ul.memberships {
 .declined {
 	color: #EB0000;
 }
+
+/*Pagination*/
+.pagination-centered {
+	text-align: center;
+}
+
+.pagination ul {
+	list-style: none;
+}
+
+.pagination li {
+	display: inline;
+}
+
+li.disabled {
+	display: none;
+}
+
+.body-wrapper {
+	float: left;
+}

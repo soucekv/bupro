@@ -1,0 +1,38 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>Pagination</title>
+</head>
+<body>
+<!-- Pagination Bar -->
+<div th:fragment="paginationbar">
+	<div class="pagination pagination-centered" th:with="number=${page.number+1}">
+		<ul>
+			<li th:class="${page.firstPage}? 'disabled' : ''">
+			<span th:if="${page.firstPage}">&larr; First</span>
+			<a th:if="${not page.firstPage}" th:href="@{${url}(page.page=1,page.size=${page.size})}">&larr; First</a>
+			</li>
+			<li th:class="${page.hasPreviousPage()}? '' : 'disabled'">
+				<span th:if="${not page.hasPreviousPage()}">&laquo;</span>
+				<a th:if="${page.hasPreviousPage()}" th:href="@{${url}(page.page=${number-1},page.size=${page.size})}" title="Go to previous page">&laquo;</a>
+			</li>
+			<!--
+			<li th:each="item : ${page}" th:class="${item.current}? 'active' : ''">
+				<span th:if="${item.current}" th:text="${item.number}">1</span>
+				<a th:if="${not item.current}" th:href="@{${page.url}(page.page=${item.number},page.size=${page.size})}"><span th:text="${item.number}">1</span></a>
+			</li>
+			 -->
+			<li th:class="${page.hasNextPage()}? '' : 'disabled'">
+				<span th:if="${not page.hasNextPage()}">&raquo;</span>
+				<a th:if="${page.hasNextPage()}" th:href="@{${url}(page.page=${number+1},page.size=${page.size})}" title="Go to next page">&raquo;</a>
+			</li>
+			<li th:class="${page.lastPage}? 'disabled' : ''">
+				<span th:if="${page.lastPage}">Last &rarr;</span>
+				<a th:if="${not page.lastPage}" th:href="@{${url}(page.page=${page.totalPages},page.size=${page.size})}">Last &rarr;</a>
+			</li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>

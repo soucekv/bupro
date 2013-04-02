@@ -9,6 +9,8 @@ import javax.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefaults;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -84,8 +86,8 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "*", "/project/list" })
-	public String showProjectList(Model model, Locale locale) {
-		model.addAttribute("projectList", projectService.getAllProjects());
+	public String showProjectList(Model model, Locale locale, @PageableDefaults(10) Pageable pageable) {
+		model.addAttribute("projects", projectService.getProjects(pageable));
 		return "project-list";
 	}
 

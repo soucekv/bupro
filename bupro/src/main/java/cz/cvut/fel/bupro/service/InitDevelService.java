@@ -124,6 +124,16 @@ public class InitDevelService {
 
 		p1.getTags().add(t1);
 		projectRepository.save(p1);
+
+		for (int i = 0; i < 25; i++) {
+			Project project = new Project();
+			project.setName("Pagination " + i);
+			project.setOwner(user1);
+			project.setSubject(subject);
+			project.setStartSemester(s1);
+			project.setEndSemester(s2);
+			projectRepository.save(project);
+		}
 	}
 
 }

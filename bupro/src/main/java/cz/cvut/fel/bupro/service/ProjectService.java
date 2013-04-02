@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,11 @@ public class ProjectService {
 	public List<Project> getAllProjects() {
 		log.info("get all projects");
 		return projectRepository.findAll();
+	}
+
+	public Page<Project> getProjects(Pageable pageable) {
+		log.info("get project page " + pageable.getPageNumber() + " size " + pageable.getPageSize());
+		return projectRepository.findAll(pageable);
 	}
 
 	@Transactional

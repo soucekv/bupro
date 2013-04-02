@@ -4,29 +4,32 @@
 	<title th:text="#{project.list}" >Project List</title>
 </head>
 <body>
-	<div th:include="header :: menu"></div>
-	<h1 th:text="#{project.list}">Project List</h1>
-	<a th:if="${user.teacher}" href="http://localhost:8080/" th:href="@{'/project/create/'}" th:text="#{create}">Create</a>
-	<table class="list">
-		<thead>
-			<tr>
-				<th></th>
-				<th th:text="#{project.name}">Project Name</th>
-				<th th:text="#{project.leader}">Project Leader</th>
-				<th th:text="#{project.creation.time}">Created</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr th:each="project : ${projectList}">
-				<td>
-					<a href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="#{detail}">Detail</a>
-					<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
-				</td>
-				<td th:text="${project.name}" class="project-name" >Project name</td>
-				<td th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</td>
-				<td th:text="${project.creationTime}">Created</td>
-			</tr>
-		</tbody>
-	</table>
+	<div class="body-wrapper">
+		<div th:include="header :: menu"></div>
+		<h1 th:text="#{project.list}">Project List</h1>
+		<a th:if="${user.teacher}" href="http://localhost:8080/" th:href="@{'/project/create/'}" th:text="#{create}">Create</a>
+		<table class="list">
+			<thead>
+				<tr>
+					<th></th>
+					<th th:text="#{project.name}">Project Name</th>
+					<th th:text="#{project.leader}">Project Leader</th>
+					<th th:text="#{project.creation.time}">Created</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="project : ${projects.content}">
+					<td>
+						<a href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="#{detail}">Detail</a>
+						<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+					</td>
+					<td th:text="${project.name}" class="project-name" >Project name</td>
+					<td th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</td>
+					<td th:text="${project.creationTime}">Created</td>
+				</tr>
+			</tbody>
+		</table>
+		<div th:include="pagination :: paginationbar" th:with="page=${projects},url=@{list}" ></div>
+	</div>
 </body>
 </html>

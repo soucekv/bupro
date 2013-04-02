@@ -21,7 +21,14 @@
 	<mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**"/>
 	<mvc:resources location="/WEB-INF/resources/js/" mapping="/js/**"/>
 	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"/>
-	<mvc:annotation-driven conversion-service="conversionService" />
+	<mvc:annotation-driven conversion-service="conversionService">
+		<mvc:argument-resolvers>
+			<bean class="org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentResolverAdapter">
+				<constructor-arg ref="pageableArgumentResolver" />
+			</bean>
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+	<bean id="pageableArgumentResolver" class="org.springframework.data.web.PageableArgumentResolver" />
 	<bean id="conversionService" class="org.springframework.core.convert.support.DefaultConversionService"/>
 	<bean class="cz.cvut.fel.bupro.support.ExtendedDomainClassConverter">
 		<constructor-arg ref="conversionService" />
