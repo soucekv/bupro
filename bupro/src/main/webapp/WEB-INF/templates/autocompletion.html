@@ -5,6 +5,56 @@
 	<title>Autocomplete</title>
 </head>
 <body>
+	<span th:fragment="simple_ajax">
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		$(function() {
+			var source =  /*[[${url}]]*/ null;
+			var selector = /*[[${selector}]]*/ '#tags';
+			$( selector ).autocomplete({
+			      source: function( request, response ) {
+			        $.ajax({
+			          url: source,
+			          dataType: "json",
+			          data: {
+			            maxRows: 12,
+			            nameStartsWith: request.term
+			          },
+			          success: function( data ) {
+			            response( $.map( data.items, function( item ) {
+			              return {
+			                label: item.firstName + " " + item.lastName,
+			                value: item.firstName + " " + item.lastName
+			              }
+			            }));
+			          }
+			        });
+			      },
+			      minLength: 2,
+			      open: function() {
+			        $( this ).removeClass( "ui-corner-all" ).addClass( "ui-corner-top" );
+			      },
+			      close: function() {
+			        $( this ).removeClass( "ui-corner-top" ).addClass( "ui-corner-all" );
+			      }
+			    });
+		});
+		/*]]>*/
+		</script>
+	</span>
+	<span th:fragment="simple">
+		<script type="text/javascript" th:inline="javascript">
+		/*<![CDATA[*/
+		$(function() {
+			var values =  /*[[${values}]]*/ [];
+			var selector = /*[[${selector}]]*/ '#tags';
+			$( selector ).autocomplete({
+				source: values
+		    });
+		});
+		/*]]>*/
+		</script>
+	</span>
 	<span th:fragment="multi">
 		<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
@@ -16,7 +66,7 @@
 			function extractLast( term ) {
 				return split( term ).pop();
 			}
-			$( '#tags' )
+			$(  '#tags' )
 				// don't navigate away from the field on tab when selecting an item
 				.bind( 'keydown', function( event ) {
 					if ( event.keyCode === $.ui.keyCode.TAB && $( this ).data( 'ui-autocomplete' ).menu.active ) {
