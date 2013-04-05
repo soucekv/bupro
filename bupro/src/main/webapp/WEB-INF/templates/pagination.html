@@ -11,11 +11,11 @@
 		<ul>
 			<li th:class="${page.firstPage}? 'disabled' : ''">
 			<span th:if="${page.firstPage}">&larr; First</span>
-			<a th:if="${not page.firstPage}" th:href="@{${url}(page.page=1,page.size=${page.size})}">&larr; First</a>
+			<a th:if="${not page.firstPage}" th:href="@{${url}(page.page=1,page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}">&larr; First</a>
 			</li>
 			<li th:class="${page.hasPreviousPage()}? '' : 'disabled'">
 				<span th:if="${not page.hasPreviousPage()}">&laquo;</span>
-				<a th:if="${page.hasPreviousPage()}" th:href="@{${url}(page.page=${number-1},page.size=${page.size})}" title="Go to previous page">&laquo;</a>
+				<a th:if="${page.hasPreviousPage()}" th:href="@{${url}(page.page=${number-1},page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}" title="Go to previous page">&laquo;</a>
 			</li>
 			<!--
 			<li th:each="item : ${page}" th:class="${item.current}? 'active' : ''">
@@ -25,11 +25,11 @@
 			 -->
 			<li th:class="${page.hasNextPage()}? '' : 'disabled'">
 				<span th:if="${not page.hasNextPage()}">&raquo;</span>
-				<a th:if="${page.hasNextPage()}" th:href="@{${url}(page.page=${number+1},page.size=${page.size})}" title="Go to next page">&raquo;</a>
+				<a th:if="${page.hasNextPage()}" th:href="@{${url}(page.page=${number+1},page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}" title="Go to next page">&raquo;</a>
 			</li>
 			<li th:class="${page.lastPage}? 'disabled' : ''">
 				<span th:if="${page.lastPage}">Last &rarr;</span>
-				<a th:if="${not page.lastPage}" th:href="@{${url}(page.page=${page.totalPages},page.size=${page.size})}">Last &rarr;</a>
+				<a th:if="${not page.lastPage}" th:href="@{${url}(page.page=${page.totalPages},page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}">Last &rarr;</a>
 			</li>
 		</ul>
 	</div>
