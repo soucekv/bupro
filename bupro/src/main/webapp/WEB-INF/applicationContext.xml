@@ -26,6 +26,7 @@
 			<bean class="org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentResolverAdapter">
 				<constructor-arg ref="pageableArgumentResolver" />
 			</bean>
+			<bean class="cz.cvut.fel.bupro.filter.FilterableArgumentResolver" />
 		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 	<bean id="pageableArgumentResolver" class="org.springframework.data.web.PageableArgumentResolver" />
