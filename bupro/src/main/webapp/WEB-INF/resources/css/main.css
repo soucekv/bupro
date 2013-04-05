@@ -102,3 +102,7 @@ li.disabled {
 .body-wrapper {
 	float: left;
 }
+
+.buttons {
+	margin: 0.75em 0em 0em;
+}
