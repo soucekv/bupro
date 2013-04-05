@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
@@ -34,6 +35,7 @@ import cz.cvut.fel.bupro.service.ProjectService;
 import cz.cvut.fel.bupro.service.SemesterService;
 import cz.cvut.fel.bupro.service.SubjectService;
 import cz.cvut.fel.bupro.service.TagService;
+import cz.cvut.fel.bupro.service.UserService;
 
 @Controller
 public class ProjectController {
@@ -53,6 +55,8 @@ public class ProjectController {
 	private LoginService loginService;
 	@Autowired
 	private EmailService emailService;
+	@Autowired
+	private UserService userService;
 
 	private void log(List<ObjectError> errors) {
 		log.info("Validation errors");
@@ -86,8 +90,9 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "*", "/project/list" })
-	public String showProjectList(Model model, Locale locale, @PageableDefaults(10) Pageable pageable) {
-		model.addAttribute("projects", projectService.getProjects(pageable));
+	public String showProjectList(Model model, Locale locale, @PageableDefaults(10) Pageable pageable, Filterable filterable) {
+		model.addAttribute("projects", projectService.getProjects(pageable, filterable));
+		model.addAttribute("filter", filterable);
 		return "project-list";
 	}
 
