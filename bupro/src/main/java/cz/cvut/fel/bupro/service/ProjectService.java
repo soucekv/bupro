@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Fetch;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
@@ -22,9 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.TimeUtils;
 import cz.cvut.fel.bupro.dao.ProjectRepository;
-import cz.cvut.fel.bupro.filter.FilterSpecification;
+import cz.cvut.fel.bupro.filter.FilterSpecificationFactory;
 import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.Semester;
+import cz.cvut.fel.bupro.model.Subject;
+import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 
 @Service
@@ -76,7 +78,7 @@ public class ProjectService {
 	private static Specifications<Project> createSingleSpec(Specifications<Project> spec, Map<String, String> map, FilterKey key) {
 		Specification<Project> newSpec = createSingleSpec(map, key);
 		if (newSpec == null) {
-			return null;
+			return spec;
 		}
 		if (spec == null) {
 			return Specifications.where(newSpec);
@@ -86,22 +88,10 @@ public class ProjectService {
 
 	private static Specification<Project> createSingleSpec(Map<String, String> map, FilterKey key) {
 		final String value = map.get(key.toString());
-		if (value != null) {
-			if (key == FilterKey.USER) {
-				return new Specification<Project>() {
-					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-						Join<Project, User> join = root.<Project, User>join("owner");
-						String[] name = value.trim().split("\\s");
-						if (name.length < 2) {
-							return cb.or(cb.like(join.<String>get("firstName"), value + "%"), cb.like(join.<String>get("lastName"), value + "%"));
-						}
-						return cb.or(cb.like(join.<String>get("firstName"), name[0] + "%"), cb.like(join.<String>get("lastName"), name[1] + "%"));
-					}
-				};
-			}
-			return new FilterSpecification<Project>(key.toString(), value);
+		if (value == null || value.trim().isEmpty()) {
+			return null;
 		}
-		return null;
+		return key.create(value);
 	}
 
 	private static Specification<Project> createSpecification(Filterable filterable) {
@@ -112,11 +102,64 @@ public class ProjectService {
 		Specifications<Project> specifications = null;
 		specifications = createSingleSpec(specifications, map, FilterKey.NAME);
 		specifications = createSingleSpec(specifications, map, FilterKey.USER);
+		specifications = createSingleSpec(specifications, map, FilterKey.TAG);
 		return specifications;
 	}
 
-	private static enum FilterKey {
-		NAME, USER, SUBJECT, SEMESTER, CREATED;
+	private static enum FilterKey implements FilterSpecificationFactory<Project> {
+		NAME {
+			public Specification<Project> create(final String value) {
+				return new Specification<Project>() {
+					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+						return cb.like(root.<String> get("name"), "%" + value + "%");
+					}
+				};
+			}
+		},
+		USER {
+			public Specification<Project> create(final String value) {
+				return new Specification<Project>() {
+					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+						Join<Project, User> join = root.<Project, User> join("owner");
+						String[] name = value.trim().split("\\s");
+						if (name.length < 2) {
+							return cb.or(cb.like(join.<String> get("firstName"), value + "%"), cb.like(join.<String> get("lastName"), value + "%"));
+						}
+						return cb.or(cb.like(join.<String> get("firstName"), name[0] + "%"), cb.like(join.<String> get("lastName"), name[1] + "%"));
+					}
+				};
+			}
+		},
+		TAG {
+			public Specification<Project> create(final String value) {
+				return new Specification<Project>() {
+					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+						Join<Project, Tag> join = root.<Project, Tag> join("tags");
+						return cb.like(join.<String> get("name"), value + "%");
+					}
+				};
+			}
+		},
+		SUBJECT {
+			public Specification<Project> create(final String value) {
+				return new Specification<Project>() {
+					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+						Join<Project, Subject> join = root.<Project, Subject> join("subject");
+						return cb.like(join.<String> get("name"), value + "%");
+					}
+				};
+			}
+		},
+		SEMESTER {
+			public Specification<Project> create(final String value) {
+				return new Specification<Project>() {
+					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+						Join<Project, Semester> join = root.<Project, Semester> join("startSemester");
+						return cb.like(join.<String> get("name"), value + "%");
+					}
+				};
+			}
+		};
 		public String toString() {
 			return super.toString().toLowerCase();
 		}

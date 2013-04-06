@@ -7,4 +7,5 @@ import java.util.Map;
  */
 public interface Filterable {
 	Map<String, String> getFilter();
+	boolean isEmpty();
 }

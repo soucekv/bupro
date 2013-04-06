@@ -7,9 +7,17 @@
 	<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		$(function() {
-			$("#filter").accordion({
-				collapsible: true
-			});
+			var filter = /*[[${!filter.isEmpty()}]]*/ false;
+			if (filter) {
+				$("#filter").accordion({
+					collapsible: true
+				});
+			} else {
+				$("#filter").accordion({
+					active: false,
+					collapsible: true
+				});
+			}
 		});
 		/*]]>*/
 	</script>
@@ -29,7 +37,8 @@
 						$('#apply').click(function() {
 							var params = $.param({
 								'filter.name' : $.trim($('#filter_name').val()),
-								'filter.user' : $.trim($('#filter_user').val())
+								'filter.user' : $.trim($('#filter_user').val()),
+								'filter.tag' : $.trim($('#filter_tag').val())
 							});
 							$(this).attr('href', filter_url + '?' + params);
 							return true; //default action
@@ -38,15 +47,34 @@
 					/*]]>*/
 				</script>
 				<form action="#" >
-					<div>
-						<label for="filter_name" th:text="#{project.name}">name:</label>
-						<input id="filter_name" type="text" th:value="${filter.filter['name']}" />
-					</div>
-					<div>
-						<span th:include="autocompletion :: simple_ajax" th:with="selector='#filter_user',url=@{/user/json}"></span>
-						<label for="filter_user" th:text="#{project.leader}">user:</label>
-						<input id="filter_user" type="text" th:value="${filter.filter['user']}" />
-					</div>
+					<table>
+						<tbody>
+							<tr>
+								<td><label for="filter_name" th:text="#{project.name}">name:</label></td>
+								<td><input id="filter_name" type="text" th:value="${filter.filter['name']}" /></td>
+							</tr>
+							<tr>
+								<td>
+									<span th:include="autocompletion :: simple_ajax" th:with="selector='#filter_user',url=@{/user/json}"></span>
+									<label for="filter_user" th:text="#{project.leader}">user:</label>
+								</td>
+								<td><input id="filter_user" type="text" th:value="${filter.filter['user']}" /></td>
+							</tr>
+							<tr>
+								<td>
+									<span th:include="autocompletion :: simple" th:with="selector='#filter_tag',values=${#strings.listToString(tags)}"></span>
+									<label for="filter_tag" th:text="#{project.tag}">tag:</label>
+								</td>
+								<td><input id="filter_tag" type="text" th:value="${filter.filter['tag']}" /></td>
+							</tr>
+							<tr>
+								<td>
+									<label for="filter_subject" th:text="#{project.subject}">subject:</label>
+								</td>
+								<td><input id="filter_subject" type="text" th:value="${filter.filter['subject']}" /></td>
+							</tr>
+						</tbody>
+					</table>
 				</form>
 				<div class="buttons">
 					<a id="apply" th:text="#{filter.apply}">Filter</a>
@@ -64,7 +92,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="project : ${projects.content}">
+				<tr th:each="project : ${projects}">
 					<td>
 						<a href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="#{detail}">Detail</a>
 						<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>

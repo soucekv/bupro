@@ -93,6 +93,7 @@ public class ProjectController {
 	public String showProjectList(Model model, Locale locale, @PageableDefaults(10) Pageable pageable, Filterable filterable) {
 		model.addAttribute("projects", projectService.getProjects(pageable, filterable));
 		model.addAttribute("filter", filterable);
+		model.addAttribute("tags", tagService.getAllTags());
 		return "project-list";
 	}
 

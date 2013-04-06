@@ -1,7 +1,5 @@
 package cz.cvut.fel.bupro.filter;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Collections;
 import java.util.Map;
 
@@ -20,34 +18,18 @@ public class FilterRequest implements Filterable {
 		return Collections.unmodifiableMap(map);
 	}
 
-	private String escape(String s) {
-		try {
-			return URLEncoder.encode(s, "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			throw new IllegalStateException(e);
+	public boolean isEmpty() {
+		if (map.isEmpty()) {
+			return true;
 		}
-	}
-
-	public String getParams() {
-		StringBuilder sb = new StringBuilder();
 		for (Map.Entry<String, String> entry : map.entrySet()) {
-			if (entry == null) {
-				continue;
+			String value = entry.getValue();
+			System.out.println("FilterRequest.isEmpty() val '" + value + "'");
+			if (value != null && !value.trim().isEmpty()) {
+				return false;
 			}
-			if (entry.getValue() == null || entry.getValue().isEmpty()) {
-				continue;
-			}
-			if (entry.getKey() == null || entry.getKey().isEmpty()) {
-				continue;
-			}
-			if (sb.length() > 0) {
-				sb.append('&');
-			}
-			sb.append(escape("filter." + entry.getKey()));
-			sb.append('=');
-			sb.append(escape(entry.getValue()));
 		}
-		return sb.toString();
+		return true;
 	}
 
 	@Override
