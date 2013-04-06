@@ -100,9 +100,9 @@ public class ProjectService {
 
 	private static Specification<Project> createSpecification(Map<String, String> map) {
 		Specifications<Project> specifications = null;
-		specifications = createSingleSpec(specifications, map, FilterKey.NAME);
-		specifications = createSingleSpec(specifications, map, FilterKey.USER);
-		specifications = createSingleSpec(specifications, map, FilterKey.TAG);
+		for (FilterKey key : FilterKey.values()) {
+			specifications = createSingleSpec(specifications, map, key);
+		}
 		return specifications;
 	}
 
