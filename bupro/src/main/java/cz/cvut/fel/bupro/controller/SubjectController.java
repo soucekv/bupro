@@ -60,6 +60,6 @@ public class SubjectController {
 	public String save(@Validated Subject subject, BindingResult errors, Map<String, Object> model) {
 		subject = subjectService.save(subject);
 		log.info("Project saved " + subject);
-		return "redirect:/subject/view/" + subject.getId();
+		return "redirect:/subject/list/";
 	}
 }
