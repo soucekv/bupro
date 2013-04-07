@@ -94,7 +94,10 @@
 					<th></th>
 					<th th:text="#{project.name}">Project Name</th>
 					<th th:text="#{project.leader}">Project Leader</th>
+					<th th:text="#{project.subject}">Project Subject</th>
 					<th th:text="#{project.creation.time}">Created</th>
+					<th th:text="#{project.start}">Begins</th>
+					<th th:text="#{project.end}">Ends</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -104,7 +107,10 @@
 					</td>
 					<td><a class="name" href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="${project.name}">Project name</a></td>
 					<td><a class="owner" th:href="@{'/user/view/' + ${project.owner.id}}" th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</a></td>
+					<td><a class="subject" th:href="@{/project/list(filter.subject=${project.subject.name})}" th:text="${project.subject.name}">Project Subject</a></td>
 					<td th:text="${project.creationTime}">Created</td>
+					<td th:text="${project.startSemester.name}">Begins in semester</td>
+					<td th:text="${project.endSemester.name}">Ends in semester</td>
 				</tr>
 			</tbody>
 		</table>
