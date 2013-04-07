@@ -53,7 +53,19 @@ table.list {
 	font-size: 0.8em;
 }
 
-.project-name {
+.project a:link,
+.subject a:link {
+	color:black;
+	text-decoration: none;
+}
+
+.project a:hover,
+.subject a:hover {
+	color: blue;
+	text-decoration:underline;
+}
+
+.project .name {
 	font-weight: bold;
 }
 
