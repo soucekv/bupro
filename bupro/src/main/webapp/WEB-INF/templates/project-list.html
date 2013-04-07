@@ -25,7 +25,7 @@
 		<div th:include="header :: menu"></div>
 		<h1 th:text="#{project.list}">Project List</h1>
 		<div>
-			<a th:if="${user.teacher}" href="http://localhost:8080/" th:href="@{'/project/create/'}" th:text="#{create}">Create</a>
+			<a class="button" th:if="${user.teacher}" href="http://localhost:8080/" th:href="@{'/project/create/'}" th:text="#{create}">Create</a>
 		</div>
 		<div id="filter">
 			<h3 th:text="#{filter}">Filter</h3>
@@ -74,6 +74,7 @@
 								</td>
 								<td>
 									<select id="filter_subject" >
+										<option value="" th:text="#{noselection}" th:attr="selected=${(filter.filter['subject'] == null or #strings.isEmpty(filter.filter['subject'])) ? 'selected' : ''}">No selection</option>
 										<option th:each="subject : ${subjects}" th:value="${subject.name}" th:text="${subject.name}" th:attr="selected=${(filter.filter['subject'] != null and #strings.startsWith(filter.filter['subject'], subject.name)) ? 'selected' : ''}">Subject 1</option>
 									</select>
 								</td>
@@ -82,8 +83,8 @@
 					</table>
 				</form>
 				<div class="buttons">
-					<a id="apply" th:text="#{filter.apply}">Filter</a>
-					<a th:href="@{/project/list}" th:text="#{filter.clear}">Clear</a>
+					<a class="button" id="apply" th:text="#{filter.apply}">Filter</a>
+					<a class="button" th:href="@{/project/list}" th:text="#{filter.clear}">Clear</a>
 				</div>
 			</div>
 		</div>
@@ -97,18 +98,17 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr th:each="project : ${projects}">
+				<tr th:each="project : ${projects}" class="project">
 					<td>
-						<a href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="#{detail}">Detail</a>
-						<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+						<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" ><img th:src="@{/images/edit.png}" height="19" width="19" /></a>
 					</td>
-					<td th:text="${project.name}" class="project-name" >Project name</td>
-					<td th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</td>
+					<td><a class="name" href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="${project.name}">Project name</a></td>
+					<td><a class="owner" th:href="@{'/user/view/' + ${project.owner.id}}" th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</a></td>
 					<td th:text="${project.creationTime}">Created</td>
 				</tr>
 			</tbody>
 		</table>
-		<div th:include="pagination :: paginationbar" th:with="page=${projects},url=@{list},params=${filter.filter}" ></div>
+		<div th:include="pagination :: paginationbar" th:with="page=${projects},url=@{/project/list},params=${filter.filter}" ></div>
 	</div>
 </body>
 </html>

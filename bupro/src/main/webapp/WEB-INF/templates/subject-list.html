@@ -6,7 +6,7 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<h1 th:text="#{subject.list}">Subject List</h1>
-	<a href="http://localhost:8080/" th:href="@{'/subject/create/'}" th:text="#{create}">Create</a>
+	<a class="button" href="http://localhost:8080/" th:href="@{'/subject/create/'}" th:text="#{create}">Create</a>
 	<table class="list">
 		<thead>
 			<tr>
@@ -15,12 +15,11 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="subject : ${subjectList}">
+			<tr th:each="subject : ${subjectList}" class="subject">
 				<td>
-					<a href="http://localhost:8080/" th:href="@{/project/list/(filter.subject=${subject.name})}" th:text="#{detail}">Detail</a>
-					<a href="http://localhost:8080/" th:href="@{'/subject/edit/' + ${subject.id}}" th:text="#{edit}">Edit</a>
+					<a href="http://localhost:8080/" th:href="@{'/subject/edit/' + ${subject.id}}" ><img th:src="@{/images/edit.png}" height="19" width="19" /></a>
 				</td>
-				<td th:text="${subject.name}">Subject name</td>
+				<td><a href="http://localhost:8080/" th:href="@{/project/list/(filter.subject=${subject.name})}" th:text="${subject.name}">Subject name</a></td>
 			</tr>
 		</tbody>
 	</table>

@@ -7,7 +7,7 @@
 	<div th:include="header :: menu"></div>
 	<h1 th:text="${project.name}"></h1>
 	<div>
-		<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+		<a class="button" th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
 	</div>
 	<div>
 		<span th:text="#{owner}">owner:</span>
@@ -42,9 +42,9 @@
 				<span th:text="#{format.fullname(${membership.user.firstName}, ${membership.user.lastName})}">Milan Vomacka</span>
 				<span th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 				<span th:if="${project.owner.equals(user)}" >
-					<a href="#" th:href="@{'/user/view/' + ${membership.user.id}}" th:text="#{detail}" >detail</a>
-					<a href="#" th:href="@{/project/membership/approve(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.accept}" >accept</a>
-					<a href="#" th:href="@{/project/membership/decline(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.decline}" >decline</a>
+					<a class="button" href="#" th:href="@{'/user/view/' + ${membership.user.id}}" th:text="#{detail}" >detail</a>
+					<a class="button" href="#" th:href="@{/project/membership/approve(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.accept}" >accept</a>
+					<a class="button" href="#" th:href="@{/project/membership/decline(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.decline}" >decline</a>
 				</span>
 			</li>
 		</ul>
