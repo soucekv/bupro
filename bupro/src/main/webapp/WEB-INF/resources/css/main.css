@@ -13,6 +13,7 @@ table.list thead tr {
 
 table.list td {
 	border: 1px solid #C5DBEC;
+	padding: 0px 10px;
 }
 
 table.list th {
