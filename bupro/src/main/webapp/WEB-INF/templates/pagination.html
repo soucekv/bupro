@@ -5,17 +5,23 @@
 	<title>Pagination</title>
 </head>
 <body>
+<span th:fragment="sort">
+	<span th:with="number=${page.number+1},sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__',order='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'">
+		<a th:href="@{${url}(page.page=${number},page.size=${page.size},page.sort=${prop},page.sort.dir='asc'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(filter.filter)}__)}"><img th:src="@{'/images/' + ${((order ==  'asc' and prop == sort) ? 'order_asc_active' : 'order_asc')} + '.png'}" /></a>
+		<a th:href="@{${url}(page.page=${number},page.size=${page.size},page.sort=${prop},page.sort.dir='desc'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(filter.filter)}__)}"><img th:src="@{'/images/' + ${((order ==  'desc' and prop == sort) ? 'order_desc_active' : 'order_desc')} + '.png'}" /></a>
+	</span>
+</span>
 <!-- Pagination Bar -->
 <div th:fragment="paginationbar">
 	<div class="pagination pagination-centered" th:with="number=${page.number+1}">
 		<ul>
 			<li th:class="${page.firstPage}? 'disabled' : ''">
 			<span th:if="${page.firstPage}">&larr; First</span>
-			<a class="button" th:if="${not page.firstPage}" th:href="@{${url}(page.page=1,page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}">&larr; First</a>
+			<a class="button" th:if="${not page.firstPage}" th:href="@{${url}(page.page=1,page.size=${page.size},page.sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__',page.sort.dir='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}">&larr; First</a>
 			</li>
 			<li th:class="${page.hasPreviousPage()}? '' : 'disabled'">
 				<span th:if="${not page.hasPreviousPage()}">&laquo;</span>
-				<a class="button" th:if="${page.hasPreviousPage()}" th:href="@{${url}(page.page=${number-1},page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}" title="Go to previous page">&laquo;</a>
+				<a class="button" th:if="${page.hasPreviousPage()}" th:href="@{${url}(page.page=${number-1},page.size=${page.size},page.sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__',page.sort.dir='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}" title="Go to previous page">&laquo;</a>
 			</li>
 			<!--
 			<li th:each="item : ${page}" th:class="${item.current}? 'active' : ''">
@@ -25,11 +31,11 @@
 			 -->
 			<li th:class="${page.hasNextPage()}? '' : 'disabled'">
 				<span th:if="${not page.hasNextPage()}">&raquo;</span>
-				<a class="button" th:if="${page.hasNextPage()}" th:href="@{${url}(page.page=${number+1},page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}" title="Go to next page">&raquo;</a>
+				<a class="button" th:if="${page.hasNextPage()}" th:href="@{${url}(page.page=${number+1},page.size=${page.size},page.sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__',page.sort.dir='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}" title="Go to next page">&raquo;</a>
 			</li>
 			<li th:class="${page.lastPage}? 'disabled' : ''">
 				<span th:if="${page.lastPage}">Last &rarr;</span>
-				<a class="button" th:if="${not page.lastPage}" th:href="@{${url}(page.page=${page.totalPages},page.size=${page.size}__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}">Last &rarr;</a>
+				<a class="button" th:if="${not page.lastPage}" th:href="@{${url}(page.page=${page.totalPages},page.size=${page.size},page.sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__',page.sort.dir='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(params)}__)}">Last &rarr;</a>
 			</li>
 		</ul>
 	</div>

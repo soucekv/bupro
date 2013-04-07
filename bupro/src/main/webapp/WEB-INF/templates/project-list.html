@@ -90,14 +90,26 @@
 		</div>
 		<table class="list">
 			<thead>
-				<tr>
+				<tr th:with="page=${projects},url=@{/project/list}">
 					<th></th>
-					<th th:text="#{project.name}">Project Name</th>
-					<th th:text="#{project.leader}">Project Leader</th>
-					<th th:text="#{project.subject}">Project Subject</th>
-					<th th:text="#{project.creation.time}">Created</th>
-					<th th:text="#{project.start}">Begins</th>
-					<th th:text="#{project.end}">Ends</th>
+					<th>
+						<span th:with="prop='name'" th:include="pagination :: sort"></span>
+						<span th:text="#{project.name}">Project Name</span>
+					</th>
+					<th>
+						<span th:with="prop='owner'" th:include="pagination :: sort"></span>
+						<span th:text="#{project.leader}">Project Leader</span>
+					</th>
+					<th>
+						<span th:with="prop='subject'" th:include="pagination :: sort"></span>
+						<span th:text="#{project.subject}">Project Subject</span>
+					</th>
+					<th>
+						<span th:with="prop='creationTime'" th:include="pagination :: sort"></span>
+						<span th:text="#{project.creation.time}">Created</span>
+					</th>
+					<th><span th:text="#{project.start}">Begins</span></th>
+					<th><span th:text="#{project.end}">Ends</span></th>
 				</tr>
 			</thead>
 			<tbody>

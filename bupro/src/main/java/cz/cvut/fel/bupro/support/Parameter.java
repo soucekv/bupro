@@ -1,6 +1,13 @@
 package cz.cvut.fel.bupro.support;
 
+import java.util.Iterator;
+import java.util.Locale;
 import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.domain.Sort.Order;
 
 import cz.cvut.fel.bupro.filter.FilterableArgumentResolver;
 
@@ -40,5 +47,52 @@ public class Parameter {
 			sb.append('\'');
 		}
 		return sb.toString();
+	}
+
+	/**
+	 * Decode property name from {@link Page} instance
+	 * <pre>
+	 * page.sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__'
+	 * </pre>
+	 * @param page
+	 * @return 1st sort order property name
+	 */
+	public static String pageOrder(Page<?> page) {
+		if (page == null) {
+			return "";
+		}
+		Sort sort = page.getSort();
+		if (sort == null) {
+			return "";
+		}
+		Iterator<Order> it = sort.iterator();
+		if (it.hasNext()) {
+			return it.next().getProperty();
+		}
+		return "";
+	}
+
+	/**
+	 * Decode sort direction from {@link Page} instance
+	 * <pre>
+	 * page.sort.dir='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'
+	 * </pre>
+	 * @param page
+	 * @return 1st sort order direction 'asc' or 'desc'
+	 */
+	public static String pageOrderDir(Page<?> page) {
+		if (page == null) {
+			return "";
+		}
+		Sort sort = page.getSort();
+		if (sort == null) {
+			return "";
+		}
+		Iterator<Order> it = sort.iterator();
+		if (it.hasNext()) {
+			Direction direction = it.next().getDirection();
+			return (direction == null) ? "" : direction.toString().toLowerCase(Locale.US);
+		}
+		return "";
 	}
 }
