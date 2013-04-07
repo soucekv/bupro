@@ -24,7 +24,6 @@ public class FilterRequest implements Filterable {
 		}
 		for (Map.Entry<String, String> entry : map.entrySet()) {
 			String value = entry.getValue();
-			System.out.println("FilterRequest.isEmpty() val '" + value + "'");
 			if (value != null && !value.trim().isEmpty()) {
 				return false;
 			}
