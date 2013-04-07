@@ -38,7 +38,8 @@
 							var params = $.param({
 								'filter.name' : $.trim($('#filter_name').val()),
 								'filter.user' : $.trim($('#filter_user').val()),
-								'filter.tag' : $.trim($('#filter_tag').val())
+								'filter.tag' : $.trim($('#filter_tag').val()),
+								'filter.subject' : $.trim($('#filter_subject :selected').val())
 							});
 							$(this).attr('href', filter_url + '?' + params);
 							return true; //default action
@@ -71,7 +72,11 @@
 								<td>
 									<label for="filter_subject" th:text="#{project.subject}">subject:</label>
 								</td>
-								<td><input id="filter_subject" type="text" th:value="${filter.filter['subject']}" /></td>
+								<td>
+									<select id="filter_subject" >
+										<option th:each="subject : ${subjects}" th:value="${subject.name}" th:text="${subject.name}" th:attr="selected=${(filter.filter['subject'] != null and #strings.startsWith(filter.filter['subject'], subject.name)) ? 'selected' : ''}">Subject 1</option>
+									</select>
+								</td>
 							</tr>
 						</tbody>
 					</table>

@@ -94,6 +94,7 @@ public class ProjectController {
 		model.addAttribute("projects", projectService.getProjects(pageable, filterable));
 		model.addAttribute("filter", filterable);
 		model.addAttribute("tags", tagService.getAllTags());
+		model.addAttribute("subjects", subjectService.getAllSubjects());
 		return "project-list";
 	}
 
