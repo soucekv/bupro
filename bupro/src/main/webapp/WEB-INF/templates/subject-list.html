@@ -17,7 +17,7 @@
 		<tbody>
 			<tr th:each="subject : ${subjectList}">
 				<td>
-					<a href="http://localhost:8080/" th:href="@{'/subject/view/' + ${subject.id}}" th:text="#{detail}">Detail</a>
+					<a href="http://localhost:8080/" th:href="@{/project/list/(filter.subject=${subject.name})}" th:text="#{detail}">Detail</a>
 					<a href="http://localhost:8080/" th:href="@{'/subject/edit/' + ${subject.id}}" th:text="#{edit}">Edit</a>
 				</td>
 				<td th:text="${subject.name}">Subject name</td>
