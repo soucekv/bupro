@@ -1,7 +1,6 @@
 package cz.cvut.fel.bupro.controller;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
@@ -10,14 +9,16 @@ import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefaults;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.service.UserService;
 
@@ -28,13 +29,10 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	@ModelAttribute("userList")
-	public List<User> getUserList() {
-		return userService.getAllUsers();
-	}
-
 	@RequestMapping({ "/user/list" })
-	public String showUserList() {
+	public String showUserList(Model model, Locale locale, @PageableDefaults Pageable pageable, Filterable filterable) {
+		model.addAttribute("users", userService.getUsers(pageable, filterable));
+		model.addAttribute("filter", filterable);
 		return "user-list";
 	}
 

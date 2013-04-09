@@ -4,18 +4,29 @@
 	<title th:text="#{user.list}" >User List</title>
 </head>
 <body>
+<div class="body-wrapper">
 	<div th:include="header :: menu"></div>
 	<h1 th:text="#{user.list}">User List</h1>
 	<table class="list">
 		<thead>
-			<tr>
+			<tr th:with="page=${users},url=@{/user/list}" >
 				<th></th>
-				<th th:text="#{user.firstName}">First Name</th>
-				<th th:text="#{user.lastName}">Last Name</th>
+				<th>
+					<div class="header">
+						<span th:with="prop='firstName'" th:include="pagination :: sort"></span>
+						<span th:text="#{user.firstName}">First Name</span>
+					</div>
+				</th>
+				<th>
+					<div class="header">
+						<span th:with="prop='lastName'" th:include="pagination :: sort"></span>
+						<span th:text="#{user.lastName}">Last Name</span>
+					</div>
+				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="user : ${userList}">
+			<tr th:each="user : ${users}">
 				<td>
 					<a href="http://localhost:8080/" th:href="@{'/user/view/' + ${user.id}}" th:text="#{detail}">Detail</a>
 				</td>
@@ -24,5 +35,7 @@
 			</tr>
 		</tbody>
 	</table>
+	<div th:include="pagination :: paginationbar" th:with="page=${users},url=@{/user/list},params=${filter.filter}" ></div>
+</div>
 </body>
 </html>

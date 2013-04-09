@@ -119,3 +119,15 @@ li.disabled {
 .buttons {
 	margin: 0.75em 0em 0em;
 }
+
+.header {
+	padding: 5px;
+}
+
+.asc {
+	margin: 2px;
+}
+
+.desc {
+	margin: 2px;
+}

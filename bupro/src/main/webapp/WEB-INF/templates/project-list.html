@@ -93,23 +93,31 @@
 				<tr th:with="page=${projects},url=@{/project/list}">
 					<th></th>
 					<th>
-						<span th:with="prop='name'" th:include="pagination :: sort"></span>
-						<span th:text="#{project.name}">Project Name</span>
+						<div class="header">
+							<span th:with="prop='name'" th:include="pagination :: sort"></span>
+							<span th:text="#{project.name}">Project Name</span>
+						</div>
 					</th>
 					<th>
-						<span th:with="prop='owner'" th:include="pagination :: sort"></span>
-						<span th:text="#{project.leader}">Project Leader</span>
+						<div class="header">
+							<span th:with="prop='owner'" th:include="pagination :: sort"></span>
+							<span th:text="#{project.leader}">Project Leader</span>
+						</div>
 					</th>
 					<th>
-						<span th:with="prop='subject'" th:include="pagination :: sort"></span>
-						<span th:text="#{project.subject}">Project Subject</span>
+						<div class="header">
+							<span th:with="prop='subject'" th:include="pagination :: sort"></span>
+							<span th:text="#{project.subject}">Project Subject</span>
+						</div>
 					</th>
 					<th>
-						<span th:with="prop='creationTime'" th:include="pagination :: sort"></span>
-						<span th:text="#{project.creation.time}">Created</span>
+						<div class="header">
+							<span th:with="prop='creationTime'" th:include="pagination :: sort"></span>
+							<span th:text="#{project.creation.time}">Created</span>
+						</div>
 					</th>
-					<th><span th:text="#{project.start}">Begins</span></th>
-					<th><span th:text="#{project.end}">Ends</span></th>
+					<th><div class="header"><span th:text="#{project.start}">Begins</span></div></th>
+					<th><div class="header"><span th:text="#{project.end}">Ends</span></div></th>
 				</tr>
 			</thead>
 			<tbody>
