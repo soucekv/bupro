@@ -6,9 +6,9 @@
 </head>
 <body>
 <span th:fragment="sort">
-	<span th:with="number=${page.number+1},sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__',order='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'">
-		<a th:href="@{${url}(page.page=${number},page.size=${page.size},page.sort=${prop},page.sort.dir='asc'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(filter.filter)}__)}"><img th:src="@{'/images/' + ${((order ==  'asc' and prop == sort) ? 'order_asc_active' : 'order_asc')} + '.png'}" /></a>
-		<a th:href="@{${url}(page.page=${number},page.size=${page.size},page.sort=${prop},page.sort.dir='desc'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(filter.filter)}__)}"><img th:src="@{'/images/' + ${((order ==  'desc' and prop == sort) ? 'order_desc_active' : 'order_desc')} + '.png'}" /></a>
+	<span class="sort" th:with="number=${page.number+1},sort='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrder(page)}__',order='__${T(cz.cvut.fel.bupro.support.Parameter).pageOrderDir(page)}__'">
+		<a class="asc" th:href="@{${url}(page.page=${number},page.size=${page.size},page.sort=${prop},page.sort.dir='asc'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(filter.filter)}__)}"><img th:src="@{'/images/' + ${((order ==  'asc' and prop == sort) ? 'order_asc_act' : 'order_asc')} + '.png'}" /></a>
+		<a class="desc" th:href="@{${url}(page.page=${number},page.size=${page.size},page.sort=${prop},page.sort.dir='desc'__${T(cz.cvut.fel.bupro.support.Parameter).encodeFilter(filter.filter)}__)}"><img th:src="@{'/images/' + ${((order ==  'desc' and prop == sort) ? 'order_desc_act' : 'order_desc')} + '.png'}" /></a>
 	</span>
 </span>
 <!-- Pagination Bar -->
