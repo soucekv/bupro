@@ -9,6 +9,7 @@
 
 	<properties>
 		<spring.version>3.2.2.RELEASE</spring.version>
+		<thymeleaf.version>2.0.15</thymeleaf.version>
 		<tomcat.version>7.0.35</tomcat.version>
 	</properties>
 
@@ -197,12 +198,12 @@
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
 			<artifactId>thymeleaf</artifactId>
-			<version>2.0.15</version>
-		</dependency>		
+			<version>${thymeleaf.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.thymeleaf</groupId>
 			<artifactId>thymeleaf-spring3</artifactId>
-			<version>2.0.15</version>
+			<version>${thymeleaf.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.thymeleaf.extras</groupId>
