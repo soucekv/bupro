@@ -9,7 +9,7 @@
 
 	<properties>
 		<spring.version>3.2.2.RELEASE</spring.version>
-		<thymeleaf.version>2.0.15</thymeleaf.version>
+		<thymeleaf.version>2.0.16</thymeleaf.version>
 		<tomcat.version>7.0.35</tomcat.version>
 	</properties>
 
