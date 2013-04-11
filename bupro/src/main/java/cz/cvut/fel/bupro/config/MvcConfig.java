@@ -45,7 +45,7 @@ public class MvcConfig {
 		return messageSource;
 	}
 
-	@Bean @Qualifier("email")
+	@Bean @Qualifier(Qualifiers.EMAIL)
 	public MessageSource emailMessageSource() {
 		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
 		messageSource.setBasename("locale/emails");

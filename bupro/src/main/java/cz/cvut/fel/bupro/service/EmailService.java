@@ -10,6 +10,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import cz.cvut.fel.bupro.config.Qualifiers;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.User;
@@ -22,7 +23,7 @@ public class EmailService {
 	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
-	@Qualifier("email")
+	@Qualifier(Qualifiers.EMAIL)
 	private MessageSource emailsMessageSource;
 	@Autowired
 	private MessageSource messageSource;

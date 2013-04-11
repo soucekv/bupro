@@ -8,16 +8,18 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cz.cvut.fel.bupro.config.Qualifiers;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.CommentableEntity;
 import cz.cvut.fel.bupro.model.User;
-import cz.cvut.fel.bupro.service.LoginService;
+import cz.cvut.fel.bupro.security.SecurityService;
 import cz.cvut.fel.bupro.service.ProjectService;
 import cz.cvut.fel.bupro.service.UserService;
 
@@ -25,8 +27,8 @@ import cz.cvut.fel.bupro.service.UserService;
 public class CommentController {
 	private final Log log = LogFactory.getLog(getClass());
 
-	@Autowired
-	private LoginService loginService;
+	@Autowired @Qualifier(Qualifiers.MOCK)
+	private SecurityService securityService;
 	@Autowired
 	private ProjectService projectService;
 	@Autowired
@@ -67,7 +69,7 @@ public class CommentController {
 	public @ResponseBody String save(Locale locale, @RequestParam String type, @RequestParam Long id, @RequestParam String title, @RequestParam String text) {
 		log.info("comment on " + type + " by id:" + id + " title:'" + title + "' text:'" + text + "'");
 		Comment comment = new Comment();
-		comment.setUser(loginService.getLoggedInUser());
+		comment.setUser(securityService.getCurrentUser());
 		comment.setTitle(title);
 		comment.setText(text);
 		CommentableEntity commentable = find(type, id);

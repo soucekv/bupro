@@ -9,5 +9,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import cz.cvut.fel.bupro.model.User;
 
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
+	User findByUsername(String username);
 	List<User> findByFirstNameLikeOrLastNameLike(String firstName, String lastName, Pageable pageable);
 }
