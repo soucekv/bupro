@@ -21,6 +21,9 @@ public class SpringSecurityService implements SecurityService {
 
 	private User find(Authentication authentication) {
 		Object o = authentication.getPrincipal();
+		if (o instanceof User) {
+			return (User) o;
+		}
 		if (o instanceof UserDetails) {
 			log.trace("Principal type UserDetails");
 			UserDetails userDetails = (UserDetails) o;
