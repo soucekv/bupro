@@ -1,4 +1,4 @@
-package cz.cvut.fel.bupro.service;
+package cz.cvut.fel.bupro.security;
 
 import java.util.List;
 
@@ -12,9 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 import cz.cvut.fel.bupro.config.Qualifiers;
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.User;
-import cz.cvut.fel.bupro.security.SecurityService;
 
-@Service @Qualifier(Qualifiers.MOCK)
+@Service
+@Qualifier(Qualifiers.MOCK)
 public class MockSecurityService implements SecurityService {
 	private final Log log = LogFactory.getLog(getClass());
 
@@ -23,9 +23,15 @@ public class MockSecurityService implements SecurityService {
 
 	@Transactional
 	public User getCurrentUser() {
-		log.warn("mock login impl");
+		log.warn("MockSecurityService.getCurrentUser");
 		List<User> users = userRepository.findAll();
 		return users.isEmpty() ? null : users.get(0);
+	}
+
+	@Transactional
+	public User createUser(User user) {
+		log.warn("MockSecurityService.createUser");
+		return userRepository.save(user);
 	}
 
 }

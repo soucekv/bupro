@@ -1,15 +1,21 @@
 package cz.cvut.fel.bupro.model;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 @Entity(name = "bupro_user")
-public class User extends CommentableEntity implements Serializable {
+public class User extends CommentableEntity implements UserDetails, Serializable {
 	private static final long serialVersionUID = -5431213892674807472L;
 
 	@Column(unique = true, nullable = false)
@@ -18,12 +24,18 @@ public class User extends CommentableEntity implements Serializable {
 	private String lastName;
 	@Column(unique = true, nullable = false)
 	private String email;
+	@Column(nullable = false)
+	private String password;
 
 	@OneToMany(mappedBy = "user")
 	private Set<Membership> memberships = new HashSet<Membership>();
 
 	@OneToMany(mappedBy = "user")
 	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
+
+	@ManyToMany
+	@JoinTable(name = "bupro_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private Set<Role> roles = new HashSet<Role>();
 
 	public String getUsername() {
 		return username;
@@ -71,6 +83,42 @@ public class User extends CommentableEntity implements Serializable {
 
 	public void setEnrolments(Set<Enrolment> enrolments) {
 		this.enrolments = enrolments;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
+	}
+
+	public Collection<Role> getAuthorities() {
+		return getRoles();
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public boolean isAccountNonExpired() {
+		return true;
+	}
+
+	public boolean isAccountNonLocked() {
+		return true;
+	}
+
+	public boolean isCredentialsNonExpired() {
+		return true;
+	}
+
+	public boolean isEnabled() {
+		return true;
 	}
 
 	private Set<Subject> getSubjects(EnrolmentType enrolmentType) {
@@ -124,4 +172,5 @@ public class User extends CommentableEntity implements Serializable {
 		}
 		return true;
 	}
+
 }

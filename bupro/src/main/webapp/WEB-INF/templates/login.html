@@ -1,0 +1,28 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+<title th:text="#{login}">Bupro - login</title>
+</head>
+<body>
+	<h1 th:text="#{login.title}">Login page</h1>
+	<p th:if="${loginError}"><span th:text="#{login.error}">Wrong user or password</span></p>
+	<form th:action="@{/j_spring_security_check}" method="post">
+		<table>
+			<tbody>
+				<tr>
+					<td><label for="j_username" th:text="#{username}">Username:</label></td>
+					<td><input type="text" id="j_username" name="j_username" /></td>
+				</tr>
+				<tr>
+					<td><label for="j_password" th:text="#{password}">Password:</label></td>
+					<td><input type="password" id="j_password" name="j_password" /></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td><input type="submit" th:value="#{login}" /></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</body>
+</html>

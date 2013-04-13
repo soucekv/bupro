@@ -7,10 +7,12 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
+import cz.cvut.fel.bupro.dao.RoleRepository;
 import cz.cvut.fel.bupro.dao.SemesterRepository;
 import cz.cvut.fel.bupro.dao.SubjectRepository;
 import cz.cvut.fel.bupro.dao.TagRepository;
@@ -20,6 +22,7 @@ import cz.cvut.fel.bupro.model.Enrolment;
 import cz.cvut.fel.bupro.model.EnrolmentType;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.Role;
 import cz.cvut.fel.bupro.model.Semester;
 import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
@@ -33,6 +36,8 @@ public class InitDevelService {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
+	private RoleRepository roleRepository;
+	@Autowired
 	private ProjectRepository projectRepository;
 	@Autowired
 	private SubjectRepository subjectRepository;
@@ -40,6 +45,8 @@ public class InitDevelService {
 	private TagRepository tagRepository;
 	@Autowired
 	private SemesterRepository semesterRepository;
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@PostConstruct
 	@Transactional
@@ -55,11 +62,17 @@ public class InitDevelService {
 		s2.setName("Summer Semester 2013/2014");
 		semesterRepository.save(s2);
 
+		Role userRole = new Role("ROLE_USER");
+		roleRepository.save(userRole);
+
 		User user1 = new User();
 		user1.setFirstName("Frantisek");
 		user1.setLastName("Vomacka");
 		user1.setEmail("vomacka@exmple.com");
 		user1.setUsername("vomacka");
+		user1.setPassword(passwordEncoder.encode("devel"));
+		user1.getRoles().add(userRole);
+		userRole.getUsers().add(user1);
 		userRepository.save(user1);
 
 		User user2 = new User();
@@ -67,6 +80,9 @@ public class InitDevelService {
 		user2.setLastName("Rohlik");
 		user2.setEmail("rohlik@exmple.com");
 		user2.setUsername("rohlik");
+		user2.setPassword(passwordEncoder.encode("devel"));
+		user2.getRoles().add(userRole);
+		userRole.getUsers().add(user2);
 		userRepository.save(user2);
 
 		User user3 = new User();
@@ -74,6 +90,7 @@ public class InitDevelService {
 		user3.setLastName("Opicka");
 		user3.setEmail("opicka@exmple.com");
 		user3.setUsername("opicka");
+		user3.setPassword(passwordEncoder.encode("devel"));
 		userRepository.save(user3);
 
 		Subject subject = new Subject();

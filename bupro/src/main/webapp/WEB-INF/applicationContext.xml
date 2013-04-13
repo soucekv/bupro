@@ -37,4 +37,5 @@
 	<context:annotation-config/>
 	<context:component-scan base-package="cz.cvut.fel"/>
 	<tx:annotation-driven />
+	<import resource="applicationSecurity.xml"/>
 </beans>

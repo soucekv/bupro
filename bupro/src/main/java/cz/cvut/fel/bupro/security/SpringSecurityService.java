@@ -1,4 +1,4 @@
-package cz.cvut.fel.bupro.service;
+package cz.cvut.fel.bupro.security;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -7,10 +7,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.User;
-import cz.cvut.fel.bupro.security.SecurityService;
 
 @Service
 public class SpringSecurityService implements SecurityService {
@@ -36,6 +36,7 @@ public class SpringSecurityService implements SecurityService {
 		throw new IllegalStateException("Unknown type of principal " + o.getClass());
 	}
 
+	@Transactional
 	public User getCurrentUser() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (authentication == null) {
@@ -47,6 +48,12 @@ public class SpringSecurityService implements SecurityService {
 			log.info("User instance not found!");
 		}
 		return user;
+	}
+
+	@Transactional
+	public User createUser(User user) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
