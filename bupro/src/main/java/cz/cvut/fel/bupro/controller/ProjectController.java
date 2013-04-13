@@ -53,7 +53,7 @@ public class ProjectController {
 	private TagService tagService;
 	@Autowired
 	private MembershipService membershipService;
-	@Autowired @Qualifier(Qualifiers.MOCK)
+	@Autowired
 	private SecurityService securityService;
 	@Autowired
 	private EmailService emailService;

@@ -27,7 +27,7 @@ import cz.cvut.fel.bupro.service.UserService;
 public class CommentController {
 	private final Log log = LogFactory.getLog(getClass());
 
-	@Autowired @Qualifier(Qualifiers.MOCK)
+	@Autowired
 	private SecurityService securityService;
 	@Autowired
 	private ProjectService projectService;
