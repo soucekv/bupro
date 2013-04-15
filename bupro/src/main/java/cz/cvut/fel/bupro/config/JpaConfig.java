@@ -6,8 +6,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.ejb.HibernatePersistence;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate4.HibernateExceptionTranslator;
@@ -21,13 +23,31 @@ import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 @Configuration
 @EnableJpaRepositories
 @EnableTransactionManagement
+@PropertySource({ "classpath:cfg/persistence.properties" })
 public class JpaConfig {
+
+	@Value("${hibernate.dialect}")
+	private String hibernateDialect;
+	@Value("${hibernate.show_sql}")
+	private String hibernateShowSql;
+	@Value("${hibernate.hbm2ddl.auto}")
+	private String hibernateHbm2ddlAuto;
+
+	@Value("${jdbc.driverClassName}")
+	private String driverClassName;
+	@Value("${jdbc.username}")
+	private String jdbcUsername;
+	@Value("${jdbc.password}")
+	private String jdbcPassword;
+	@Value("${jdbc.uri}")
+	private String jdbcUri;
 
 	@Bean
 	public EntityManagerFactory entityManagerFactory() {
 		Properties properties = new Properties();
-		properties.put("hibernate.show_sql", "false");
-		properties.put("hibernate.hbm2ddl.auto", "create-drop");
+		properties.put("hibernate.show_sql", hibernateShowSql);
+		properties.put("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
+		properties.put("hibernate.dialect", hibernateDialect);
 		LocalContainerEntityManagerFactoryBean entityManagerFactory = new LocalContainerEntityManagerFactoryBean();
 		entityManagerFactory.setDataSource(dataSource());
 		entityManagerFactory.setPackagesToScan(new String[] { "cz.cvut.fel.bupro.model" });
@@ -53,15 +73,11 @@ public class JpaConfig {
 
 	@Bean
 	public DataSource dataSource() {
-		String username = "bupro";
-		String password = "bupro_devel";
-		String path = "bupro";
-
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("org.postgresql.Driver");
-		dataSource.setUrl("jdbc:postgresql://localhost:5432/" + path);
-		dataSource.setUsername(username);
-		dataSource.setPassword(password);
+		dataSource.setDriverClassName(driverClassName);
+		dataSource.setUrl(jdbcUri);
+		dataSource.setUsername(jdbcUsername);
+		dataSource.setPassword(jdbcPassword);
 		return dataSource;
 	}
 
