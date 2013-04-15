@@ -8,14 +8,12 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import cz.cvut.fel.bupro.config.Qualifiers;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.CommentableEntity;
 import cz.cvut.fel.bupro.model.User;
