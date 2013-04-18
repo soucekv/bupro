@@ -17,25 +17,9 @@
 		http://www.springframework.org/schema/data/jpa
 		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 	<data:repositories base-package="cz.cvut.fel.bupro.dao" />
-	<!-- Enables the Spring MVC @Controller programming model -->
-	<mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**"/>
-	<mvc:resources location="/WEB-INF/resources/js/" mapping="/js/**"/>
-	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"/>
-	<mvc:annotation-driven conversion-service="conversionService">
-		<mvc:argument-resolvers>
-			<bean class="org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentResolverAdapter">
-				<constructor-arg ref="pageableArgumentResolver" />
-			</bean>
-			<bean class="cz.cvut.fel.bupro.filter.FilterableArgumentResolver" />
-		</mvc:argument-resolvers>
-	</mvc:annotation-driven>
-	<bean id="pageableArgumentResolver" class="org.springframework.data.web.PageableArgumentResolver" />
-	<bean id="conversionService" class="org.springframework.core.convert.support.DefaultConversionService"/>
-	<bean class="cz.cvut.fel.bupro.support.ExtendedDomainClassConverter">
-		<constructor-arg ref="conversionService" />
-	</bean>
 	<context:annotation-config/>
 	<context:component-scan base-package="cz.cvut.fel"/>
 	<tx:annotation-driven />
-	<import resource="applicationSecurity.xml"/>
+	<import resource="mvc-config.xml"/>
+	<import resource="security-config.xml"/>
 </beans>

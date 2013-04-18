@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:mvc="http://www.springframework.org/schema/mvc"
+     xmlns:tx="http://www.springframework.org/schema/tx"
+     xmlns:data="http://www.springframework.org/schema/data/jpa"
+     xsi:schemaLocation="
+		http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-3.2.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+		http://www.springframework.org/schema/data/jpa
+		http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+	<!-- Enables the Spring MVC @Controller programming model -->
+	<mvc:resources location="/WEB-INF/resources/css/" mapping="/css/**"/>
+	<mvc:resources location="/WEB-INF/resources/js/" mapping="/js/**"/>
+	<mvc:resources location="/WEB-INF/resources/images/" mapping="/images/**"/>
+	<mvc:annotation-driven conversion-service="conversionService">
+		<mvc:argument-resolvers>
+			<bean class="org.springframework.web.servlet.mvc.method.annotation.ServletWebArgumentResolverAdapter">
+				<constructor-arg ref="pageableArgumentResolver" />
+			</bean>
+			<bean class="cz.cvut.fel.bupro.filter.FilterableArgumentResolver" />
+		</mvc:argument-resolvers>
+	</mvc:annotation-driven>
+	<bean id="pageableArgumentResolver" class="org.springframework.data.web.PageableArgumentResolver" />
+	<bean id="conversionService" class="org.springframework.core.convert.support.DefaultConversionService"/>
+	<bean class="cz.cvut.fel.bupro.support.ExtendedDomainClassConverter">
+		<constructor-arg ref="conversionService" />
+	</bean>
+</beans>
