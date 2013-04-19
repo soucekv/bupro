@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xml="http://www.w3.org/XML/1998/namespace"
+	targetNamespace="http://kosapi.feld.cvut.cz/schema/3" xmlns="http://kosapi.feld.cvut.cz/schema/3">
+	<xs:import schemaLocation="http://www.w3.org/2001/xml.xsd" namespace="http://www.w3.org/XML/1998/namespace" />
+	<xs:element name="semester" type="semester" />
+
+	<xs:complexType name="semester">
+		<xs:choice>
+			<xs:element name="endDate" type="xs:string" />
+			<xs:element name="code" type="xs:string" />
+			<xs:element name="name" type="name" maxOccurs="unbounded" />
+			<xs:element name="startDate" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:complexType name="name">
+		<xs:simpleContent>
+			<xs:extension base="xs:string">
+				<xs:attribute ref="xml:lang" />
+			</xs:extension>
+		</xs:simpleContent>
+	</xs:complexType>
+
+</xs:schema>
