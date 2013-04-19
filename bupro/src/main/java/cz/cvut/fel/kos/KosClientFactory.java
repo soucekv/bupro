@@ -1,5 +1,10 @@
 package cz.cvut.fel.kos;
 
+/**
+ * 
+ * @author Viktor Souček
+ *
+ */
 public interface KosClientFactory {
 
 	/**
