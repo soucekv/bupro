@@ -21,8 +21,7 @@
 	<sec:http pattern="/images/**" security="none"/>
 	<sec:http auto-config="true">
 		<sec:form-login login-page="/login" authentication-failure-url="/login-error" default-target-url="/project/list"/>
-		<sec:logout />
-		<sec:intercept-url pattern="/" access="ROLE_ANONYMOUS,ROLE_USER" />
+		<sec:logout logout-success-url="/login" />
 		<sec:intercept-url pattern="/login*" access="ROLE_ANONYMOUS,ROLE_USER" />
 		<sec:intercept-url pattern="/logout" access="ROLE_ANONYMOUS,ROLE_USER" />
 		<sec:intercept-url pattern="/**" access="ROLE_USER" />

@@ -89,7 +89,7 @@ public class ProjectController {
 		return user;
 	}
 
-	@RequestMapping({ "/project/list" })
+	@RequestMapping({ "/", "/project/list" })
 	public String showProjectList(Model model, Locale locale, @PageableDefaults Pageable pageable, Filterable filterable) {
 		model.addAttribute("projects", projectService.getProjects(pageable, filterable));
 		model.addAttribute("filter", filterable);
