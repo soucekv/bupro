@@ -23,6 +23,11 @@
 			<id>(FELid) Shibboleth Service Provider - OpenSAML</id>
 			<url>https://build.shibboleth.net/nexus/content/repositories/releases</url>
 		</repository>
+		<repository>
+		    <id>cvut-local-repos</id>
+		    <name>CVUT Repository Local</name>
+		    <url>http://repository.fit.cvut.cz/maven/local-repos/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
@@ -177,6 +182,27 @@
 					<artifactId>log4j-over-slf4j</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<!-- KOS libs  -->
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-oxm</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+		<dependency>
+			<groupId>javax.xml</groupId>
+			<artifactId>jaxb-api</artifactId>
+			<version>2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>cz.jirutka.atom</groupId>
+			<artifactId>atom-jaxb</artifactId>
+			<version>1.0.1</version>
+		</dependency>
+		<dependency>
+		   <groupId>org.apache.httpcomponents</groupId>
+		   <artifactId>httpclient</artifactId>
+		   <version>4.2.4</version>
 		</dependency>
 		<!-- Other -->
 		<dependency>
