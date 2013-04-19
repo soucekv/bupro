@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.RoleRepository;
-import cz.cvut.fel.bupro.dao.SemesterRepository;
 import cz.cvut.fel.bupro.dao.SubjectRepository;
 import cz.cvut.fel.bupro.dao.TagRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
@@ -23,10 +22,11 @@ import cz.cvut.fel.bupro.model.EnrolmentType;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.Role;
-import cz.cvut.fel.bupro.model.Semester;
+import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.kos.KosClient;
 
 @Service
 public class InitDevelService {
@@ -44,23 +44,19 @@ public class InitDevelService {
 	@Autowired
 	private TagRepository tagRepository;
 	@Autowired
-	private SemesterRepository semesterRepository;
-	@Autowired
 	private PasswordEncoder passwordEncoder;
+	@Autowired
+	private KosClient kos;
 
 	@PostConstruct
 	@Transactional
 	public void initDevelData() {
 		log.info("Init Devel data");
-		Semester s1 = new Semester();
-		s1.setCode("201314Z");
-		s1.setName("Winter Semester 2013/2014");
-		semesterRepository.save(s1);
+		SemesterCode s1 = new SemesterCode(kos.getSemester().getCode());
+		SemesterCode s2 = new SemesterCode(kos.getNextSemester().getCode());
 
-		Semester s2 = new Semester();
-		s2.setCode("201314L");
-		s2.setName("Summer Semester 2013/2014");
-		semesterRepository.save(s2);
+		log.info("Kos semester code s1 " + s1);
+		log.info("Kos semester code s2 " + s2);
 
 		Role userRole = new Role("ROLE_USER");
 		roleRepository.save(userRole);

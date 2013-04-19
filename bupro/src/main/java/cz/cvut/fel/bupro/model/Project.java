@@ -8,12 +8,14 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinTable;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
@@ -52,10 +54,12 @@ public class Project extends CommentableEntity implements Serializable {
 
 	private boolean autoApprove;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Semester startSemester;
-	@ManyToOne(fetch = FetchType.EAGER)
-	private Semester endSemester;
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "code", column = @Column(name = "startSemester")) })
+	private SemesterCode startSemester;
+	@Embedded
+	@AttributeOverrides({ @AttributeOverride(name = "code", column = @Column(name = "endSemester")) })
+	private SemesterCode endSemester;
 
 	public Project() {
 		creationTime = TimeUtils.createCurrentTimestamp();
@@ -133,19 +137,19 @@ public class Project extends CommentableEntity implements Serializable {
 		this.autoApprove = autoApprove;
 	}
 
-	public Semester getStartSemester() {
+	public SemesterCode getStartSemester() {
 		return startSemester;
 	}
 
-	public void setStartSemester(Semester startSemester) {
+	public void setStartSemester(SemesterCode startSemester) {
 		this.startSemester = startSemester;
 	}
 
-	public Semester getEndSemester() {
+	public SemesterCode getEndSemester() {
 		return endSemester;
 	}
 
-	public void setEndSemester(Semester endSemester) {
+	public void setEndSemester(SemesterCode endSemester) {
 		this.endSemester = endSemester;
 	}
 
@@ -188,4 +192,5 @@ public class Project extends CommentableEntity implements Serializable {
 	public String toString() {
 		return getClass().getName() + " [id=" + getId() + ", name=" + name + ", owner=" + owner + ", tags=" + getTags() + "]";
 	}
+
 }

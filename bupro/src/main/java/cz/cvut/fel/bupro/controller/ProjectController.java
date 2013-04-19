@@ -1,14 +1,17 @@
 package cz.cvut.fel.bupro.controller;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
 import org.springframework.stereotype.Controller;
@@ -25,6 +28,7 @@ import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
+import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
@@ -57,6 +61,15 @@ public class ProjectController {
 	private EmailService emailService;
 	@Autowired
 	private UserService userService;
+
+	private static Set<SemesterCode> semesterCodeSet(Collection<Project> c) {
+		Set<SemesterCode> set = new HashSet<SemesterCode>();
+		for (Project project : c) {
+			set.add(project.getStartSemester());
+			set.add(project.getEndSemester());
+		}
+		return set;
+	}
 
 	private void log(List<ObjectError> errors) {
 		log.info("Validation errors");
@@ -91,7 +104,9 @@ public class ProjectController {
 
 	@RequestMapping({ "/", "/project/list" })
 	public String showProjectList(Model model, Locale locale, @PageableDefaults Pageable pageable, Filterable filterable) {
-		model.addAttribute("projects", projectService.getProjects(pageable, filterable));
+		Page<Project> projects = projectService.getProjects(pageable, filterable);
+		model.addAttribute("projects", projects);
+		model.addAttribute("semester", semesterService.getSemestersNames(semesterCodeSet(projects.getContent()), locale));
 		model.addAttribute("filter", filterable);
 		model.addAttribute("tags", tagService.getAllTags());
 		model.addAttribute("subjects", subjectService.getAllSubjects());

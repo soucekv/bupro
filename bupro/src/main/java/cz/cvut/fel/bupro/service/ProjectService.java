@@ -24,7 +24,6 @@ import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.filter.FilterSpecificationFactory;
 import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.Project;
-import cz.cvut.fel.bupro.model.Semester;
 import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
@@ -150,7 +149,8 @@ public class ProjectService {
 				};
 			}
 		},
-		SEMESTER {
+		//FIXME new filtering method
+/*		SEMESTER {
 			public Specification<Project> create(final String value) {
 				return new Specification<Project>() {
 					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
@@ -159,7 +159,7 @@ public class ProjectService {
 					}
 				};
 			}
-		};
+		}*/;
 		public String toString() {
 			return super.toString().toLowerCase();
 		}
