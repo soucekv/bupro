@@ -1,8 +1,14 @@
 package cz.cvut.fel.kos.impl;
 
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
@@ -19,8 +25,12 @@ import org.springframework.web.client.RestTemplate;
 
 import cz.cvut.fel.kos.Configuration;
 import cz.cvut.fel.kos.KosClient;
+import cz.cvut.fel.kos.KosSemesterCode;
+import cz.cvut.fel.kos.jaxb.Name;
 import cz.cvut.fel.kos.jaxb.Semester;
+import cz.jirutka.atom.jaxb.AtomLink;
 import cz.jirutka.atom.jaxb.Entry;
+import cz.jirutka.atom.jaxb.Feed;
 
 /**
  * KOS Client API implementation built on Spring REST template
@@ -61,26 +71,113 @@ public class KosClientImpl implements KosClient {
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> Entry<T> getForObject(String uri, Map<String, ?> urlVariables) {
-		Entry<?> e = template.getForObject(uri, Entry.class, urlVariables);
-		return (Entry<T>) e;
+	private <T> Feed<T> getForFeed(String uri, Map<String, ?> urlVariables) {
+		return template.getForObject(uri, Feed.class, urlVariables);
 	}
 
-	public Semester getSemmester() {
-		Map<String, String> urlVariables = new HashMap<String, String>();
-		Entry<Semester> entry = getForObject(configuration.getUri() + "semesters/current", urlVariables);
+	@SuppressWarnings("unchecked")
+	private <T> Feed<T> getForFeed(URI uri) {
+		return template.getForObject(uri, Feed.class);
+	}
+
+	@SuppressWarnings("unchecked")
+	private <T> Entry<T> getForEntry(String uri, Map<String, ?> urlVariables) {
+		return template.getForObject(uri, Entry.class, urlVariables);
+	}
+
+	private <T> Entry<T> getForEntry(String uri) {
+		Map<String, ?> urlVariables = Collections.emptyMap();
+		return getForEntry(uri, urlVariables);
+	}
+
+	public Semester getPreviousSemester() {
+		Entry<Semester> entry = getForEntry(configuration.getUri() + "semesters/prev");
 		return entry.getContent();
 	}
 
-	public Semester getSemmester(int index) {
-		Map<String, String> urlVariables = new HashMap<String, String>();
-		Entry<Semester> entry = getForObject(configuration.getUri() + "semesters/current", urlVariables);
+	public Semester getSemester() {
+		Entry<Semester> entry = getForEntry(configuration.getUri() + "semesters/current");
 		return entry.getContent();
 	}
 
-	public Semester getSemmester(String code) {
+	public Semester getNextSemester() {
+		Entry<Semester> entry = getForEntry(configuration.getUri() + "semesters/next");
+		return entry.getContent();
+	}
+
+	private Feed<Semester> getSemestersFeed(int offset, int limit) {
+		Map<String, Object> urlVariables = new HashMap<String, Object>();
+		urlVariables.put(KosRestParams.OFFSET, offset);
+		urlVariables.put(KosRestParams.LIMIT, limit);
+		urlVariables.put(KosRestParams.ORDERBY, "startDate@asc");
+		Feed<Semester> feed = getForFeed(configuration.getUri() + "semesters", urlVariables);
+		return feed;
+	}
+
+	private <T> Feed<T> getNextFeed(Feed<T> feed) {
+		List<AtomLink> links = feed.getLinks();
+		for (AtomLink link : links) {
+			if ("next".equals(link.getRel())) {
+				try {
+					URL url = new URL(feed.getBase().toURL(), link.getHref().toString());
+					log.trace("Feed chain next URL " + url);
+					return getForFeed(url.toURI());
+				} catch (MalformedURLException e) {
+					log.error("Problem reading feed chain", e);
+				} catch (URISyntaxException e) {
+					log.error("Problem reading feed chain", e);
+				}
+			}
+		}
+		return null;
+	}
+
+	public List<Semester> getSemesters() {
+		List<Semester> semesters = new LinkedList<Semester>();
+		int offset = 0;
+		int limit = 100;
+		Feed<Semester> feed = getSemestersFeed(offset, limit);
+		while (feed != null) {
+			for (Entry<Semester> entry : feed.getEntries()) {
+				semesters.add(entry.getContent());
+			}
+			feed = getNextFeed(feed);
+		}
+		;
+		log.info("Feed size " + semesters.size());
+		return semesters;
+	}
+
+	public Semester getSemester(String code) {
+		if (!KosSemesterCode.validate(code)) {
+			throw new IllegalArgumentException("Invalid semester code " + code);
+		}
+		Entry<Semester> entry = getForEntry(configuration.getUri() + "semesters/" + code);
+		return entry.getContent();
+	}
+
+	public String getSemesterName(String code, Locale locale) {
+		if (locale == null) {
+			throw new NullPointerException();
+		}
+		Semester semester = getSemester(code);
+		String english = null;
+		for (Name name : semester.getName()) {
+			Locale lang = new Locale(name.getLang());
+			if (locale.equals(lang)) {
+				return name.getValue();
+			}
+			if (Locale.ENGLISH.equals(lang)) {
+				english = name.getValue();
+			}
+		}
+		assert english != null;
+		return english;
+	}
+
+	public Semester getSemester(int index) {
 		Map<String, String> urlVariables = new HashMap<String, String>();
-		Entry<Semester> entry = getForObject(configuration.getUri() + "semesters/current", urlVariables);
+		Entry<Semester> entry = getForEntry(configuration.getUri() + "semesters/current", urlVariables);
 		return entry.getContent();
 	}
 
