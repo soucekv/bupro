@@ -26,7 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import cz.cvut.fel.kos.Configuration;
 import cz.cvut.fel.kos.KosClient;
 import cz.cvut.fel.kos.KosSemesterCode;
-import cz.cvut.fel.kos.jaxb.Name;
+import cz.cvut.fel.kos.jaxb.Label;
 import cz.cvut.fel.kos.jaxb.Semester;
 import cz.jirutka.atom.jaxb.AtomLink;
 import cz.jirutka.atom.jaxb.Entry;
@@ -162,13 +162,13 @@ public class KosClientImpl implements KosClient {
 		}
 		Semester semester = getSemester(code);
 		String english = null;
-		for (Name name : semester.getName()) {
-			Locale lang = new Locale(name.getLang());
+		for (Label label : semester.getName()) {
+			Locale lang = new Locale(label.getLang());
 			if (locale.equals(lang)) {
-				return name.getValue();
+				return label.getValue();
 			}
 			if (Locale.ENGLISH.equals(lang)) {
-				english = name.getValue();
+				english = label.getValue();
 			}
 		}
 		assert english != null;
