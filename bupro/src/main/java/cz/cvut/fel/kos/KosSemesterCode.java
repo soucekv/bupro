@@ -63,4 +63,22 @@ public class KosSemesterCode {
 		year += Integer.parseInt(code);
 		return year;
 	}
+
+	public static String next(String code) {
+		int year = decodeYear(code);
+		Period period = decodePeriod(code);
+		if (period == Period.WINTER) {
+			return encode(year + 1, Period.SUMMER);
+		}
+		return encode(year, Period.WINTER);
+	}
+
+	public static String prev(String code) {
+		int year = decodeYear(code);
+		Period period = decodePeriod(code);
+		if (period == Period.SUMMER) {
+			return encode(year - 1, Period.WINTER);
+		}
+		return encode(year, Period.SUMMER);
+	}
 }
