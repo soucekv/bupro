@@ -80,6 +80,11 @@ public class KosClientImpl implements KosClient {
 		return template.getForObject(uri, Feed.class);
 	}
 
+	private <T> Feed<T> getForFeed(String uri) {
+		Map<String, ?> urlVariables = Collections.emptyMap();
+		return getForFeed(uri, urlVariables);
+	}
+
 	@SuppressWarnings("unchecked")
 	private <T> Entry<T> getForEntry(String uri, Map<String, ?> urlVariables) {
 		return template.getForObject(uri, Entry.class, urlVariables);
@@ -88,6 +93,48 @@ public class KosClientImpl implements KosClient {
 	private <T> Entry<T> getForEntry(String uri) {
 		Map<String, ?> urlVariables = Collections.emptyMap();
 		return getForEntry(uri, urlVariables);
+	}
+
+	/**
+	 * GET next Feed in sequence
+	 * 
+	 * @param feed
+	 * @return next Feed in sequence
+	 */
+	private <T> Feed<T> getNextFeed(Feed<T> feed) {
+		List<AtomLink> links = feed.getLinks();
+		for (AtomLink link : links) {
+			if ("next".equals(link.getRel())) {
+				try {
+					URI uri = UriUtils.mergeAsURL(feed.getBase(), link.getHref());
+					log.trace("Feed chain next URL " + uri);
+					return getForFeed(uri);
+				} catch (MalformedURLException e) {
+					log.error("Problem reading feed chain", e);
+				} catch (URISyntaxException e) {
+					log.error("Problem reading feed chain", e);
+				}
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * sequentially GETs series of Feed
+	 * 
+	 * @param feed
+	 *            first Feed obtained
+	 * @return all data on this URL starting with first Feed
+	 */
+	private <T> List<T> getChainedFeedsContent(Feed<T> feed) {
+		List<T> list = new LinkedList<T>();
+		while (feed != null) {
+			for (Entry<T> entry : feed.getEntries()) {
+				list.add(entry.getContent());
+			}
+			feed = getNextFeed(feed);
+		}
+		return list;
 	}
 
 	public Semester getPreviousSemester() {
@@ -114,38 +161,11 @@ public class KosClientImpl implements KosClient {
 		return feed;
 	}
 
-	private <T> Feed<T> getNextFeed(Feed<T> feed) {
-		List<AtomLink> links = feed.getLinks();
-		for (AtomLink link : links) {
-			if ("next".equals(link.getRel())) {
-				try {
-					URL url = new URL(feed.getBase().toURL(), link.getHref().toString());
-					log.trace("Feed chain next URL " + url);
-					return getForFeed(url.toURI());
-				} catch (MalformedURLException e) {
-					log.error("Problem reading feed chain", e);
-				} catch (URISyntaxException e) {
-					log.error("Problem reading feed chain", e);
-				}
-			}
-		}
-		return null;
-	}
-
 	public List<Semester> getSemesters() {
-		List<Semester> semesters = new LinkedList<Semester>();
 		int offset = 0;
 		int limit = 100;
 		Feed<Semester> feed = getSemestersFeed(offset, limit);
-		while (feed != null) {
-			for (Entry<Semester> entry : feed.getEntries()) {
-				semesters.add(entry.getContent());
-			}
-			feed = getNextFeed(feed);
-		}
-		;
-		log.info("Feed size " + semesters.size());
-		return semesters;
+		return getChainedFeedsContent(feed);
 	}
 
 	public Semester getSemester(String code) {
