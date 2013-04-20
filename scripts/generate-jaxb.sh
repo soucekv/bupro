@@ -1,4 +1,5 @@
 #
 # Script to generate JAXB for KOS
 #
-xjc -d ../bupro/src/main/java/ -p cz.cvut.fel.kos.jaxb ../bupro/src/main/resources/jaxb/kos.xsd
+project=bupro
+xjc -d ../$project/src/main/java/ -p cz.cvut.fel.kos.jaxb ../$project/src/main/resources/jaxb/kos.xsd -b ../$project/src/main/resources/jaxb/bindings.xjb
