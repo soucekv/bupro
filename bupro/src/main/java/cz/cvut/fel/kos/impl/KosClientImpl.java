@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import cz.cvut.fel.kos.Configuration;
 import cz.cvut.fel.kos.KosClient;
 import cz.cvut.fel.kos.KosSemesterCode;
+import cz.cvut.fel.kos.jaxb.Course;
 import cz.cvut.fel.kos.jaxb.Label;
 import cz.cvut.fel.kos.jaxb.Semester;
 import cz.jirutka.atom.jaxb.AtomLink;
@@ -195,10 +196,21 @@ public class KosClientImpl implements KosClient {
 		return english;
 	}
 
-	public Semester getSemester(int index) {
-		Map<String, String> urlVariables = new HashMap<String, String>();
-		Entry<Semester> entry = getForEntry(configuration.getUri() + "semesters/current", urlVariables);
-		return entry.getContent();
+	public List<Course> getCourses() {
+		//TODO impl feed chain, use query to remove obsolete courses
+		Feed<Course> feed = getForFeed(configuration.getUri() + "courses");
+		return feed.getContents();
+	}
+
+	public Course getCourse(String code) {
+		if (code == null) {
+			throw new NullPointerException();
+		}
+		if (!code.matches("^[0-9A-Z]+$")) {
+			throw new IllegalArgumentException("Invalid course code " + code);
+		}
+		Entry<Course> course = getForEntry(configuration.getUri() + "courses/" + code);
+		return course.getContent();
 	}
 
 }
