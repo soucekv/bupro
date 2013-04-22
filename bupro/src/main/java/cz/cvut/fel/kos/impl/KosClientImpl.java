@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 import cz.cvut.fel.kos.Configuration;
 import cz.cvut.fel.kos.KosClient;
 import cz.cvut.fel.kos.KosSemesterCode;
+import cz.cvut.fel.kos.Configuration.Authentication;
 import cz.cvut.fel.kos.jaxb.Course;
 import cz.cvut.fel.kos.jaxb.Label;
 import cz.cvut.fel.kos.jaxb.Semester;
@@ -50,6 +51,9 @@ public class KosClientImpl implements KosClient {
 
 	@PostConstruct
 	public void configureKosCredentials() {
+		if (configuration.getAuthentication() == Authentication.OAUTH2) {
+			throw new UnsupportedOperationException("OAuth v2.0 is not supported yet");
+		}
 		ClientHttpRequestFactory rf = template.getRequestFactory();
 		if (rf instanceof HttpComponentsClientHttpRequestFactory) {
 			log.info("RESTtemplate configuring http BASIC AUTH");

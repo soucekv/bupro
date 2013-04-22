@@ -6,6 +6,7 @@ package cz.cvut.fel.kos;
 public class Configuration {
 
 	private final String uri;
+	private final Authentication authentication;
 	private final String username;
 	private final String password;
 
@@ -14,24 +15,34 @@ public class Configuration {
 	 * @param uri
 	 *            KOS API REST url base
 	 * @param username
-	 *            KOS API auth username
+	 *            KOS API authentication username
 	 * @param password
-	 *            KOS API auth password
+	 *            KOS API authentication password
+	 * @param authentication
+	 * 			  KOS API authentication scheme {@link Authentication}
 	 */
-	public Configuration(String uri, String username, String password) {
+	public Configuration(String uri, String username, String password, Authentication authentication) {
 		if (uri == null) {
 			throw new NullPointerException("KOS URI required, but is null");
 		}
 		if (uri.trim().isEmpty()) {
 			throw new IllegalArgumentException("KOS URI required, but is empty");
 		}
+		if (authentication == null) {
+			throw new NullPointerException("KOS Authentication type required");
+		}
 		this.uri = uri;
+		this.authentication = authentication;
 		this.username = username;
 		this.password = password;
 	}
 
 	public String getUri() {
 		return uri;
+	}
+
+	public Authentication getAuthentication() {
+		return authentication;
 	}
 
 	public String getUsername() {
@@ -77,6 +88,13 @@ public class Configuration {
 		} else if (!username.equals(other.username))
 			return false;
 		return true;
+	}
+
+	/**
+	 * KOS client supported authentication schemes
+	 */
+	public enum Authentication {
+		BASIC, OAUTH2;
 	}
 
 }
