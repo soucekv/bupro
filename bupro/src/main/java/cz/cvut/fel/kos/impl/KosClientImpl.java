@@ -19,8 +19,10 @@ import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import cz.cvut.fel.kos.Configuration;
@@ -94,7 +96,16 @@ public class KosClientImpl implements KosClient {
 
 	@SuppressWarnings("unchecked")
 	private <T> Entry<T> getForEntry(String uri, Map<String, ?> urlVariables) {
-		return template.getForObject(uri, Entry.class, urlVariables);
+		try {
+			return template.getForObject(uri, Entry.class, urlVariables);
+		} catch(HttpClientErrorException e) {
+			HttpStatus httpStatus = e.getStatusCode();
+			if (httpStatus == HttpStatus.NOT_FOUND) {
+				log.warn("KOS API entry " + uri + " Not Found!");
+				return null;
+			}
+			throw e;
+		}
 	}
 
 	private <T> Entry<T> getForEntry(String uri) {
@@ -215,8 +226,8 @@ public class KosClientImpl implements KosClient {
 		if (!code.matches("^[0-9A-Z]+$")) {
 			throw new IllegalArgumentException("Invalid course code " + code);
 		}
-		Entry<Course> course = getForEntry(configuration.getUri() + "courses/" + code);
-		return course.getContent();
+		Entry<Course> entry = getForEntry(configuration.getUri() + "courses/" + code);
+		return (entry == null) ? null : entry.getContent();
 	}
 
 	public Student getStudent(String username) {
@@ -224,7 +235,7 @@ public class KosClientImpl implements KosClient {
 			throw new NullPointerException();
 		}
 		Entry<Student> entry = getForEntry(configuration.getUri() + "students/" + username);
-		return entry.getContent();
+		return (entry == null) ? null : entry.getContent();
 	}
 
 	public Teacher getTeacher(String username) {
@@ -232,7 +243,7 @@ public class KosClientImpl implements KosClient {
 			throw new NullPointerException();
 		}
 		Entry<Teacher> entry = getForEntry(configuration.getUri() + "teachers/" + username);
-		return entry.getContent();
+		return (entry == null) ? null : entry.getContent();
 	}
 
 }
