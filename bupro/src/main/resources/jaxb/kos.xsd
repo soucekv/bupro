@@ -155,4 +155,83 @@
 			<xs:enumeration value="UNDEFINED" />
 		</xs:restriction>
 	</xs:simpleType>
+	
+	<!-- Student -->
+	<xs:element name="student" type="student" />
+
+	<xs:complexType name="student">
+		<xs:choice>
+			<xs:element name="branch" type="link" />
+			<xs:element name="department" type="link" />
+			<xs:element name="email" type="xs:string" />
+			<xs:element name="faculty" type="link" />
+			<xs:element name="firstName" type="xs:string" />
+			<xs:element name="grade" type="xs:int" />
+			<xs:element name="interruptedUntil" type="xs:string" />
+			<xs:element name="lastName" type="xs:string" />
+			<xs:element name="personalNumber" type="xs:string" />
+			<xs:element name="programme" type="link" />
+			<xs:element name="studyForm" type="studyForm" />
+			<xs:element name="studyGroup" type="xs:int" />
+			<xs:element name="studyPlan" type="link" />
+			<xs:element name="studyState" type="studyState" />
+			<xs:element name="supervisor" type="link" />
+			<xs:element name="studyTerminationReason" type="studyTerminationReason" />
+			<xs:element name="titlesPost" type="xs:string" />
+			<xs:element name="titlesPre" type="xs:string" />
+			<xs:element name="username" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="studyState">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ACTIVE" />
+			<xs:enumeration value="INTERRUPTED" />
+			<xs:enumeration value="CLOSED" />
+			<xs:enumeration value="UNDEFINED" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="studyTerminationReason">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="GRADUATION" />
+			<xs:enumeration value="WITHDRAW" />
+			<xs:enumeration value="NONCOMPLIANCE" />
+			<xs:enumeration value="ACCREDITATION_REVOKED" />
+			<xs:enumeration value="ACCREDITATION_EXPIRED" />
+			<xs:enumeration value="EXPULSION_PAR_65" />
+			<xs:enumeration value="EXPULSION_PAR_67" />
+			<xs:enumeration value="DEATH" />
+			<xs:enumeration value="TRANSFER_TO_OTHER_FACULTY" />
+			<xs:enumeration value="UNDEFINED" />
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Teacher -->
+	<xs:element name="teacher" type="teacher" />
+
+	<xs:complexType name="teacher">
+		<xs:choice>
+			<xs:element name="division" type="link" />
+			<xs:element name="email" type="xs:string" />
+			<xs:element name="extern" type="xs:boolean" />
+			<xs:element name="firstName" type="xs:string" />
+			<xs:element name="lastName" type="xs:string" />
+			<xs:element name="personalNumber" type="xs:string" />
+			<xs:element name="phone" type="xs:string" />
+			<xs:element name="stageName" type="xs:string" />
+			<xs:element name="supervisionPhDStudents" type="permission" />
+			<xs:element name="titlesPost" type="xs:string" />
+			<xs:element name="titlesPre" type="xs:string" />
+			<xs:element name="username" type="xs:string" />
+		</xs:choice>
+	</xs:complexType>
+
+	<xs:simpleType name="permission">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ALLOWED" />
+			<xs:enumeration value="DENIED" />
+			<xs:enumeration value="UNDEFINED" />
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>

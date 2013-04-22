@@ -13,36 +13,48 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for season.
+ * <p>Java class for studyTerminationReason.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="season">
+ * &lt;simpleType name="studyTerminationReason">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="WINTER"/>
- *     &lt;enumeration value="SUMMER"/>
- *     &lt;enumeration value="BOTH"/>
+ *     &lt;enumeration value="GRADUATION"/>
+ *     &lt;enumeration value="WITHDRAW"/>
+ *     &lt;enumeration value="NONCOMPLIANCE"/>
+ *     &lt;enumeration value="ACCREDITATION_REVOKED"/>
+ *     &lt;enumeration value="ACCREDITATION_EXPIRED"/>
+ *     &lt;enumeration value="EXPULSION_PAR_65"/>
+ *     &lt;enumeration value="EXPULSION_PAR_67"/>
+ *     &lt;enumeration value="DEATH"/>
+ *     &lt;enumeration value="TRANSFER_TO_OTHER_FACULTY"/>
  *     &lt;enumeration value="UNDEFINED"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "season")
+@XmlType(name = "studyTerminationReason")
 @XmlEnum
-public enum Season {
+public enum StudyTerminationReason {
 
-    WINTER,
-    SUMMER,
-    BOTH,
+    GRADUATION,
+    WITHDRAW,
+    NONCOMPLIANCE,
+    ACCREDITATION_REVOKED,
+    ACCREDITATION_EXPIRED,
+    EXPULSION_PAR_65,
+    EXPULSION_PAR_67,
+    DEATH,
+    TRANSFER_TO_OTHER_FACULTY,
     UNDEFINED;
 
     public String value() {
         return name();
     }
 
-    public static Season fromValue(String v) {
+    public static StudyTerminationReason fromValue(String v) {
         return valueOf(v);
     }
 

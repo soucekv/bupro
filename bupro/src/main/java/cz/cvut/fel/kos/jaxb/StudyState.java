@@ -13,36 +13,36 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for season.
+ * <p>Java class for studyState.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <p>
  * <pre>
- * &lt;simpleType name="season">
+ * &lt;simpleType name="studyState">
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string">
- *     &lt;enumeration value="WINTER"/>
- *     &lt;enumeration value="SUMMER"/>
- *     &lt;enumeration value="BOTH"/>
+ *     &lt;enumeration value="ACTIVE"/>
+ *     &lt;enumeration value="INTERRUPTED"/>
+ *     &lt;enumeration value="CLOSED"/>
  *     &lt;enumeration value="UNDEFINED"/>
  *   &lt;/restriction>
  * &lt;/simpleType>
  * </pre>
  * 
  */
-@XmlType(name = "season")
+@XmlType(name = "studyState")
 @XmlEnum
-public enum Season {
+public enum StudyState {
 
-    WINTER,
-    SUMMER,
-    BOTH,
+    ACTIVE,
+    INTERRUPTED,
+    CLOSED,
     UNDEFINED;
 
     public String value() {
         return name();
     }
 
-    public static Season fromValue(String v) {
+    public static StudyState fromValue(String v) {
         return valueOf(v);
     }
 
