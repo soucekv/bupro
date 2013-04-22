@@ -30,6 +30,8 @@ import cz.cvut.fel.kos.Configuration.Authentication;
 import cz.cvut.fel.kos.jaxb.Course;
 import cz.cvut.fel.kos.jaxb.Label;
 import cz.cvut.fel.kos.jaxb.Semester;
+import cz.cvut.fel.kos.jaxb.Student;
+import cz.cvut.fel.kos.jaxb.Teacher;
 import cz.jirutka.atom.jaxb.AtomLink;
 import cz.jirutka.atom.jaxb.Entry;
 import cz.jirutka.atom.jaxb.Feed;
@@ -215,6 +217,22 @@ public class KosClientImpl implements KosClient {
 		}
 		Entry<Course> course = getForEntry(configuration.getUri() + "courses/" + code);
 		return course.getContent();
+	}
+
+	public Student getStudent(String username) {
+		if (username == null) {
+			throw new NullPointerException();
+		}
+		Entry<Student> entry = getForEntry(configuration.getUri() + "students/" + username);
+		return entry.getContent();
+	}
+
+	public Teacher getTeacher(String username) {
+		if (username == null) {
+			throw new NullPointerException();
+		}
+		Entry<Teacher> entry = getForEntry(configuration.getUri() + "teachers/" + username);
+		return entry.getContent();
 	}
 
 }

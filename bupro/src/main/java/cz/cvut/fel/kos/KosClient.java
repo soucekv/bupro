@@ -5,6 +5,8 @@ import java.util.Locale;
 
 import cz.cvut.fel.kos.jaxb.Course;
 import cz.cvut.fel.kos.jaxb.Semester;
+import cz.cvut.fel.kos.jaxb.Student;
+import cz.cvut.fel.kos.jaxb.Teacher;
 
 /**
  * High level API for obtaining data from KOS
@@ -80,6 +82,20 @@ public interface KosClient {
 	 *             if code is not valid
 	 */
 	Course getCourse(String code);
+
+	/**
+	 * Finds student by KOS username
+	 * @param username
+	 * @return
+	 */
+	Student getStudent(String username);
+
+	/**
+	 * Finds teacher by KOS username
+	 * @param username
+	 * @return
+	 */
+	Teacher getTeacher(String username);
 
 	// TODO more methods
 }
