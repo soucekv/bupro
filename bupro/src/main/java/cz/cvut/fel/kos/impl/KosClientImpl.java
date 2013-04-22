@@ -33,6 +33,7 @@ import cz.cvut.fel.kos.jaxb.Course;
 import cz.cvut.fel.kos.jaxb.Label;
 import cz.cvut.fel.kos.jaxb.Semester;
 import cz.cvut.fel.kos.jaxb.Student;
+import cz.cvut.fel.kos.jaxb.StudyState;
 import cz.cvut.fel.kos.jaxb.Teacher;
 import cz.jirutka.atom.jaxb.AtomLink;
 import cz.jirutka.atom.jaxb.Entry;
@@ -98,7 +99,7 @@ public class KosClientImpl implements KosClient {
 	private <T> Entry<T> getForEntry(String uri, Map<String, ?> urlVariables) {
 		try {
 			return template.getForObject(uri, Entry.class, urlVariables);
-		} catch(HttpClientErrorException e) {
+		} catch (HttpClientErrorException e) {
 			HttpStatus httpStatus = e.getStatusCode();
 			if (httpStatus == HttpStatus.NOT_FOUND) {
 				log.warn("KOS API entry " + uri + " Not Found!");
@@ -153,6 +154,24 @@ public class KosClientImpl implements KosClient {
 			feed = getNextFeed(feed);
 		}
 		return list;
+	}
+
+	/**
+	 * GET feed result of RSQL expression. The offset is set to 0 and limit to
+	 * 10 (default).
+	 * 
+	 * @param uri
+	 *            REST URI String
+	 * @param rsql
+	 *            instance of {@link RsqlBuilder} representing expression
+	 * @return feed containing first page of result
+	 */
+	private <T> Feed<T> getForFeed(String uri, RsqlBuilder rsql) {
+		Map<String, Object> urlVariables = new HashMap<String, Object>();
+		urlVariables.put(KosRestParams.OFFSET, 0);
+		urlVariables.put(KosRestParams.LIMIT, 10);
+		urlVariables.put(KosRestParams.QUERY, rsql.toString());
+		return getForFeed(uri, urlVariables);
 	}
 
 	public Semester getPreviousSemester() {
@@ -214,7 +233,7 @@ public class KosClientImpl implements KosClient {
 	}
 
 	public List<Course> getCourses() {
-		//TODO impl feed chain, use query to remove obsolete courses
+		// TODO impl feed chain, use query to remove obsolete courses
 		Feed<Course> feed = getForFeed(configuration.getUri() + "courses");
 		return feed.getContents();
 	}
@@ -230,12 +249,26 @@ public class KosClientImpl implements KosClient {
 		return (entry == null) ? null : entry.getContent();
 	}
 
+	public List<Student> getStudents() {
+		RsqlBuilder rsql = new RsqlBuilder();
+		rsql.equal("studyState", StudyState.ACTIVE);
+		Feed<Student> feed = getForFeed(configuration.getUri() + "students", rsql);
+		return getChainedFeedsContent(feed);
+	}
+
 	public Student getStudent(String username) {
 		if (username == null) {
 			throw new NullPointerException();
 		}
 		Entry<Student> entry = getForEntry(configuration.getUri() + "students/" + username);
 		return (entry == null) ? null : entry.getContent();
+	}
+
+	public List<Student> getStudentByName(String firstName, String lastName) {
+		RsqlBuilder rsql = new RsqlBuilder();
+		rsql.startWith("firstName", firstName).or().startWith("lastName", lastName);
+		Feed<Student> feed = getForFeed(configuration.getUri(), rsql);
+		return getChainedFeedsContent(feed);
 	}
 
 	public Teacher getTeacher(String username) {

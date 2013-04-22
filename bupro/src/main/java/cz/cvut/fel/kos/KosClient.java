@@ -6,6 +6,7 @@ import java.util.Locale;
 import cz.cvut.fel.kos.jaxb.Course;
 import cz.cvut.fel.kos.jaxb.Semester;
 import cz.cvut.fel.kos.jaxb.Student;
+import cz.cvut.fel.kos.jaxb.StudyState;
 import cz.cvut.fel.kos.jaxb.Teacher;
 
 /**
@@ -84,16 +85,28 @@ public interface KosClient {
 	Course getCourse(String code);
 
 	/**
-	 * Finds student by KOS username
-	 * @param username
+	 * Finds all students currently studying in other words
+	 * {@link StudyState#ACTIVE}
+	 * 
 	 * @return
+	 */
+	List<Student> getStudents();
+
+	/**
+	 * Finds student by KOS username
+	 * 
+	 * @param username
+	 * @return instance of {@link Student} or <code>null</code> if no such
+	 *         student exists
 	 */
 	Student getStudent(String username);
 
 	/**
 	 * Finds teacher by KOS username
+	 * 
 	 * @param username
-	 * @return
+	 * @return instance of {@link Teacher} or <code>null</code> if no such
+	 *         teacher exists
 	 */
 	Teacher getTeacher(String username);
 
