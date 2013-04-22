@@ -29,4 +29,11 @@ public class KosRestParams {
 	 * Působnost: Atom Feed
 	 */
 	public static final String ORDERBY = "orderBy";
+
+	/**
+	 * Popis: Vyhledá záznamy odpovídající zadanému RSQL výrazu.
+	 * Vstup: RSQL výraz
+	 * Působnost: Atom Feed
+	 */
+	public static final String QUERY = "query";
 }
