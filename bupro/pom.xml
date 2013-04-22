@@ -28,9 +28,19 @@
 		    <name>CVUT Repository Local</name>
 		    <url>http://repository.fit.cvut.cz/maven/local-repos/</url>
 		</repository>
+		<repository>
+		  <id>oauth</id>
+		  <name>OAuth Repository</name>
+		  <url>http://oauth.googlecode.com/svn/code/maven</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
+		<dependency>
+			<groupId>cz.cvut.fel</groupId>
+			<artifactId>kos-client</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<!-- Embedded Tomcat Web Server -->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>
@@ -199,11 +209,13 @@
 			<artifactId>atom-jaxb</artifactId>
 			<version>1.0.1</version>
 		</dependency>
+		<!-- KOS BASIC auth -->
 		<dependency>
 		   <groupId>org.apache.httpcomponents</groupId>
 		   <artifactId>httpclient</artifactId>
 		   <version>4.2.4</version>
 		</dependency>
+		<!-- KOS OAUTH2 - OAuth 2.0 -->
 		<!-- Other -->
 		<dependency>
 			<groupId>cglib</groupId>

@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.auth.AuthScope;
@@ -52,10 +50,10 @@ public class KosClientImpl implements KosClient {
 	public KosClientImpl(RestTemplate template, Configuration configuration) {
 		this.template = template;
 		this.configuration = configuration;
+		configureKosCredentials();
 	}
 
-	@PostConstruct
-	public void configureKosCredentials() {
+	private void configureKosCredentials() {
 		if (configuration.getAuthentication() == Authentication.OAUTH2) {
 			throw new UnsupportedOperationException("OAuth v2.0 is not supported yet");
 		}
