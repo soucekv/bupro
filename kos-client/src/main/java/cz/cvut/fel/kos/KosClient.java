@@ -1,7 +1,6 @@
 package cz.cvut.fel.kos;
 
 import java.util.List;
-import java.util.Locale;
 
 import cz.cvut.fel.kos.jaxb.Course;
 import cz.cvut.fel.kos.jaxb.Semester;
@@ -49,20 +48,6 @@ public interface KosClient {
 	 * @return next semester
 	 */
 	Semester getNextSemester();
-
-	/**
-	 * Localized semester name, if there is no name defined for locale this
-	 * method should return English name
-	 * 
-	 * @param code
-	 * @param locale
-	 * @return Localized semester name
-	 * @throws NullPointerException
-	 *             if code is <code>null</code>
-	 * @throws IllegalArgumentException
-	 *             if code is not valid
-	 */
-	String getSemesterName(String code, Locale locale);
 
 	/**
 	 * List of approved courses
