@@ -5,7 +5,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
@@ -201,7 +203,21 @@ public class KosClientImpl implements KosClient {
 		int offset = 0;
 		int limit = 100;
 		Feed<Semester> feed = getSemestersFeed(offset, limit);
-		return getChainedFeedsContent(feed);
+		List<Semester> semesters = getChainedFeedsContent(feed);
+		//FIXME workaround invalid semesters
+		Iterator<Semester> it = semesters.iterator();
+		while (it.hasNext()) {
+			Semester semester = it.next();
+			if (!KosSemesterCode.validate(semester.getCode())) {
+				it.remove();
+			}
+		}
+		Collections.sort(semesters, new Comparator<Semester>() {
+			public int compare(Semester o1, Semester o2) {
+				return o1.getCode().compareToIgnoreCase(o2.getCode());
+			}
+		});
+		return semesters;
 	}
 
 	public Semester getSemester(String code) {
