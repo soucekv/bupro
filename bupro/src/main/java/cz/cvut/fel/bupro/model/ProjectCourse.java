@@ -9,12 +9,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 @Entity
 @Table(name = "course")
 public class ProjectCourse extends BaseEntity {
 	private static final long serialVersionUID = -5477454797474559891L;
 
 	@Column(nullable = false, unique = true)
+	@NotEmpty
 	private String code;
 	@OneToMany(mappedBy = "course")
 	private Set<Project> projects = new HashSet<Project>();
