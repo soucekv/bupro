@@ -5,13 +5,16 @@
 </head>
 <body>
 	<div th:include="header :: menu"></div>
-	<form action="#" th:action="@{/course/save}" th:object="${course}" method="post">
+	<form action="#" th:action="@{/course/save}" th:object="${projectCourse}" method="post">
 		<input type="hidden" th:field="*{id}" />
 		<table>
 			<tbody>
 				<tr>
-					<td><label th:for="${'name'}">name:</label></td>
-					<td><input type="text" th:field="*{name}" /></td>
+					<td><label th:for="${'code'}" th:text="#{course.code}">code:</label></td>
+					<td>
+						<input type="text" th:field="*{code}" th:class="${#fields.hasErrors('code')}? 'field-error'" />
+						<span th:if="${#fields.hasErrors('code')}" th:errors="*{code}" class="field-error">Invalid code</span>
+					</td>
 				</tr>
 			</tbody>
 		</table>

@@ -19,7 +19,7 @@
 				<td>
 					<a href="http://localhost:8080/" th:href="@{'/course/edit/' + ${course.id}}" ><img th:src="@{/images/edit.png}" height="19" width="19" /></a>
 				</td>
-				<td><a href="http://localhost:8080/" th:href="@{/project/list/(filter.course=${course.name})}" th:text="${course.name}">Course name</a></td>
+				<td><a href="http://localhost:8080/" th:href="@{/project/list/(filter.course=${course.code})}" th:text="${course.name}">Course name</a></td>
 			</tr>
 		</tbody>
 	</table>

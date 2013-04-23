@@ -3,6 +3,8 @@ package cz.cvut.fel.bupro.service;
 import java.util.List;
 import java.util.Locale;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import cz.cvut.fel.kos.jaxb.Course;
 
 @Service
 public class CourseService {
+	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
 	private CourseRepository courseRepository;
@@ -48,5 +51,15 @@ public class CourseService {
 	@Transactional
 	public ProjectCourse save(ProjectCourse course) {
 		return courseRepository.save(course);
+	}
+
+	@Transactional
+	public Course getCourse(ProjectCourse course) {
+		try {
+			return kos.getCourse(course.getCode());
+		} catch (IllegalArgumentException e) {
+			log.error("Error obtaining course from KOS", e);
+			return null;
+		}
 	}
 }
