@@ -29,7 +29,6 @@ public class KosConfig {
 	@Autowired
 	private KosClientFactory kosClientFactory;
 
-	@Bean
 	public cz.cvut.fel.kos.Configuration kosConfiguration() {
 		Authentication authentication = Authentication.valueOf(String.valueOf(auth).toUpperCase());
 		return new cz.cvut.fel.kos.Configuration(uri, username, password, authentication);
