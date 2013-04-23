@@ -19,47 +19,47 @@ import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.service.CourseService;
 
 @Controller
-public class SubjectController {
+public class CourseController {
 	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
 	private CourseService courseService;
 
-	@ModelAttribute("subjectList")
+	@ModelAttribute("courseList")
 	public List<ProjectCourse> getAllSubjects() {
 		return courseService.getProjectCourses();
 	}
 
-	@RequestMapping({ "/subject/list" })
+	@RequestMapping({ "/course/list" })
 	public String showList() {
-		return "subject-list";
+		return "course-list";
 	}
 
-	@RequestMapping({ "/subject/view/{id}" })
+	@RequestMapping({ "/course/view/{id}" })
 	public String showDetail(Model model, Locale locale, @PathVariable Long id) {
 		ProjectCourse course = courseService.getProjectCourse(id);
-		model.addAttribute("subject", course);
-		return "subject-view";
+		model.addAttribute("course", course);
+		return "course-view";
 	}
 
-	@RequestMapping({ "/subject/edit/{id}" })
+	@RequestMapping({ "/course/edit/{id}" })
 	public String editDetail(Model model, Locale locale, @PathVariable Long id) {
 		ProjectCourse course = courseService.getProjectCourse(id);
-		model.addAttribute("subject", course);
-		return "subject-edit";
+		model.addAttribute("course", course);
+		return "course-edit";
 	}
 
-	@RequestMapping({ "/subject/create" })
+	@RequestMapping({ "/course/create" })
 	public String create(Model model, Locale locale) {
 		log.trace("SubjectController.createProject()");
-		model.addAttribute("subject", new ProjectCourse());
-		return "subject-edit";
+		model.addAttribute("course", new ProjectCourse());
+		return "course-edit";
 	}
 
-	@RequestMapping({ "/subject/save" })
+	@RequestMapping({ "/course/save" })
 	public String save(@Validated ProjectCourse course, BindingResult errors, Map<String, Object> model) {
 		course = courseService.save(course);
 		log.info("Project saved " + course);
-		return "redirect:/subject/list/";
+		return "redirect:/course/list/";
 	}
 }

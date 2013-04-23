@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 import javax.validation.constraints.Pattern;
 
 import cz.cvut.fel.kos.KosSemesterCode;
@@ -15,6 +16,9 @@ public class SemesterCode implements Serializable {
 	@Column(nullable = false)
 	@Pattern(regexp = KosSemesterCode.REGEX_PATTERN)
 	private String code;
+
+	@Transient
+	private String name;
 
 	public SemesterCode() {
 	}
@@ -28,6 +32,14 @@ public class SemesterCode implements Serializable {
 
 	public String getCode() {
 		return code;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

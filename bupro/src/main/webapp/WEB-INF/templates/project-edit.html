@@ -20,7 +20,7 @@
 					<td><label th:for="${'course'}">course:</label></td>
 					<td>
 						<select th:field="*{course}" >
-							<option th:each="course : ${subjectList}" th:value="${course.id}" th:text="${course.name}">Course 1</option>
+							<option th:each="course : ${courseList}" th:value="${course.id}" th:text="${course.name}">Course 1</option>
 						</select>
 						<span class="error" th:errors="*{course}"></span>
 					</td>
@@ -29,7 +29,7 @@
 					<td><label th:for="${'startSemester'}">start:</label></td>
 					<td>
 						<select th:field="*{startSemester}" >
-							<option th:each="semester : ${semesterList}" th:value="${semester.code}" th:text="${semester.name}">Semester name</option>
+							<option th:each="semester : ${semesterList}" th:value="${semester.code}" th:text="${translator.localizedString(semester.name)}">Semester name</option>
 						</select>
 						<span class="error" th:errors="*{startSemester}"></span>
 					</td>
@@ -38,7 +38,7 @@
 					<td><label th:for="${'endSemester'}">end:</label></td>
 					<td>
 						<select th:field="*{endSemester}" >
-							<option th:each="semester : ${semesterList}" th:value="${semester.code}" th:text="${semester.name}">Semester name</option>
+							<option th:each="semester : ${semesterList}" th:value="${semester.code}" th:text="${translator.localizedString(semester.name)}">Semester name</option>
 						</select>
 						<span class="error" th:errors="*{endSemester}"></span>
 					</td>

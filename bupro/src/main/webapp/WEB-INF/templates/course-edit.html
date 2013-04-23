@@ -1,11 +1,11 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head th:include="header :: head">
-	<title th:text="#{subject(${subject.name == null ? '' : subject.name})}" >Subject</title>
+	<title th:text="#{course(${course.name == null ? '' : course.name})}" >Subject</title>
 </head>
 <body>
 	<div th:include="header :: menu"></div>
-	<form action="#" th:action="@{/subject/save}" th:object="${subject}" method="post">
+	<form action="#" th:action="@{/course/save}" th:object="${course}" method="post">
 		<input type="hidden" th:field="*{id}" />
 		<table>
 			<tbody>

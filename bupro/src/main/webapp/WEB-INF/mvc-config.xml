@@ -27,7 +27,20 @@
 			</bean>
 			<bean class="cz.cvut.fel.bupro.filter.FilterableArgumentResolver" />
 		</mvc:argument-resolvers>
+		<mvc:message-converters register-defaults="true">
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
+			</bean>
+		</mvc:message-converters>
 	</mvc:annotation-driven>
+	<mvc:interceptors>
+		<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
+			<property name="paramName" value="lang" />
+		</bean>
+	</mvc:interceptors>
+	<bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+		<property name="defaultLocale" value="cs" />
+	</bean>
 	<bean id="pageableArgumentResolver" class="org.springframework.data.web.PageableArgumentResolver" />
 	<bean id="conversionService" class="org.springframework.core.convert.support.DefaultConversionService"/>
 	<bean class="cz.cvut.fel.bupro.support.ExtendedDomainClassConverter">

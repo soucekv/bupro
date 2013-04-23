@@ -26,11 +26,13 @@ import cz.cvut.fel.bupro.filter.FilterSpecificationFactory;
 import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.ProjectCourse;
+import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.kos.KosClient;
 import cz.cvut.fel.kos.Translator;
 import cz.cvut.fel.kos.jaxb.Course;
+import cz.cvut.fel.kos.jaxb.Semester;
 
 @Service
 public class ProjectService {
@@ -41,7 +43,19 @@ public class ProjectService {
 	private ProjectRepository projectRepository;
 	@Autowired
 	private KosClient kos;
-	
+
+	private void localize(Project project, Translator translator) {
+		ProjectCourse projectCourse = project.getCourse();
+		Course course = kos.getCourse(projectCourse.getCode());
+		projectCourse.setName(translator.localizedString(course.getName()));
+		SemesterCode semesterCode = project.getStartSemester();
+		Semester semester = kos.getSemester(semesterCode.getCode());
+		semesterCode.setName(translator.localizedString(semester.getName()));
+		semesterCode = project.getEndSemester();
+		semester = kos.getSemester(semesterCode.getCode());
+		semesterCode.setName(translator.localizedString(semester.getName()));
+	}
+
 	@Transactional
 	public List<Project> getAllProjects() {
 		log.info("get all projects");
@@ -65,9 +79,7 @@ public class ProjectService {
 		Translator translator = new Translator(locale);
 		Page<Project> page = getProjects(pageable, filterable);
 		for (Project project : page) {
-			ProjectCourse projectCourse = project.getCourse();
-			Course course = kos.getCourse(projectCourse.getCode());
-			projectCourse.setName(translator.localizedString(course.getName()));
+			localize(project, translator);
 		}
 		return page;
 	}
@@ -79,6 +91,13 @@ public class ProjectService {
 		project.getMemberships().size(); // force fetch
 		project.getComments().size(); // force fetch
 		project.getTags().size(); // force fetch
+		return project;
+	}
+
+	@Transactional
+	public Project getProject(Long id, Locale locale) {
+		Project project = getProject(id);
+		localize(project, new Translator(locale));
 		return project;
 	}
 
@@ -156,7 +175,7 @@ public class ProjectService {
 				};
 			}
 		},
-		SUBJECT {
+		COURSE {
 			public Specification<Project> create(final String value) {
 				return new Specification<Project>() {
 					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {

@@ -1,0 +1,27 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+	<title th:text="#{sbuject.list}" >Subject List</title>
+</head>
+<body>
+	<div th:include="header :: menu"></div>
+	<h1 th:text="#{course.list}">Subject List</h1>
+	<a class="button" href="http://localhost:8080/" th:href="@{'/course/create/'}" th:text="#{create}">Create</a>
+	<table class="list">
+		<thead>
+			<tr>
+				<th></th>
+				<th th:text="#{course.name}">Subject Name</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="course : ${courseList}" class="subject">
+				<td>
+					<a href="http://localhost:8080/" th:href="@{'/course/edit/' + ${course.id}}" ><img th:src="@{/images/edit.png}" height="19" width="19" /></a>
+				</td>
+				<td><a href="http://localhost:8080/" th:href="@{/project/list/(filter.course=${course.name})}" th:text="${course.name}">Course name</a></td>
+			</tr>
+		</tbody>
+	</table>
+</body>
+</html>

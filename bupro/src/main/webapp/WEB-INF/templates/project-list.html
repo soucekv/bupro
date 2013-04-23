@@ -24,6 +24,7 @@
 	<div class="body-wrapper">
 		<div th:include="header :: menu"></div>
 		<h1 th:text="#{project.list}">Project List</h1>
+		<div th:text="${locale}"></div>
 		<div>
 			<a class="button" th:if="${user.teacher}" href="http://localhost:8080/" th:href="@{'/project/create/'}" th:text="#{create}">Create</a>
 		</div>
@@ -39,7 +40,7 @@
 								'filter.name' : $.trim($('#filter_name').val()),
 								'filter.user' : $.trim($('#filter_user').val()),
 								'filter.tag' : $.trim($('#filter_tag').val()),
-								'filter.subject' : $.trim($('#filter_subject :selected').val())
+								'filter.course' : $.trim($('#filter_course :selected').val())
 							});
 							$(this).attr('href', filter_url + '?' + params);
 							return true; //default action
@@ -70,12 +71,12 @@
 							</tr>
 							<tr>
 								<td>
-									<label for="filter_subject" th:text="#{project.subject}">subject:</label>
+									<label for="filter_course" th:text="#{project.course}">Course:</label>
 								</td>
 								<td>
-									<select id="filter_subject" >
-										<option value="" th:text="#{noselection}" th:attr="selected=${(filter.filter['subject'] == null or #strings.isEmpty(filter.filter['subject'])) ? 'selected' : ''}">No selection</option>
-										<option th:each="subject : ${subjects}" th:value="${subject.name}" th:text="${subject.name}" th:attr="selected=${(filter.filter['subject'] != null and #strings.startsWith(filter.filter['subject'], subject.name)) ? 'selected' : ''}">Subject 1</option>
+									<select id="filter_course" >
+										<option value="" th:text="#{noselection}" th:attr="selected=${(filter.filter['course'] == null or #strings.isEmpty(filter.filter['course'])) ? 'selected' : ''}">No selection</option>
+										<option th:each="course : ${courses}" th:value="${course.name}" th:text="${course.name}" th:attr="selected=${(filter.filter['course'] != null and #strings.startsWith(filter.filter['course'], course.name)) ? 'selected' : ''}">Course 1</option>
 									</select>
 								</td>
 							</tr>
@@ -107,7 +108,7 @@
 					<th>
 						<div class="header">
 							<span th:with="prop='course'" th:include="pagination :: sort"></span>
-							<span th:text="#{project.subject}">Project Subject</span>
+							<span th:text="#{project.course}">Project Course</span>
 						</div>
 					</th>
 					<th>
@@ -127,7 +128,7 @@
 					</td>
 					<td><a class="name" href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="${project.name}">Project name</a></td>
 					<td><a class="owner" th:href="@{'/user/view/' + ${project.owner.id}}" th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</a></td>
-					<td><a class="subject" th:href="@{/project/list(filter.subject=${project.course.code})}" th:text="${project.course.name}">Project Course</a></td>
+					<td><a class="course" th:href="@{/project/list(filter.course=${project.course.code})}" th:text="${project.course.name}">Project Course</a></td>
 					<td th:text="${project.creationTime}">Created</td>
 					<td th:text="${semester[project.startSemester]}">Begins in semester</td>
 					<td th:text="${semester[project.endSemester]}">Ends in semester</td>

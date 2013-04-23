@@ -40,6 +40,7 @@ import cz.cvut.fel.bupro.service.SemesterService;
 import cz.cvut.fel.bupro.service.CourseService;
 import cz.cvut.fel.bupro.service.TagService;
 import cz.cvut.fel.bupro.service.UserService;
+import cz.cvut.fel.kos.Translator;
 
 @Controller
 public class ProjectController {
@@ -86,11 +87,12 @@ public class ProjectController {
 		return "project-view";
 	}
 
-	private String editPage(Model model, Project project, Collection<ProjectCourse> courses) {
+	private String editPage(Model model, Locale locale, Project project, Collection<ProjectCourse> courses) {
 		model.addAttribute("project", project);
-		model.addAttribute("subjectList", courses);
+		model.addAttribute("courseList", courses);
 		model.addAttribute("tags", tagService.getAllTags());
 		model.addAttribute("semesterList", semesterService.getAllSemesters());
+		model.addAttribute("translator", new Translator(locale));
 		return "project-edit";
 	}
 
@@ -108,14 +110,14 @@ public class ProjectController {
 		model.addAttribute("semester", semesterService.getSemestersNames(semesterCodeSet(projects.getContent()), locale));
 		model.addAttribute("filter", filterable);
 		model.addAttribute("tags", tagService.getAllTags());
-		model.addAttribute("subjects", courseService.getProjectCourses());
+		model.addAttribute("courses", courseService.getProjectCourses());
 		return "project-list";
 	}
 
 	@RequestMapping({ "/project/view/{id}" })
 	@Transactional
 	public String showProjectDetail(Model model, Locale locale, @PathVariable Long id) {
-		Project project = projectService.getProject(id);
+		Project project = projectService.getProject(id, locale);
 		return viewPage(model, project);
 	}
 
@@ -125,7 +127,7 @@ public class ProjectController {
 		log.trace("ProjectManagementController.editProjectDetail()");
 		Project project = projectService.getProject(id);
 		Collection<ProjectCourse> courses = courseService.getProjectCourses();
-		return editPage(model, project, courses);
+		return editPage(model, locale, project, courses);
 	}
 
 	@RequestMapping({ "/project/create" })
@@ -135,7 +137,7 @@ public class ProjectController {
 		User user = securityService.getCurrentUser();
 		Project project = new Project();
 		Collection<ProjectCourse> courses = courseService.getProjectCourses(locale);
-		return editPage(model, project, courses);
+		return editPage(model, locale, project, courses);
 	}
 
 	@RequestMapping({ "/project/save" })
@@ -144,7 +146,7 @@ public class ProjectController {
 		User user = securityService.getCurrentUser();
 		if (bindingResult.hasErrors()) {
 			log(bindingResult.getAllErrors());
-			model.addAttribute("subjectList", courseService.getProjectCourses(locale));
+			model.addAttribute("courseList", courseService.getProjectCourses(locale));
 			return "project-edit";
 		}
 		if (project.getOwner() == null) {
