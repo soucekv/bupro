@@ -1,6 +1,7 @@
 package cz.cvut.fel.bupro.service;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -24,9 +25,12 @@ import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.filter.FilterSpecificationFactory;
 import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.Project;
-import cz.cvut.fel.bupro.model.Subject;
+import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.kos.KosClient;
+import cz.cvut.fel.kos.Translator;
+import cz.cvut.fel.kos.jaxb.Course;
 
 @Service
 public class ProjectService {
@@ -35,7 +39,9 @@ public class ProjectService {
 
 	@Autowired
 	private ProjectRepository projectRepository;
-
+	@Autowired
+	private KosClient kos;
+	
 	@Transactional
 	public List<Project> getAllProjects() {
 		log.info("get all projects");
@@ -53,6 +59,17 @@ public class ProjectService {
 			return projectRepository.findAll(pageable);
 		}
 		return projectRepository.findAll(spec, pageable);
+	}
+	
+	public Page<Project> getProjects(Locale locale, Pageable pageable, Filterable filterable) {
+		Translator translator = new Translator(locale);
+		Page<Project> page = getProjects(pageable, filterable);
+		for (Project project : page) {
+			ProjectCourse projectCourse = project.getCourse();
+			Course course = kos.getCourse(projectCourse.getCode());
+			projectCourse.setName(translator.localizedString(course.getName()));
+		}
+		return page;
 	}
 
 	@Transactional
@@ -143,8 +160,8 @@ public class ProjectService {
 			public Specification<Project> create(final String value) {
 				return new Specification<Project>() {
 					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-						Join<Project, Subject> join = root.<Project, Subject> join("subject");
-						return cb.like(join.<String> get("name"), value + "%");
+						Join<Project, ProjectCourse> join = root.<Project, ProjectCourse> join("course");
+						return cb.like(join.<String> get("code"), value + "%");
 					}
 				};
 			}

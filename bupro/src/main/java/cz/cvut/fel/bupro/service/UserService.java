@@ -23,6 +23,9 @@ import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.filter.FilterSpecificationFactory;
 import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.kos.KosClient;
+import cz.cvut.fel.kos.jaxb.Student;
+import cz.cvut.fel.kos.jaxb.Teacher;
 
 @Service
 public class UserService {
@@ -30,6 +33,32 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private KosClient kos;
+
+	public void createNewUserAccount(String username) {
+		User user = new User();
+		String email = null;
+		Student student = kos.getStudent(username);
+		if (student != null) {
+			email = student.getEmail();
+			// add student role
+		}
+		Teacher teacher = kos.getTeacher(username);
+		if (teacher != null) {
+			email = teacher.getEmail();
+			// add teacher role
+		}
+		if (email == null) {
+			// silently ignore name and show success to prevent attempts to
+			// findout username
+			// return null;
+		}
+		// Generate random password
+		// Send password to user
+		// emailServic.send()
+	}
 
 	@Transactional
 	public List<User> getAllUsers() {
@@ -50,6 +79,7 @@ public class UserService {
 		log.info("get user " + id);
 		User user = userRepository.findOne(id);
 		user.getComments().size(); // force fetch
+		user.getRoles().size(); // force fetch
 		return user;
 	}
 

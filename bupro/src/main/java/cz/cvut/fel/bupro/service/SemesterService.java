@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.kos.KosClient;
+import cz.cvut.fel.kos.Translator;
 import cz.cvut.fel.kos.jaxb.Semester;
 
 /**
@@ -48,16 +49,13 @@ public class SemesterService {
 		return map;
 	}
 
-	//TODO ? remove this use SPEL collection tools
-	public String getSemesterName(SemesterCode code, Locale locale) {
-		return kosClient.getSemesterName(code.getCode(), locale);
-	}
-
 	public Map<SemesterCode, String> getSemestersNames(Collection<SemesterCode> c, Locale locale) {
+		Translator translator = new Translator(locale);
 		Map<SemesterCode, String> map = new HashMap<SemesterCode, String>();
 		for (SemesterCode code : c) {
 			if (!map.containsKey(code)) {
-				map.put(code, getSemesterName(code, locale));
+				Semester semester = getSemester(code);
+				map.put(code, translator.localizedString(semester.getName()));
 			}
 		}
 		return map;

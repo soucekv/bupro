@@ -47,7 +47,7 @@ public class Project extends CommentableEntity implements Serializable {
 	private Set<Tag> tags = new HashSet<Tag>();
 
 	@ManyToOne(cascade = { CascadeType.MERGE })
-	private Subject subject;
+	private ProjectCourse course;
 
 	@Min(value = 1)
 	private int capacity = 1;
@@ -113,12 +113,12 @@ public class Project extends CommentableEntity implements Serializable {
 		this.tags = tags;
 	}
 
-	public Subject getSubject() {
-		return subject;
+	public ProjectCourse getCourse() {
+		return course;
 	}
 
-	public void setSubject(Subject subject) {
-		this.subject = subject;
+	public void setCourse(ProjectCourse course) {
+		this.course = course;
 	}
 
 	public int getCapacity() {

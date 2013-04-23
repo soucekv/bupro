@@ -3,28 +3,31 @@ package cz.cvut.fel.bupro.model;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
-public class Subject extends BaseEntity {
+@Table(name = "course")
+public class ProjectCourse extends BaseEntity {
 	private static final long serialVersionUID = -5477454797474559891L;
 
 	@Column(nullable = false, unique = true)
-	private String name;
-	@OneToMany(mappedBy = "subject")
+	private String code;
+	@OneToMany(mappedBy = "course")
 	private Set<Project> projects = new HashSet<Project>();
-	@OneToMany(mappedBy = "subject", cascade = {CascadeType.ALL})
-	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
 
-	public String getName() {
-		return name;
+	@Transient
+	private String name;
+
+	public String getCode() {
+		return code;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public Set<Project> getProjects() {
@@ -35,12 +38,14 @@ public class Subject extends BaseEntity {
 		this.projects = projects;
 	}
 
-	public Set<Enrolment> getEnrolments() {
-		return enrolments;
+	public String getName() {
+		if (name == null) {
+			return getCode();
+		}
+		return name;
 	}
 
-	public void setEnrolments(Set<Enrolment> enrolments) {
-		this.enrolments = enrolments;
+	public void setName(String name) {
+		this.name = name;
 	}
-
 }

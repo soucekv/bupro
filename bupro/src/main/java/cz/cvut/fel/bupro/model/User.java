@@ -30,9 +30,6 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 	@OneToMany(mappedBy = "user")
 	private Set<Membership> memberships = new HashSet<Membership>();
 
-	@OneToMany(mappedBy = "user")
-	private Set<Enrolment> enrolments = new HashSet<Enrolment>();
-
 	@ManyToMany
 	@JoinTable(name = "bupro_user_role", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private Set<Role> roles = new HashSet<Role>();
@@ -77,14 +74,6 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 		this.memberships = memberships;
 	}
 
-	public Set<Enrolment> getEnrolments() {
-		return enrolments;
-	}
-
-	public void setEnrolments(Set<Enrolment> enrolments) {
-		this.enrolments = enrolments;
-	}
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -121,26 +110,13 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 		return true;
 	}
 
-	private Set<Subject> getSubjects(EnrolmentType enrolmentType) {
-		Set<Subject> set = new HashSet<Subject>();
-		for (Enrolment enrolment : getEnrolments()) {
-			if (enrolment.getEnrolmentType() == enrolmentType) {
-				set.add(enrolment.getSubject());
+	public boolean isTeacher() {
+		for (Role role : getRoles()) {
+			if ("ROLE_TEACHER".equals(role.getAuthority())) {
+				return true;
 			}
 		}
-		return set;
-	}
-
-	public Set<Subject> getTeachedSubjects() {
-		return getSubjects(EnrolmentType.TEACHER);
-	}
-
-	public Set<Subject> getStudiedSubjects() {
-		return getSubjects(EnrolmentType.STUDENT);
-	}
-
-	public boolean isTeacher() {
-		return !getTeachedSubjects().isEmpty();
+		return false;
 	}
 
 	@Override

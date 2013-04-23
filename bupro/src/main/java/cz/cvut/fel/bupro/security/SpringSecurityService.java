@@ -46,6 +46,8 @@ public class SpringSecurityService implements SecurityService {
 		User user = find(authentication);
 		if (user == null) {
 			log.info("User instance not found!");
+		} else {
+			user.getRoles().size(); // force fetch 
 		}
 		return user;
 	}

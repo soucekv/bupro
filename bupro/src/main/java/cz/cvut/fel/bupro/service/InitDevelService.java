@@ -13,20 +13,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.RoleRepository;
-import cz.cvut.fel.bupro.dao.SubjectRepository;
+import cz.cvut.fel.bupro.dao.CourseRepository;
 import cz.cvut.fel.bupro.dao.TagRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.Comment;
-import cz.cvut.fel.bupro.model.Enrolment;
-import cz.cvut.fel.bupro.model.EnrolmentType;
+import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.Role;
 import cz.cvut.fel.bupro.model.SemesterCode;
-import cz.cvut.fel.bupro.model.Subject;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.kos.KosClient;
+import cz.cvut.fel.kos.jaxb.Course;
+import cz.cvut.fel.kos.jaxb.Student;
+import cz.cvut.fel.kos.jaxb.Teacher;
 
 @Service
 public class InitDevelService {
@@ -40,7 +41,7 @@ public class InitDevelService {
 	@Autowired
 	private ProjectRepository projectRepository;
 	@Autowired
-	private SubjectRepository subjectRepository;
+	private CourseRepository courseRepository;
 	@Autowired
 	private TagRepository tagRepository;
 	@Autowired
@@ -60,6 +61,8 @@ public class InitDevelService {
 
 		Role userRole = new Role("ROLE_USER");
 		roleRepository.save(userRole);
+		Role teacherRole = new Role("ROLE_TEACHER");
+		roleRepository.save(teacherRole);
 
 		User user1 = new User();
 		user1.setFirstName("Frantisek");
@@ -68,7 +71,9 @@ public class InitDevelService {
 		user1.setUsername("vomacka");
 		user1.setPassword(passwordEncoder.encode("devel"));
 		user1.getRoles().add(userRole);
+		user1.getRoles().add(teacherRole);
 		userRole.getUsers().add(user1);
+		teacherRole.getUsers().add(user1);
 		userRepository.save(user1);
 
 		User user2 = new User();
@@ -89,23 +94,21 @@ public class InitDevelService {
 		user3.setPassword(passwordEncoder.encode("devel"));
 		userRepository.save(user3);
 
-		Subject subject = new Subject();
-		subject.setName("X7 - Happy Subject");
-		Enrolment enrolment = new Enrolment();
-		enrolment.setEnrolmentType(EnrolmentType.TEACHER);
-		enrolment.setUser(user1);
-		enrolment.setSubject(subject);
-		subject.getEnrolments().add(enrolment);
-		subjectRepository.save(subject);
+		Course course = kos.getCourse("X36PMI");
 
-		Subject subject2 = new Subject();
-		subject2.setName("X13 - Sad Subject");
-		subjectRepository.save(subject2);
+		ProjectCourse c1 = new ProjectCourse();
+		c1.setCode(course.getCode());
+		courseRepository.save(c1);
+
+		course = kos.getCourse("X36PAR");
+		ProjectCourse c2 = new ProjectCourse();
+		c2.setCode(course.getCode());
+		courseRepository.save(c2);
 
 		Project p1 = new Project();
 		p1.setName("Test 1");
 		p1.setOwner(user1);
-		p1.setSubject(subject);
+		p1.setCourse(c1);
 		p1.setStartSemester(s1);
 		p1.setEndSemester(s2);
 		Comment comment = new Comment();
@@ -123,7 +126,7 @@ public class InitDevelService {
 		Project p2 = new Project();
 		p2.setName("Test 2");
 		p2.setOwner(user2);
-		p2.setSubject(subject);
+		p2.setCourse(c2);
 		p2.setStartSemester(s1);
 		p2.setEndSemester(s2);
 		membership = new Membership();
@@ -142,11 +145,19 @@ public class InitDevelService {
 			Project project = new Project();
 			project.setName("Pagination " + i);
 			project.setOwner(user1);
-			project.setSubject(subject);
+			project.setCourse(c1);
 			project.setStartSemester(s1);
 			project.setEndSemester(s2);
 			projectRepository.save(project);
 		}
+
+		log.info("Course " + course.getCode() + " " + course.getName().get(0).getValue() + " " + course.getStudyForm());
+		
+		Student student = kos.getStudent("soucevik");
+		log.info("Student " + student.getTitlesPre() + " " + student.getFirstName() + " " + student.getLastName());
+		
+		Teacher teacher = kos.getTeacher("soucevik");
+		log.info("Teacher " + teacher);
 	}
 
 }

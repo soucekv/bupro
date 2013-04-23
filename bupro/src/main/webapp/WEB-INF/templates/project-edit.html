@@ -17,12 +17,12 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label th:for="${'subject'}">subject:</label></td>
+					<td><label th:for="${'course'}">course:</label></td>
 					<td>
-						<select th:field="*{subject}" >
-							<option th:each="subject : ${subjectList}" th:value="${subject.id}" th:text="${subject.name}">Subject 1</option>
+						<select th:field="*{course}" >
+							<option th:each="course : ${subjectList}" th:value="${course.id}" th:text="${course.name}">Course 1</option>
 						</select>
-						<span class="error" th:errors="*{subject}"></span>
+						<span class="error" th:errors="*{course}"></span>
 					</td>
 				</tr>
 				<tr>

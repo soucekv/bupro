@@ -15,19 +15,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import cz.cvut.fel.bupro.model.Subject;
-import cz.cvut.fel.bupro.service.SubjectService;
+import cz.cvut.fel.bupro.model.ProjectCourse;
+import cz.cvut.fel.bupro.service.CourseService;
 
 @Controller
 public class SubjectController {
 	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
-	private SubjectService subjectService;
+	private CourseService courseService;
 
 	@ModelAttribute("subjectList")
-	public List<Subject> getAllSubjects() {
-		return subjectService.getAllSubjects();
+	public List<ProjectCourse> getAllSubjects() {
+		return courseService.getProjectCourses();
 	}
 
 	@RequestMapping({ "/subject/list" })
@@ -37,29 +37,29 @@ public class SubjectController {
 
 	@RequestMapping({ "/subject/view/{id}" })
 	public String showDetail(Model model, Locale locale, @PathVariable Long id) {
-		Subject subject = subjectService.getSubject(id);
-		model.addAttribute("subject", subject);
+		ProjectCourse course = courseService.getProjectCourse(id);
+		model.addAttribute("subject", course);
 		return "subject-view";
 	}
 
 	@RequestMapping({ "/subject/edit/{id}" })
 	public String editDetail(Model model, Locale locale, @PathVariable Long id) {
-		Subject subject = subjectService.getSubject(id);
-		model.addAttribute("subject", subject);
+		ProjectCourse course = courseService.getProjectCourse(id);
+		model.addAttribute("subject", course);
 		return "subject-edit";
 	}
 
 	@RequestMapping({ "/subject/create" })
 	public String create(Model model, Locale locale) {
 		log.trace("SubjectController.createProject()");
-		model.addAttribute("subject", new Subject());
+		model.addAttribute("subject", new ProjectCourse());
 		return "subject-edit";
 	}
 
 	@RequestMapping({ "/subject/save" })
-	public String save(@Validated Subject subject, BindingResult errors, Map<String, Object> model) {
-		subject = subjectService.save(subject);
-		log.info("Project saved " + subject);
+	public String save(@Validated ProjectCourse course, BindingResult errors, Map<String, Object> model) {
+		course = courseService.save(course);
+		log.info("Project saved " + course);
 		return "redirect:/subject/list/";
 	}
 }

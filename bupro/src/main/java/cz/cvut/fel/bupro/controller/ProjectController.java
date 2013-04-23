@@ -29,7 +29,7 @@ import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.SemesterCode;
-import cz.cvut.fel.bupro.model.Subject;
+import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.security.SecurityService;
@@ -37,7 +37,7 @@ import cz.cvut.fel.bupro.service.EmailService;
 import cz.cvut.fel.bupro.service.MembershipService;
 import cz.cvut.fel.bupro.service.ProjectService;
 import cz.cvut.fel.bupro.service.SemesterService;
-import cz.cvut.fel.bupro.service.SubjectService;
+import cz.cvut.fel.bupro.service.CourseService;
 import cz.cvut.fel.bupro.service.TagService;
 import cz.cvut.fel.bupro.service.UserService;
 
@@ -50,7 +50,7 @@ public class ProjectController {
 	@Autowired
 	private SemesterService semesterService;
 	@Autowired
-	private SubjectService subjectService;
+	private CourseService courseService;
 	@Autowired
 	private TagService tagService;
 	@Autowired
@@ -86,9 +86,9 @@ public class ProjectController {
 		return "project-view";
 	}
 
-	private String editPage(Model model, Project project, Collection<Subject> subjects) {
+	private String editPage(Model model, Project project, Collection<ProjectCourse> courses) {
 		model.addAttribute("project", project);
-		model.addAttribute("subjectList", subjects);
+		model.addAttribute("subjectList", courses);
 		model.addAttribute("tags", tagService.getAllTags());
 		model.addAttribute("semesterList", semesterService.getAllSemesters());
 		return "project-edit";
@@ -98,18 +98,17 @@ public class ProjectController {
 	@Transactional
 	public User getLoggedInUser() {
 		User user = securityService.getCurrentUser();
-		user.getEnrolments().size(); // force fetch
 		return user;
 	}
 
 	@RequestMapping({ "/", "/project/list" })
 	public String showProjectList(Model model, Locale locale, @PageableDefaults Pageable pageable, Filterable filterable) {
-		Page<Project> projects = projectService.getProjects(pageable, filterable);
+		Page<Project> projects = projectService.getProjects(locale, pageable, filterable);
 		model.addAttribute("projects", projects);
 		model.addAttribute("semester", semesterService.getSemestersNames(semesterCodeSet(projects.getContent()), locale));
 		model.addAttribute("filter", filterable);
 		model.addAttribute("tags", tagService.getAllTags());
-		model.addAttribute("subjects", subjectService.getAllSubjects());
+		model.addAttribute("subjects", courseService.getProjectCourses());
 		return "project-list";
 	}
 
@@ -125,8 +124,8 @@ public class ProjectController {
 	public String editProjectDetail(Model model, Locale locale, @PathVariable Long id) {
 		log.trace("ProjectManagementController.editProjectDetail()");
 		Project project = projectService.getProject(id);
-		Collection<Subject> subjects = project.getOwner().getTeachedSubjects();
-		return editPage(model, project, subjects);
+		Collection<ProjectCourse> courses = courseService.getProjectCourses();
+		return editPage(model, project, courses);
 	}
 
 	@RequestMapping({ "/project/create" })
@@ -135,17 +134,17 @@ public class ProjectController {
 		log.trace("ProjectManagementController.createProject()");
 		User user = securityService.getCurrentUser();
 		Project project = new Project();
-		Collection<Subject> subjects = user.getTeachedSubjects();
-		return editPage(model, project, subjects);
+		Collection<ProjectCourse> courses = courseService.getProjectCourses(locale);
+		return editPage(model, project, courses);
 	}
 
 	@RequestMapping({ "/project/save" })
 	@Transactional
-	public String saveProject(@Valid Project project, BindingResult bindingResult, Model model) {
+	public String saveProject(@Valid Project project, BindingResult bindingResult, Model model, Locale locale) {
 		User user = securityService.getCurrentUser();
 		if (bindingResult.hasErrors()) {
 			log(bindingResult.getAllErrors());
-			model.addAttribute("subjectList", user.getTeachedSubjects());
+			model.addAttribute("subjectList", courseService.getProjectCourses(locale));
 			return "project-edit";
 		}
 		if (project.getOwner() == null) {
