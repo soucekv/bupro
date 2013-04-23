@@ -64,8 +64,6 @@ public interface KosClient {
 	 *         exists
 	 * @throws NullPointerException
 	 *             if code is <code>null</code>
-	 * @throws IllegalArgumentException
-	 *             if code is not valid
 	 */
 	Course getCourse(String code);
 

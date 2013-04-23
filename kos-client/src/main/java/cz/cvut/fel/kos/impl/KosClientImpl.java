@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -26,12 +25,11 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import cz.cvut.fel.kos.Configuration;
+import cz.cvut.fel.kos.Configuration.Authentication;
 import cz.cvut.fel.kos.KosClient;
 import cz.cvut.fel.kos.KosSemesterCode;
 import cz.cvut.fel.kos.Translator;
-import cz.cvut.fel.kos.Configuration.Authentication;
 import cz.cvut.fel.kos.jaxb.Course;
-import cz.cvut.fel.kos.jaxb.Label;
 import cz.cvut.fel.kos.jaxb.Semester;
 import cz.cvut.fel.kos.jaxb.Student;
 import cz.cvut.fel.kos.jaxb.StudyState;
@@ -49,7 +47,6 @@ public class KosClientImpl implements KosClient {
 	private final Configuration configuration;
 	private final RestTemplate template;
 
-	@Autowired
 	public KosClientImpl(RestTemplate template, Configuration configuration) {
 		this.template = template;
 		this.configuration = configuration;
@@ -248,9 +245,6 @@ public class KosClientImpl implements KosClient {
 	public Course getCourse(String code) {
 		if (code == null) {
 			throw new NullPointerException();
-		}
-		if (!code.matches("^[0-9A-Z]+$")) {
-			throw new IllegalArgumentException("Invalid course code " + code);
 		}
 		Entry<Course> entry = getForEntry(configuration.getUri() + "courses/" + code);
 		return (entry == null) ? null : entry.getContent();
