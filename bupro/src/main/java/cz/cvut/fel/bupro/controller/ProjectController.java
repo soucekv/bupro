@@ -110,7 +110,7 @@ public class ProjectController {
 		model.addAttribute("semester", semesterService.getSemestersNames(semesterCodeSet(projects.getContent()), locale));
 		model.addAttribute("filter", filterable);
 		model.addAttribute("tags", tagService.getAllTags());
-		model.addAttribute("courses", courseService.getProjectCourses());
+		model.addAttribute("courses", courseService.getProjectCourses(locale));
 		return "project-list";
 	}
 
