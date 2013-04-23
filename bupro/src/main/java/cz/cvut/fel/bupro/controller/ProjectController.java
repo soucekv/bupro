@@ -147,6 +147,9 @@ public class ProjectController {
 		if (bindingResult.hasErrors()) {
 			log(bindingResult.getAllErrors());
 			model.addAttribute("courseList", courseService.getProjectCourses(locale));
+			model.addAttribute("tags", tagService.getAllTags());
+			model.addAttribute("semesterList", semesterService.getAllSemesters());
+			model.addAttribute("translator", new Translator(locale));
 			return "project-edit";
 		}
 		if (project.getOwner() == null) {
