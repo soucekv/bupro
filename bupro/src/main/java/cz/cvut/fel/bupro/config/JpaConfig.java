@@ -1,10 +1,14 @@
 package cz.cvut.fel.bupro.config;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Properties;
 
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.hibernate.ejb.HibernatePersistence;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -24,6 +28,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @PropertySource({ "classpath:cfg/persistence.properties" })
 public class JpaConfig {
+	private final Log log = LogFactory.getLog(getClass());
 
 	@Value("${hibernate.dialect}")
 	private String hibernateDialect;
@@ -72,6 +77,19 @@ public class JpaConfig {
 
 	@Bean
 	public DataSource dataSource() {
+		String systemProvidedURL = System.getenv("DATABASE_URL");
+		if (systemProvidedURL != null && !systemProvidedURL.trim().isEmpty()) {
+			// Heroku postgresql configuration
+			log.info("System enviroment DB configuration detected overriding local configuration");
+			try {
+				URI dbUri = new URI(systemProvidedURL);
+				jdbcUsername = dbUri.getUserInfo().split(":")[0];
+				jdbcPassword = dbUri.getUserInfo().split(":")[1];
+				jdbcUri = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
+			} catch (URISyntaxException e) {
+				throw new IllegalStateException("Invalid DATABASE_URL format", e);
+			}
+		}
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName(driverClassName);
 		dataSource.setUrl(jdbcUri);
