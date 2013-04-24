@@ -4,6 +4,7 @@
 	<groupId>cz.cvut.fel</groupId>
 	<artifactId>bupro</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 	<name>Bupro</name>
 	<description>Project exchange and management</description>
 
@@ -289,8 +290,8 @@
 					<assembleDirectory>target</assembleDirectory>
 					<programs>
 						<program>
-							<mainClass>launch.Main</mainClass>
-							<name>webapp</name>
+							<mainClass>cz.cvut.fel.bupro.Bootstrap</mainClass>
+							<name>bupro</name>
 						</program>
 					</programs>
 				</configuration>
