@@ -41,6 +41,11 @@
 			<artifactId>kos-client</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>cz.cvut.fel</groupId>
+			<artifactId>reposapi</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 		<!-- Embedded Tomcat Web Server -->
 		<dependency>
 			<groupId>org.apache.tomcat.embed</groupId>

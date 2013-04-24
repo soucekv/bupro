@@ -60,6 +60,9 @@ public class Project extends CommentableEntity implements Serializable {
 	@Embedded
 	@AttributeOverrides({ @AttributeOverride(name = "code", column = @Column(name = "endSemester")) })
 	private SemesterCode endSemester;
+	
+	@Embedded
+	private RepositoryLink repository = new RepositoryLink();
 
 	public Project() {
 		creationTime = TimeUtils.createCurrentTimestamp();
@@ -151,6 +154,14 @@ public class Project extends CommentableEntity implements Serializable {
 
 	public void setEndSemester(SemesterCode endSemester) {
 		this.endSemester = endSemester;
+	}
+	
+	public RepositoryLink getRepository() {
+		return repository;
+	}
+	
+	public void setRepository(RepositoryLink repository) {
+		this.repository = repository;
 	}
 
 	public List<Membership> getMemberships(MembershipState membershipState) {

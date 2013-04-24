@@ -33,6 +33,7 @@ import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.security.SecurityService;
+import cz.cvut.fel.bupro.service.CodeRepositoryService;
 import cz.cvut.fel.bupro.service.EmailService;
 import cz.cvut.fel.bupro.service.MembershipService;
 import cz.cvut.fel.bupro.service.ProjectService;
@@ -62,6 +63,8 @@ public class ProjectController {
 	private EmailService emailService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private CodeRepositoryService codeRepositoryService;
 
 	private static Set<SemesterCode> semesterCodeSet(Collection<Project> c) {
 		Set<SemesterCode> set = new HashSet<SemesterCode>();
@@ -84,6 +87,7 @@ public class ProjectController {
 		project.getComments().size(); // force fetch
 		project.getTags().size(); // force fetch
 		model.addAttribute("project", project);
+		model.addAttribute("commits", codeRepositoryService.getCommits(project, 5));
 		return "project-view";
 	}
 
