@@ -12,11 +12,18 @@ public interface Commit {
 	 * 
 	 * @return URL to this commit on provider's web
 	 */
-	String getUrl();
+	String getExternalUrl();
 
 	/**
 	 * 
 	 * @return commit message
 	 */
 	String getMessage();
+
+	/**
+	 * id of commit for Git SHA
+	 * 
+	 * @return
+	 */
+	String getId();
 }
