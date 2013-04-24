@@ -55,13 +55,13 @@ table.list {
 }
 
 .project a:link,
-.subject a:link {
+.course a:link {
 	color:black;
 	text-decoration: none;
 }
 
 .project a:hover,
-.subject a:hover {
+.course a:hover {
 	color: blue;
 	text-decoration:underline;
 }
@@ -130,4 +130,8 @@ li.disabled {
 
 .desc {
 	margin: 2px;
+}
+
+.userpanel {
+	margin: 5px;
 }
