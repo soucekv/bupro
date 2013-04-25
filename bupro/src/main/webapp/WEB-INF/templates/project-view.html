@@ -3,61 +3,48 @@
 <head th:include="header :: head">
 	<title th:text="#{project(${project.name})}" >Project</title>
 </head>
-<body>
+<body th:object="${project}">
 	<div th:include="header :: menu"></div>
-	<h1 th:text="${project.name}"></h1>
+	<h1 th:text="*{name}"></h1>
 	<div class="project-actions" th:if="${project.owner.equals(user)}">
-		<a class="button" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
-		<a class="button" href="http://localhost:8080/" th:href="@{'/project/log/' + ${project.id}}" th:text="#{project.log}">Project log</a>
-		<a class="button" href="http://localhost:8080/" th:href="@{'/project/email/' + ${project.id}}" th:text="#{project.email}">Project email</a>
+		<a class="button" href="http://localhost:8080/" th:href="@{'/project/edit/' + *{id}}" th:text="#{edit}">Edit</a>
+		<a class="button" href="http://localhost:8080/" th:href="@{'/project/log/' + *{id}}" th:text="#{project.log}">Project log</a>
+		<a class="button" href="http://localhost:8080/" th:href="@{'/project/email/' + *{id}}" th:text="#{project.email}">Project email</a>
 	</div>
+	<div th:include="commons :: label" th:with="label=#{owner},value=#{format.fullname(*{owner.firstName}, *{owner.lastName})}"></div>
+	<div th:include="commons :: label" th:with="label=#{creation.time},value=*{#dates.format(creationTime,'yyyy-MM-dd')}"></div>
+	<div th:include="commons :: label" th:with="label=#{project.start},value=*{startSemester.name}"></div>
+	<div th:include="commons :: label" th:with="label=#{project.end},value=*{endSemester.name}"></div>
+	<div th:include="commons :: label" th:with="label=#{project.end},value=#{project.capacity(*{approvedCount}, *{waitingApprovalCount}, *{capacity})}"></div>
+	<h3 th:text="#{project.description}">description:</h3>
 	<div>
-		<span th:text="#{owner}">owner:</span>
-		<span th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Karel Novak</span>
+		<span th:text="*{description == null} ? #{project.nodescription} : *{description}">Here is text describing project goals</span>
 	</div>
+	<h3 th:text="#{project.tags}">tags:</h3>
 	<div>
-		<span th:text="#{creation.time}">created:</span> <span th:text="${#dates.format(project.creationTime,'yyyy-MM-dd')}">01.02.2000</span>
-	</div>
-	<div>
-		<div>
-			<span th:text="#{project.start}">Start:</span><span th:text="${project.startSemester.name}">Winter Semester 20XX/20XY</span>
-		</div>
-		<div>
-			<span th:text="#{project.end}">End:</span><span th:text="${project.endSemester.name}">Summer Semester 20XX/20XY</span>
-		</div>
-	</div>
-	<div>
-		<span th:text="#{project.capacity(${project.approvedCount}, ${project.waitingApprovalCount}, ${project.capacity})}">Capacity: 0(1)/1</span>
-	</div>
-	<div>
-		<h3 th:text="#{project.description}">description:</h3>
-		<span th:text="${project.description == null} ? #{project.nodescription} : ${project.description}">Here is text describing project goals</span>
-	</div>
-	<div>
-		<h3 th:text="#{project.tags}">tags:</h3>
-		<span th:each="tag : ${project.tags}"><a th:href="@{/project/list/(filter.tag=${tag.name})}" th:text="${tag.name}">Tag1</a></span>
+		<span th:each="tag : *{tags}"><a th:href="@{/project/list/(filter.tag=${tag.name})}" th:text="${tag.name}">Tag1</a></span>
 	</div>
 	<div>
 		<h2 th:text="#{project.members}" >Members</h2>
-		<ul class="memberships" th:if="${not #lists.isEmpty(project.memberships)}">
-			<li th:each="membership : ${project.memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
+		<ul class="memberships" th:unless="*{#lists.isEmpty(memberships)}">
+			<li th:each="membership : *{memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
 				<span th:text="#{format.fullname(${membership.user.firstName}, ${membership.user.lastName})}">Milan Vomacka</span>
 				<span th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 				<span th:if="${project.owner.equals(user)}" >
 					<a class="button" href="#" th:href="@{'/user/view/' + ${membership.user.id}}" th:text="#{detail}" >detail</a>
-					<a class="button" href="#" th:href="@{/project/membership/approve(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.accept}" >accept</a>
-					<a class="button" href="#" th:href="@{/project/membership/decline(projectId=${project.id},userId=${membership.user.id})}" th:text="#{member.decline}" >decline</a>
+					<a class="button" href="#" th:href="@{/project/membership/approve(projectId=*{id},userId=${membership.user.id})}" th:text="#{member.accept}" >accept</a>
+					<a class="button" href="#" th:href="@{/project/membership/decline(projectId=*{id},userId=${membership.user.id})}" th:text="#{member.decline}" >decline</a>
 				</span>
 			</li>
 		</ul>
-		<span th:if="${#lists.isEmpty(project.memberships)}"  th:text="#{project.members.none}">This project has no members yet.</span>
-		<span th:if="${project.capacityFull}" th:text="#{project.members.capacity.full}">Sorry, project capacity is full.</span>
-		<a class="button" th:unless="${project.capacityFull or project.owner.equals(user) or project.hasMember(user)}" href="#" th:href="@{'/project/join/' + ${project.id}}" th:text="#{join}">Join</a>
+		<span th:if="*{#lists.isEmpty(memberships)}"  th:text="#{project.members.none}">This project has no members yet.</span>
+		<span th:if="*{capacityFull}" th:text="#{project.members.capacity.full}">Sorry, project capacity is full.</span>
+		<a class="button" th:unless="${project.capacityFull or project.owner.equals(user) or project.hasMember(user)}" href="#" th:href="@{'/project/join/' + *{id}}" th:text="#{join}">Join</a>
 	</div>
 	<div>
 		<h2 th:text="#{comments}" >Comments</h2>
 		<div id="comments">
-			<div class="comment" th:each="comment : ${project.comments}">
+			<div class="comment" th:each="comment : *{comments}">
 				<div>
 					<span class="author" th:text="#{format.fullname(${comment.user.firstName},${comment.user.lastName})}">Comment-Author</span>
 					<span class="time" th:text="${#dates.format(comment.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>

@@ -162,3 +162,7 @@ li.disabled {
 .email textarea {
 	width: 13cm;
 }
+
+.project-actions {
+	margin: 5px;
+}
