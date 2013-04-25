@@ -200,25 +200,35 @@ public class ProjectController {
 		return viewPage(model, project);
 	}
 
-	private String updateMembership(Model model, Locale locale, Long projectId, Long userId, MembershipState membershipState) {
-		Membership membership = membershipService.getMembership(projectId, userId);
-		membership.setMembershipState(membershipState);
-		emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), membershipState);
-		return viewPage(model, membership.getProject());
-	}
-
 	@RequestMapping({ "/project/membership/approve" })
 	@Transactional
 	public String approveMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId) {
-		return updateMembership(model, locale, projectId, userId, MembershipState.APPROVED);
+		Project project = projectService.getProject(projectId);
+		boolean full = project.getCapacity() <= (project.getApprovedCount() + 1);
+		for (Membership membership : project.getMemberships()) {
+			if (membership.getUser().getId().equals(userId)) {
+				MembershipState state = MembershipState.APPROVED;
+				membership.setMembershipState(state);
+				emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), state);
+			} else if (full && membership.getMembershipState() == MembershipState.WAITING_APPROVAL) {
+				MembershipState state = MembershipState.DECLINED;
+				membership.setMembershipState(state);
+				emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), state);
+			}
+		}
+		return viewPage(model, project);
 	}
 
 	@RequestMapping({ "/project/membership/decline" })
 	@Transactional
 	public String declineMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId) {
-		return updateMembership(model, locale, projectId, userId, MembershipState.DECLINED);
+		MembershipState membershipState = MembershipState.DECLINED;
+		Membership membership = membershipService.getMembership(projectId, userId);
+		membership.setMembershipState(membershipState);
+		emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), membershipState);
+		return viewPage(model, membership.getProject());
 	}
 
 	@RequestMapping("/project/log/{id}")
