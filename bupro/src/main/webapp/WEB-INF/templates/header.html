@@ -1,5 +1,5 @@
 <!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head th:fragment="head">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<link href="/css/redmond/jquery-ui-1.10.2.custom.css" rel="stylesheet" />
@@ -15,9 +15,15 @@
 </head>
 <body>
 	<div th:fragment="menu">
-		<a class="button" href="http://localhost:8080/" th:href="@{/subject/list/}" th:text="#{subject.list}">Subjects</a>
-		<a class="button" href="http://localhost:8080/" th:href="@{/project/list/}" th:text="#{project.list}">Projects</a>
-		<a class="button" href="http://localhost:8080/" th:href="@{/user/list/}" th:text="#{user.list}">Users</a>
+		<div class="userpanel">
+			<span sec:authentication="name">Username</span>
+			 <a class="button" href="login.html" th:href="@{/j_spring_security_logout}">Logout</a>
+		</div>
+		<div class="menu">
+			<a class="button" href="http://localhost:8080/" th:href="@{/course/list/}" th:text="#{course.list}">Subjects</a>
+			<a class="button" href="http://localhost:8080/" th:href="@{/project/list/}" th:text="#{project.list}">Projects</a>
+			<a class="button" href="http://localhost:8080/" th:href="@{/user/list/}" th:text="#{user.list}">Users</a>
+		</div>
 	</div>
 </body>
 </html>

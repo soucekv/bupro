@@ -1,0 +1,44 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+	<title th:text="#{project.email}" >Send email to project members</title>
+</head>
+<text>
+	<div th:include="header :: menu"></div>
+	<h1 th:text="#{project.email}">Project List</h1>
+	<form class="email" action="#" th:action="@{/project/email/send}" th:object="${email}" method="post" accept-charset="UTF-8">
+		<input type="hidden" th:field="*{id}" />
+		<table>
+			<tbody>
+				<tr>
+					<td><label th:for="${'to'}" th:text="#{email.to}">to:</label></td>
+					<td>
+						<input type="text" th:field="*{to}" th:class="${#fields.hasErrors('to')}? 'field-error'"  />
+						<span th:if="${#fields.hasErrors('to')}" th:errors="*{to}" class="field-error" >Invalid recipient</span>
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="${'title'}" th:text="#{email.title}">title:</label></td>
+					<td>
+						<input type="text" th:field="*{title}" th:class="${#fields.hasErrors('title')}? 'field-error'" />
+						<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}" class="field-error" >Invalid title</span>
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="${'text'}"></label></td>
+					<td>
+						<textarea th:field="*{text}" th:class="${#fields.hasErrors('text')}? 'field-error'" rows="30" ></textarea>
+						<span th:if="${#fields.hasErrors('text')}" th:errors="*{text}" class="field-error" >Invalid title</span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<input type="submit" value="Send" th:value="#{email.send}" />
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</text>
+</html>

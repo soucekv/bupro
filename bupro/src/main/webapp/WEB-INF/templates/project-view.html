@@ -6,9 +6,10 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<h1 th:text="${project.name}"></h1>
-	<div>
-		<a class="button" th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+	<div class="project-actions" th:if="${project.owner.equals(user)}">
+		<a class="button" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
 		<a class="button" href="http://localhost:8080/" th:href="@{'/project/log/' + ${project.id}}" th:text="#{project.log}">Project log</a>
+		<a class="button" href="http://localhost:8080/" th:href="@{'/project/email/' + ${project.id}}" th:text="#{project.email}">Project email</a>
 	</div>
 	<div>
 		<span th:text="#{owner}">owner:</span>

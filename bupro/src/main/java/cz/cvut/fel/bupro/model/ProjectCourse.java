@@ -51,4 +51,40 @@ public class ProjectCourse extends BaseEntity {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((getCode() == null) ? 0 : getCode().hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!super.equals(obj)) {
+			return false;
+		}
+		if (!(obj instanceof ProjectCourse)) {
+			return false;
+		}
+		ProjectCourse other = (ProjectCourse) obj;
+		if (getCode() == null) {
+			if (other.getCode() != null) {
+				return false;
+			}
+		} else if (!getCode().equals(other.getCode())) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return getName();
+	}
+
 }

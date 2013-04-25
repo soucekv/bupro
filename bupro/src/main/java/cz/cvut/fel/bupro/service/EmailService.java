@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.config.Qualifiers;
+import cz.cvut.fel.bupro.model.Email;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.User;
@@ -62,5 +63,9 @@ public class EmailService {
 	public void sendEmail(String to, String cc, String title, String body) {
 		log.info("Sending email to:" + to + " cc:" + cc + " title:'" + title + "' body:'" + body + "'");
 		// TODO implement javax mail sending
+	}
+
+	public void sendEmail(Email email) {
+		sendEmail(email.getTo(), email.getC(), email.getTitle(), email.getText());
 	}
 }

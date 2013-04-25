@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import cz.cvut.fel.bupro.filter.Filterable;
+import cz.cvut.fel.bupro.model.Email;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
@@ -185,6 +186,11 @@ public class ProjectController {
 			log.warn("Owner can't join project " + project);
 			return showProjectDetail(model, locale, id);
 		}
+		List<Membership> duplicate = membershipService.getMemberships(user, project.getCourse());
+		for (Membership membership : duplicate) {
+			log.info("Membership already found for course " + project.getCourse() + " in project " + membership.getProject().getName());
+		}
+		membershipService.deleteMembership(duplicate);
 		Membership membership = new Membership();
 		membership.setUser(user);
 		membership.setProject(project);
@@ -217,7 +223,7 @@ public class ProjectController {
 
 	@RequestMapping("/project/log/{id}")
 	@Transactional
-	public String show(Model model, Locale locale, @PathVariable Long id) {
+	public String projectLog(Model model, Locale locale, @PathVariable Long id) {
 		Project project = projectService.getProject(id, locale);
 		Collection<Issue> openedIssues = codeRepositoryService.getIssues(project, IssueState.OPEN);
 		Collection<Issue> closedIssues = codeRepositoryService.getIssues(project, IssueState.CLOSED);
@@ -231,6 +237,33 @@ public class ProjectController {
 		model.addAttribute("total", total);
 		model.addAttribute("issues", codeRepositoryService.getUpdatedIssues(project, LOG_LIMIT));
 		return "project-log";
+	}
+
+	@RequestMapping("/project/email/{id}")
+	@Transactional
+	public String composeEmail(Model model, Locale locale, @PathVariable Long id) {
+		User user = securityService.getCurrentUser();
+		Project project = projectService.getProject(id, locale);
+		if (!project.getOwner().equals(user)) {
+			log.warn("Only owner can send emails to all members" + project);
+			return showProjectDetail(model, locale, id);
+		}
+		Email email = new Email();
+		email.setId(project.getId());
+		email.addAllTo(project.getMembers());
+		email.setTitle(project.getName());
+		model.addAttribute("email", email);
+		return "project-email";
+	}
+
+	@RequestMapping("/project/email/send")
+	@Transactional
+	public String sendEmail(@Valid Email email, BindingResult bindingResult, Model model, Locale locale) {
+		if (bindingResult.hasErrors()) {
+			return "project-email";
+		}
+		emailService.sendEmail(email);
+		return showProjectDetail(model, locale, email.getId());
 	}
 
 }

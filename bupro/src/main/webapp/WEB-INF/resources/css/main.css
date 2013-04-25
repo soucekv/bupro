@@ -157,3 +157,8 @@ li.disabled {
 .issues .closed {
 	background-color: #FFDDDD;
 }
+
+.email input[type=text],
+.email textarea {
+	width: 13cm;
+}
