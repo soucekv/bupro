@@ -1,5 +1,6 @@
 package cz.cvut.fel.bupro.service;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -24,6 +25,8 @@ import cz.cvut.fel.bupro.TimeUtils;
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.filter.FilterSpecificationFactory;
 import cz.cvut.fel.bupro.filter.Filterable;
+import cz.cvut.fel.bupro.model.Membership;
+import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.SemesterCode;
@@ -62,11 +65,13 @@ public class ProjectService {
 		return projectRepository.findAll();
 	}
 
+	@Transactional
 	public Page<Project> getProjects(Pageable pageable) {
 		log.info("get project page " + pageable.getPageNumber() + " size " + pageable.getPageSize());
 		return projectRepository.findAll(pageable);
 	}
 
+	@Transactional
 	public Page<Project> getProjects(Pageable pageable, Filterable filterable) {
 		Specification<Project> spec = createSpecification(filterable);
 		if (spec == null) {
@@ -74,7 +79,8 @@ public class ProjectService {
 		}
 		return projectRepository.findAll(spec, pageable);
 	}
-	
+
+	@Transactional
 	public Page<Project> getProjects(Locale locale, Pageable pageable, Filterable filterable) {
 		Translator translator = new Translator(locale);
 		Page<Project> page = getProjects(pageable, filterable);
@@ -82,6 +88,31 @@ public class ProjectService {
 			localize(project, translator);
 		}
 		return page;
+	}
+
+	@Transactional
+	public List<Project> getOwnedProjects(User user, Locale locale) {
+		List<Project> projects = projectRepository.findByOwner(user);
+		Translator translator = new Translator(locale);
+		for (Project project : projects) {
+			localize(project, translator);
+		}
+		return projects;
+	}
+
+	@Transactional
+	public List<Project> getMemberProjects(User user, Locale locale) {
+		List<Project> projects = new LinkedList<Project>();
+		for (Membership membership : user.getMemberships()) {
+			if (membership.getMembershipState() == MembershipState.APPROVED) {
+				projects.add(membership.getProject());
+			}
+		}
+		Translator translator = new Translator(locale);
+		for (Project project : projects) {
+			localize(project, translator);
+		}
+		return projects;
 	}
 
 	@Transactional
@@ -185,17 +216,15 @@ public class ProjectService {
 				};
 			}
 		},
-		//FIXME new filtering method
-/*		SEMESTER {
-			public Specification<Project> create(final String value) {
-				return new Specification<Project>() {
-					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
-						Join<Project, Semester> join = root.<Project, Semester> join("startSemester");
-						return cb.like(join.<String> get("name"), value + "%");
-					}
-				};
-			}
-		}*/;
+		// FIXME new filtering method
+		/*
+		 * SEMESTER { public Specification<Project> create(final String value) {
+		 * return new Specification<Project>() { public Predicate
+		 * toPredicate(Root<Project> root, CriteriaQuery<?> query,
+		 * CriteriaBuilder cb) { Join<Project, Semester> join = root.<Project,
+		 * Semester> join("startSemester"); return cb.like(join.<String>
+		 * get("name"), value + "%"); } }; } }
+		 */;
 		public String toString() {
 			return super.toString().toLowerCase();
 		}

@@ -205,6 +205,10 @@ public class ProjectController {
 	public String approveMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId) {
 		Project project = projectService.getProject(projectId);
+		if (project.isCapacityFull()) {
+			log.error("Project " + project.getId() + " is at full capacity can not approve more members");
+			return viewPage(model, project);
+		}
 		boolean full = project.getCapacity() <= (project.getApprovedCount() + 1);
 		for (Membership membership : project.getMemberships()) {
 			if (membership.getUser().getId().equals(userId)) {
