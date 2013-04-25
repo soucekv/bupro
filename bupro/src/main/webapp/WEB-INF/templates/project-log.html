@@ -1,0 +1,26 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+	<title th:text="#{project.log.title(${project.name})}" >Project</title>
+</head>
+<body>
+	<div th:include="header :: menu"></div>
+	<h1 th:text="#{project.log.title(${project.name})}"></h1>
+	<div th:unless="${#lists.isEmpty(commits)}">
+		<h2 th:text="#{project.repository.commits.recent}">Recent commits:</h2>
+		<div th:each="commit : ${commits}">
+			<div>
+				<a th:href="${commit.externalUrl}" th:text="${commit.message}">commit</a>
+			</div>
+		</div>
+	</div>
+	<div th:unless="${#lists.isEmpty(issues)}" class="issues">
+		<h2 th:text="#{project.repository.issues}">Issues:</h2>
+		<div th:text="#{project.repository.issues.count(${open},${closed},${total})}"></div>
+		<h3 th:text="#{project.repository.issues.recent}">Recently updated issues:</h3>
+		<div th:each="issue : ${issues}" th:class="${#strings.toLowerCase(issue.state)}">
+			<span th:text="${#dates.format(issue.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>&nbsp;<a th:href="${issue.externalUrl}" th:text="${issue.title}">issue</a>
+		</div>
+	</div>
+</body>
+</html>

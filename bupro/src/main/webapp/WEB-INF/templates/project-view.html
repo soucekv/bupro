@@ -8,6 +8,7 @@
 	<h1 th:text="${project.name}"></h1>
 	<div>
 		<a class="button" th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" th:text="#{edit}">Edit</a>
+		<a class="button" href="http://localhost:8080/" th:href="@{'/project/log/' + ${project.id}}" th:text="#{project.log}">Project log</a>
 	</div>
 	<div>
 		<span th:text="#{owner}">owner:</span>
@@ -51,14 +52,6 @@
 		<span th:if="${#lists.isEmpty(project.memberships)}"  th:text="#{project.members.none}">This project has no members yet.</span>
 		<span th:if="${project.capacityFull}" th:text="#{project.members.capacity.full}">Sorry, project capacity is full.</span>
 		<a class="button" th:unless="${project.capacityFull or project.owner.equals(user) or project.hasMember(user)}" href="#" th:href="@{'/project/join/' + ${project.id}}" th:text="#{join}">Join</a>
-	</div>
-	<div th:unless="${#lists.isEmpty(commits)}">
-		<h2 th:text="#{project.repository.commits}">Commits:</h2>
-		<div th:each="commit : ${commits}">
-			<div>
-				<a th:href="${commit.externalUrl}" th:text="${commit.message}">commit</a>
-			</div>
-		</div>
 	</div>
 	<div>
 		<h2 th:text="#{comments}" >Comments</h2>

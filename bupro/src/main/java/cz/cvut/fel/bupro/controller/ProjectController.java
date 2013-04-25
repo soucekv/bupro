@@ -28,23 +28,27 @@ import cz.cvut.fel.bupro.filter.Filterable;
 import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
-import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.ProjectCourse;
+import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.security.SecurityService;
 import cz.cvut.fel.bupro.service.CodeRepositoryService;
+import cz.cvut.fel.bupro.service.CourseService;
 import cz.cvut.fel.bupro.service.EmailService;
 import cz.cvut.fel.bupro.service.MembershipService;
 import cz.cvut.fel.bupro.service.ProjectService;
 import cz.cvut.fel.bupro.service.SemesterService;
-import cz.cvut.fel.bupro.service.CourseService;
 import cz.cvut.fel.bupro.service.TagService;
 import cz.cvut.fel.bupro.service.UserService;
 import cz.cvut.fel.kos.Translator;
+import cz.cvut.fel.reposapi.Issue;
+import cz.cvut.fel.reposapi.IssueState;
 
 @Controller
 public class ProjectController {
+	private static final int LOG_LIMIT = 5;
+
 	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
@@ -87,7 +91,6 @@ public class ProjectController {
 		project.getComments().size(); // force fetch
 		project.getTags().size(); // force fetch
 		model.addAttribute("project", project);
-		model.addAttribute("commits", codeRepositoryService.getCommits(project, 5));
 		return "project-view";
 	}
 
@@ -210,6 +213,24 @@ public class ProjectController {
 	public String declineMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId) {
 		return updateMembership(model, locale, projectId, userId, MembershipState.DECLINED);
+	}
+
+	@RequestMapping("/project/log/{id}")
+	@Transactional
+	public String show(Model model, Locale locale, @PathVariable Long id) {
+		Project project = projectService.getProject(id, locale);
+		Collection<Issue> openedIssues = codeRepositoryService.getIssues(project, IssueState.OPEN);
+		Collection<Issue> closedIssues = codeRepositoryService.getIssues(project, IssueState.CLOSED);
+		String open = (openedIssues == null) ? "?" : String.valueOf(openedIssues.size());
+		String closed = (closedIssues == null) ? "?" : String.valueOf(closedIssues.size());
+		String total = (openedIssues == null || closedIssues == null) ? "?" : String.valueOf(openedIssues.size() + closedIssues.size());
+		model.addAttribute("project", project);
+		model.addAttribute("commits", codeRepositoryService.getCommits(project, LOG_LIMIT));
+		model.addAttribute("open", open);
+		model.addAttribute("closed", closed);
+		model.addAttribute("total", total);
+		model.addAttribute("issues", codeRepositoryService.getUpdatedIssues(project, LOG_LIMIT));
+		return "project-log";
 	}
 
 }

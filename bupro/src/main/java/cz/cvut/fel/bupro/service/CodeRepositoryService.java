@@ -13,6 +13,8 @@ import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.RepositoryLink;
 import cz.cvut.fel.reposapi.Commit;
 import cz.cvut.fel.reposapi.Credentials;
+import cz.cvut.fel.reposapi.Issue;
+import cz.cvut.fel.reposapi.IssueState;
 import cz.cvut.fel.reposapi.Repository;
 import cz.cvut.fel.reposapi.RepositoryClient;
 import cz.cvut.fel.reposapi.RepositoryClientFactory;
@@ -20,6 +22,12 @@ import cz.cvut.fel.reposapi.RepositoryException;
 import cz.cvut.fel.reposapi.ServiceProvider;
 import cz.cvut.fel.reposapi.github.GitHubCredentials;
 
+/**
+ * Service for obtaining Source Code Management information
+ * 
+ * @author Viktor Souček
+ * 
+ */
 @Service
 public class CodeRepositoryService {
 	private final Log log = LogFactory.getLog(getClass());
@@ -78,6 +86,48 @@ public class CodeRepositoryService {
 			return (repository == null) ? Collections.<Commit> emptyList() : repository.getCommits();
 		} catch (RepositoryException e) {
 			log.error("Error obtaining commits " + repositoryLink, e);
+			return null;
+		}
+	}
+
+	public List<Issue> getIssues(Project project) {
+		return getIssues(project, null);
+	}
+
+	public List<Issue> getIssues(Project project, IssueState issueState) {
+		return getIssues(project.getRepository(), issueState);
+	}
+
+	public List<Issue> getIssues(RepositoryLink repositoryLink, IssueState issueState) {
+		try {
+			Repository repository = getRepository(repositoryLink);
+			if (repository == null) {
+				return Collections.<Issue> emptyList();
+			}
+			return (issueState == null) ? repository.getIssues() : repository.getIssues(issueState);
+		} catch (RepositoryException e) {
+			log.error("Error obtaining issues " + repositoryLink, e);
+			return null;
+		}
+	}
+
+	public List<Issue> getUpdatedIssues(Project project, int limit) {
+		return getUpdatedIssues(project, null, limit);
+	}
+
+	public List<Issue> getUpdatedIssues(Project project, IssueState issueState, int limit) {
+		return getUpdatedIssues(project.getRepository(), issueState, limit);
+	}
+
+	public List<Issue> getUpdatedIssues(RepositoryLink repositoryLink, IssueState issueState, int limit) {
+		try {
+			Repository repository = getRepository(repositoryLink);
+			if (repository == null) {
+				return Collections.<Issue> emptyList();
+			}
+			return (issueState == null) ? repository.getUpdatedIssues(limit) : repository.getUpdatedIssues(issueState, limit);
+		} catch (RepositoryException e) {
+			log.error("Error obtaining issues " + repositoryLink, e);
 			return null;
 		}
 	}

@@ -135,3 +135,25 @@ li.disabled {
 .userpanel {
 	margin: 5px;
 }
+
+.issues div {
+	padding: 2px 0;
+}
+
+.issues a:link {
+	color:black;
+	text-decoration: none;
+}
+
+.issues a:hover {
+	color:black;
+	text-decoration:underline;
+}
+
+.issues .open {
+	background-color: #DDFFDD;
+}
+
+.issues .closed {
+	background-color: #FFDDDD;
+}
