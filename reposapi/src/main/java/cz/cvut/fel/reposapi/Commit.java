@@ -6,13 +6,7 @@ package cz.cvut.fel.reposapi;
  * @author Viktor Souček
  * 
  */
-public interface Commit {
-
-	/**
-	 * 
-	 * @return URL to this commit on provider's web
-	 */
-	String getExternalUrl();
+public interface Commit extends Linkable {
 
 	/**
 	 * 
