@@ -1,11 +1,14 @@
 package cz.cvut.fel.bupro.controller;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 import org.apache.commons.logging.Log;
@@ -70,6 +73,15 @@ public class ProjectController {
 	private UserService userService;
 	@Autowired
 	private CodeRepositoryService codeRepositoryService;
+
+	private static String getContextRoot(HttpServletRequest request) {
+		try {
+			URL url = new URL(request.getScheme(), request.getLocalName(), request.getLocalPort(), request.getContextPath());
+			return url.toExternalForm();
+		} catch (MalformedURLException e) {
+			return "#";
+		}
+	}
 
 	private static Set<SemesterCode> semesterCodeSet(Collection<Project> c) {
 		Set<SemesterCode> set = new HashSet<SemesterCode>();
@@ -179,7 +191,7 @@ public class ProjectController {
 
 	@RequestMapping({ "/project/join/{id}" })
 	@Transactional
-	public String joinProject(Model model, Locale locale, @PathVariable Long id) {
+	public String joinProject(Model model, Locale locale, @PathVariable Long id, HttpServletRequest request) {
 		User user = securityService.getCurrentUser();
 		Project project = projectService.getProject(id);
 		if (project.getOwner().equals(user)) {
@@ -196,29 +208,36 @@ public class ProjectController {
 		membership.setProject(project);
 		project.getMemberships().add(membership);
 		user.getMemberships().add(membership);
-		emailService.sendMembershipRequest(locale, project, user);
+		String baseLinkUrl = getContextRoot(request);
+		if (project.isAutoApprove()) {
+			membership.setMembershipState(MembershipState.APPROVED);
+			emailService.sendMembershipAutoapproved(baseLinkUrl, locale, project, user);
+		} else {
+			emailService.sendMembershipRequest(baseLinkUrl, locale, project, user);
+		}
 		return viewPage(model, project);
 	}
 
 	@RequestMapping({ "/project/membership/approve" })
 	@Transactional
 	public String approveMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
-			@RequestParam(value = "userId", required = true) Long userId) {
+			@RequestParam(value = "userId", required = true) Long userId, HttpServletRequest request) {
 		Project project = projectService.getProject(projectId);
 		if (project.isCapacityFull()) {
 			log.error("Project " + project.getId() + " is at full capacity can not approve more members");
 			return viewPage(model, project);
 		}
 		boolean full = project.getCapacity() <= (project.getApprovedCount() + 1);
+		String baseLinkUrl = getContextRoot(request);
 		for (Membership membership : project.getMemberships()) {
 			if (membership.getUser().getId().equals(userId)) {
 				MembershipState state = MembershipState.APPROVED;
 				membership.setMembershipState(state);
-				emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), state);
+				emailService.sendMembershipState(baseLinkUrl, locale, membership.getProject(), membership.getUser(), state);
 			} else if (full && membership.getMembershipState() == MembershipState.WAITING_APPROVAL) {
 				MembershipState state = MembershipState.DECLINED;
 				membership.setMembershipState(state);
-				emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), state);
+				emailService.sendMembershipState(baseLinkUrl, locale, membership.getProject(), membership.getUser(), state);
 			}
 		}
 		return viewPage(model, project);
@@ -227,11 +246,12 @@ public class ProjectController {
 	@RequestMapping({ "/project/membership/decline" })
 	@Transactional
 	public String declineMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
-			@RequestParam(value = "userId", required = true) Long userId) {
+			@RequestParam(value = "userId", required = true) Long userId, HttpServletRequest request) {
 		MembershipState membershipState = MembershipState.DECLINED;
 		Membership membership = membershipService.getMembership(projectId, userId);
 		membership.setMembershipState(membershipState);
-		emailService.sendMembershipState(locale, membership.getProject(), membership.getUser(), membershipState);
+		String baseLinkUrl = getContextRoot(request);
+		emailService.sendMembershipState(baseLinkUrl, locale, membership.getProject(), membership.getUser(), membershipState);
 		return viewPage(model, membership.getProject());
 	}
 

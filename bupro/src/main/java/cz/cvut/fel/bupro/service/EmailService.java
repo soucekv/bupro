@@ -29,6 +29,20 @@ public class EmailService {
 	@Autowired
 	private MessageSource messageSource;
 
+	private static String projectLink(String urlBase, Project project) {
+		if (!urlBase.endsWith("/")) {
+			urlBase += "/";
+		}
+		return urlBase + "project/view/" + project.getId();
+	}
+
+	private static String userLink(String urlBase, User user) {
+		if (!urlBase.endsWith("/")) {
+			urlBase += "/";
+		}
+		return urlBase + "user/view/" + user.getId();
+	}
+
 	private String getLocalizedFullName(Locale locale, String firstName, String lastName) {
 		return messageSource.getMessage("format.fullname", new String[] { firstName, lastName }, firstName + " " + lastName, locale);
 	}
@@ -37,19 +51,28 @@ public class EmailService {
 		return getLocalizedFullName(locale, user.getFirstName(), user.getLastName());
 	}
 
-	public void sendMembershipRequest(Locale locale, Project project, User user) {
+	public void sendMembershipAutoapproved(String linkUrl, Locale locale, Project project, User user) {
+		String title = emailsMessageSource.getMessage("notify.new.membership.autoapproved.title", new String[] {}, "Bupro: membership automaticaliy approved",
+				locale);
+		String defaultBody = "User " + getLocalizedFullName(locale, user) + " joined your project " + project.getName();
+		String[] args = new String[] { project.getName(), projectLink(linkUrl, project), getLocalizedFullName(locale, user), userLink(linkUrl, user) };
+		String body = emailsMessageSource.getMessage("notify.new.membership.autoapproved.text", args, defaultBody, locale);
+		sendEmail(project.getOwner(), title, body);
+	}
+
+	public void sendMembershipRequest(String linkUrl, Locale locale, Project project, User user) {
 		String title = emailsMessageSource.getMessage("notify.new.membership.request.title", new String[] {}, "Bupro: membership request", locale);
 		String defaultBody = "User " + getLocalizedFullName(locale, user) + " requested to join your project " + project.getName();
-		String[] args = new String[] { project.getName(), String.valueOf(project.getId()), getLocalizedFullName(locale, user), String.valueOf(user.getId()) };
+		String[] args = new String[] { project.getName(), projectLink(linkUrl, project), getLocalizedFullName(locale, user), userLink(linkUrl, user) };
 		String body = emailsMessageSource.getMessage("notify.new.membership.request.text", args, defaultBody, locale);
 		sendEmail(project.getOwner(), title, body);
 	}
 
-	public void sendMembershipState(Locale locale, Project project, User user, MembershipState membershipState) {
+	public void sendMembershipState(String linkUrl, Locale locale, Project project, User user, MembershipState membershipState) {
 		final String titleKey = "notify.membership.request." + String.valueOf(membershipState).toLowerCase() + ".title";
 		final String textKey = "notify.membership.request." + String.valueOf(membershipState).toLowerCase() + ".text";
 		String title = emailsMessageSource.getMessage(titleKey, new String[] {}, "Bupro: membership " + String.valueOf(membershipState), locale);
-		String[] args = new String[] { project.getName(), String.valueOf(project.getId()) };
+		String[] args = new String[] { project.getName(), projectLink(linkUrl, project) };
 		String defaultText = "Your request to join project " + project.getName() + " " + String.valueOf(membershipState).toLowerCase();
 		String text = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
 		sendEmail(user, title, text);

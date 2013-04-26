@@ -78,7 +78,6 @@ public class Membership extends BaseEntity implements Serializable {
 	@PrePersist
 	public void onPrepesist() {
 		autosetTimestamps();
-		autoApprove();
 	}
 
 	private void autosetTimestamps() {
@@ -87,13 +86,6 @@ public class Membership extends BaseEntity implements Serializable {
 		}
 		if (getChanged() == null) {
 			setChanged(getCreated());
-		}
-	}
-
-	private void autoApprove() {
-		Project project = getProject();
-		if (project != null && project.isAutoApprove()) {
-			setMembershipState(MembershipState.APPROVED);
 		}
 	}
 
