@@ -29,8 +29,8 @@ import cz.cvut.fel.bupro.TimeUtils;
 public class Project extends CommentableEntity implements Serializable {
 	private static final long serialVersionUID = -4565743549559354326L;
 
-	@NotEmpty
 	@Column(unique = true, nullable = false)
+	@NotEmpty
 	private String name;
 	private String description;
 

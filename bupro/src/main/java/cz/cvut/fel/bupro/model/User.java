@@ -12,6 +12,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity(name = "bupro_user")
@@ -19,12 +21,15 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 	private static final long serialVersionUID = -5431213892674807472L;
 
 	@Column(unique = true, nullable = false)
+	@NotEmpty
 	private String username;
 	private String firstName;
 	private String lastName;
 	@Column(unique = true, nullable = false)
+	@Email
 	private String email;
 	@Column(nullable = false)
+	@NotEmpty
 	private String password;
 
 	@OneToMany(mappedBy = "user")
