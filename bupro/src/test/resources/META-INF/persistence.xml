@@ -7,15 +7,14 @@
 		<description>Bupro Test Persistence</description>
 		<class>cz.cvut.fel.bupro.model.BaseEntity</class>
 		<class>cz.cvut.fel.bupro.model.User</class>
+		<class>cz.cvut.fel.bupro.model.Role</class>
 		<class>cz.cvut.fel.bupro.model.Comment</class>
 		<class>cz.cvut.fel.bupro.model.CommentableEntity</class>
-		<class>cz.cvut.fel.bupro.model.Authorship</class>
 		<class>cz.cvut.fel.bupro.model.Membership</class>
 		<class>cz.cvut.fel.bupro.model.Project</class>
 		<class>cz.cvut.fel.bupro.model.Tag</class>
-		<class>cz.cvut.fel.bupro.model.Subject</class>
-		<class>cz.cvut.fel.bupro.model.Enrolment</class>
-		<class>cz.cvut.fel.bupro.model.EnrolmentType</class>
+		<class>cz.cvut.fel.bupro.model.ProjectCourse</class>
+		<class>cz.cvut.fel.bupro.model.SemesterCode</class>
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
 			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:spring" />
@@ -23,6 +22,7 @@
 			<property name="hibernate.connection.username" value="sa" />
 			<property name="hibernate.connection.password" value="" />
 			<property name="hibernate.hbm2ddl.auto" value="create-drop" />
+			<property name="hibernate.show_sql" value="true" />
 		</properties>
 	</persistence-unit>
 

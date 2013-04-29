@@ -36,6 +36,7 @@ public class MembershipTest {
 		user.setLastName(lastName);
 		user.setEmail(email);
 		user.setUsername(username);
+		user.setPassword("blah");
 		userRepository.save(user);
 		return user;
 	}
