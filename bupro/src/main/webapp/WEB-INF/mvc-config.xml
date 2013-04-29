@@ -46,4 +46,23 @@
 	<bean class="cz.cvut.fel.bupro.support.ExtendedDomainClassConverter">
 		<constructor-arg ref="conversionService" />
 	</bean>
+	<!-- view resolver -->
+	<bean id="viewResolver" class="org.thymeleaf.spring3.view.ThymeleafViewResolver">
+		<property name="templateEngine" ref="templateEngine"/>
+		<property name="characterEncoding" value="UTF-8" />
+	</bean>
+	<bean id="templateEngine" class="org.thymeleaf.spring3.SpringTemplateEngine">
+		<property name="templateResolver" ref="templateResolver" />
+		<property name="additionalDialects">
+			<set>
+				<bean id="springDialect" class="org.thymeleaf.spring3.dialect.SpringStandardDialect" />
+				<bean id="securityDialect" class="org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect" />
+			</set>
+		</property>
+	</bean>
+	<bean id="templateResolver" class="org.thymeleaf.templateresolver.ServletContextTemplateResolver">
+		<property name="prefix" value="/WEB-INF/templates/" />
+		<property name="suffix" value=".html" />
+		<property name="templateMode" value="HTML5" />
+	</bean>
 </beans>
