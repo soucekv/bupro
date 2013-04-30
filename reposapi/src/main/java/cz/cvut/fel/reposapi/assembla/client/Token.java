@@ -8,6 +8,11 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonProperty;
 import org.springframework.http.HttpHeaders;
 
+/**
+ * Token is session for client application
+ * @author Viktor Soucek
+ *
+ */
 @JsonIgnoreProperties
 public class Token implements Identity {
 
