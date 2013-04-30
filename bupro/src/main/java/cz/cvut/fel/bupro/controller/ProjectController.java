@@ -48,6 +48,7 @@ import cz.cvut.fel.bupro.service.UserService;
 import cz.cvut.fel.kos.Translator;
 import cz.cvut.fel.reposapi.Issue;
 import cz.cvut.fel.reposapi.IssueState;
+import cz.cvut.fel.reposapi.ServiceProvider;
 
 @Controller
 public class ProjectController {
@@ -113,6 +114,7 @@ public class ProjectController {
 		model.addAttribute("tags", tagService.getAllTags());
 		model.addAttribute("semesterList", semesterService.getAllSemesters());
 		model.addAttribute("translator", new Translator(locale));
+		model.addAttribute("providerList", ServiceProvider.values());
 		return "project-edit";
 	}
 

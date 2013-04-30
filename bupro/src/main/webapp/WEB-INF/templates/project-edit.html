@@ -5,19 +5,20 @@
 </head>
 <body>
 	<div th:include="header :: menu"></div>
+	<h1 th:text="#{project.edit.title}">Project edit</h1>
 	<form action="#" th:action="@{/project/save}" th:object="${project}" method="post" accept-charset="UTF-8">
 		<input type="hidden" th:field="*{id}" />
 		<table>
 			<tbody>
 				<tr>
-					<td><label th:for="${'name'}">name:</label></td>
+					<td><label th:for="${'name'}" th:text="#{project.name}" >name:</label></td>
 					<td>
 						<input type="text" th:field="*{name}" th:class="${#fields.hasErrors('name')}? 'field-error'" />
 						<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="field-error" >Invalid name</span>
 					</td>
 				</tr>
 				<tr>
-					<td><label th:for="${'course'}">course:</label></td>
+					<td><label th:for="${'course'}" th:text="#{project.course}" >course:</label></td>
 					<td>
 						<select th:field="*{course}" >
 							<option th:each="course : ${courseList}" th:value="${course.id}" th:text="${course.name}">Course 1</option>
@@ -26,7 +27,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label th:for="${'startSemester'}">start:</label></td>
+					<td><label th:for="${'startSemester'}" th:text="#{project.start}" >start:</label></td>
 					<td>
 						<select th:field="*{startSemester}" >
 							<option th:each="semester : ${semesterList}" th:value="${semester.code}" th:text="${translator.localizedString(semester.name)}">Semester name</option>
@@ -35,7 +36,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label th:for="${'endSemester'}">end:</label></td>
+					<td><label th:for="${'endSemester'}" th:text="#{project.end}" >end:</label></td>
 					<td>
 						<select th:field="*{endSemester}" >
 							<option th:each="semester : ${semesterList}" th:value="${semester.code}" th:text="${translator.localizedString(semester.name)}">Semester name</option>
@@ -44,7 +45,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label th:for="${'capacity'}">capacity:</label></td>
+					<td><label th:for="${'capacity'}"  th:text="#{project.capacity.label}" >capacity:</label></td>
 					<td>
 						<script type="text/javascript">
 						/*<![CDATA[*/
@@ -64,14 +65,49 @@
 					</td>
 				</tr>
 				<tr>
-					<td><label th:for="${'description'}">description:</label></td>
+					<td><label th:for="${'description'}" th:text="#{project.description}" >description:</label></td>
 					<td><textarea th:field="*{description}"></textarea></td>
 				</tr>
 				<tr>
-					<td><label th:for="${'tags'}">tags:</label></td>
+					<td><label th:for="${'tags'}" th:text="#{project.tags}">tags:</label></td>
 					<td>
 						<span th:include="autocompletion :: multi" th:with="availableTags=${#strings.listToString(tags)}"></span>
 						<input type="text" th:field="*{tags}" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2"><h2 th:text="#{project.repository}"></h2> </td>
+				</tr>
+				<tr>
+					<td><label th:for="${'repository type'}" th:text="#{project.repository.provider}" >provider:</label></td>
+					<td>
+						<select th:field="*{repository.repositoryProvider}">
+							<option th:each="provider : ${providerList}" th:value="${provider}" th:text="#{${provider}}">Provider name</option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="${'repositoryUser'}" th:text="#{project.repository.username}" >user:</label></td>
+					<td>
+						<input type="text" th:field="*{repository.repositoryUser}" />
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="${'repositoryName'}" th:text="#{project.repository.name}" >name:</label></td>
+					<td>
+						<input type="text" th:field="*{repository.repositoryName}" />
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="${'applicationId'}" th:text="#{project.repository.client.id}" >applicationId:</label></td>
+					<td>
+						<input type="text" th:field="*{repository.applicationId}" />
+					</td>
+				</tr>
+				<tr>
+					<td><label th:for="${'applicationSecret'}" th:text="#{project.repository.client.secret}" >applicationSecret:</label></td>
+					<td>
+						<input type="password" th:field="*{repository.applicationSecret}" />
 					</td>
 				</tr>
 			</tbody>
