@@ -56,4 +56,11 @@ public class Ticket {
 	public Date getUpdatedAt() {
 		return updated_at;
 	}
+
+	@Override
+	public String toString() {
+		return "Ticket [id=" + id + ", number=" + number + ", summary=" + summary + ", description=" + description + ", state=" + state + ", priority="
+				+ priority + ", updated_at=" + updated_at + "]";
+	}
+
 }

@@ -34,4 +34,10 @@ public class AssemblaIssue implements Issue {
 		return ticket.getUpdatedAt();
 	}
 
+	@Override
+	public String toString() {
+		return getClass().getName() + " [getExternalUrl()=" + getExternalUrl() + ", getTitle()=" + getTitle() + ", getState()=" + getState() + ", getUpdatedAt()="
+				+ getUpdatedAt() + "]";
+	}
+
 }
