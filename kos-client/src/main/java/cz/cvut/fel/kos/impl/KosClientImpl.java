@@ -1,5 +1,7 @@
 package cz.cvut.fel.kos.impl;
 
+import static cz.cvut.fel.kos.impl.KosRestParams.*;
+
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -46,6 +48,10 @@ public class KosClientImpl implements KosClient {
 
 	private final Configuration configuration;
 	private final RestTemplate template;
+
+	private static String param(String name) {
+		return name + "={" + name + "}";
+	}
 
 	public KosClientImpl(RestTemplate template, Configuration configuration) {
 		this.template = template;
@@ -166,9 +172,10 @@ public class KosClientImpl implements KosClient {
 	 */
 	private <T> Feed<T> getForFeed(String uri, RsqlBuilder rsql) {
 		Map<String, Object> urlVariables = new HashMap<String, Object>();
-		urlVariables.put(KosRestParams.OFFSET, 0);
-		urlVariables.put(KosRestParams.LIMIT, 10);
-		urlVariables.put(KosRestParams.QUERY, rsql.toString());
+		urlVariables.put(OFFSET, 0);
+		urlVariables.put(LIMIT, 10);
+		urlVariables.put(QUERY, rsql.toString());
+		uri = uri + "?" + param(OFFSET) + "&" + param(LIMIT) + "&" + param(ORDERBY) + "&" + param(QUERY);
 		return getForFeed(uri, urlVariables);
 	}
 
@@ -189,10 +196,11 @@ public class KosClientImpl implements KosClient {
 
 	private Feed<Semester> getSemestersFeed(int offset, int limit) {
 		Map<String, Object> urlVariables = new HashMap<String, Object>();
-		urlVariables.put(KosRestParams.OFFSET, offset);
-		urlVariables.put(KosRestParams.LIMIT, limit);
-		urlVariables.put(KosRestParams.ORDERBY, "startDate@asc");
-		Feed<Semester> feed = getForFeed(configuration.getUri() + "semesters", urlVariables);
+		urlVariables.put(OFFSET, offset);
+		urlVariables.put(LIMIT, limit);
+		urlVariables.put(ORDERBY, "startDate@asc");
+		String uri = configuration.getUri() + "semesters?" + param(OFFSET) + "&" + param(LIMIT) + "&" + param(ORDERBY);
+		Feed<Semester> feed = getForFeed(uri, urlVariables);
 		return feed;
 	}
 
@@ -201,7 +209,7 @@ public class KosClientImpl implements KosClient {
 		int limit = 100;
 		Feed<Semester> feed = getSemestersFeed(offset, limit);
 		List<Semester> semesters = getChainedFeedsContent(feed);
-		//FIXME workaround invalid semesters
+		// FIXME workaround invalid semesters
 		Iterator<Semester> it = semesters.iterator();
 		while (it.hasNext()) {
 			Semester semester = it.next();
