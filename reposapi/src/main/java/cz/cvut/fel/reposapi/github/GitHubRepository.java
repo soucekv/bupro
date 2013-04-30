@@ -35,6 +35,10 @@ public class GitHubRepository implements cz.cvut.fel.reposapi.Repository {
 		this.issueService = new IssueService(gitHubClient);
 	}
 
+	public String getName() {
+		return repository.getName();
+	}
+
 	public String getExternalUrl() {
 		return "https://github.com/" + repository.getOwner().getLogin() + "/" + repository.getName();
 	}

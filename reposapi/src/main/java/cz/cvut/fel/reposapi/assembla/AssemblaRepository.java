@@ -22,6 +22,10 @@ public class AssemblaRepository implements Repository {
 		this.repositoryClient = repositoryClient;
 	}
 
+	public String getName() {
+		return space.getName();
+	}
+
 	public String getExternalUrl() {
 		return "https://www.assembla.com/spaces/show/" + space.getName();
 	}
