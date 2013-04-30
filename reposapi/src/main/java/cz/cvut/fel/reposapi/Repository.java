@@ -2,7 +2,7 @@ package cz.cvut.fel.reposapi;
 
 import java.util.List;
 
-public interface Repository {
+public interface Repository extends Linkable {
 	List<Commit> getCommits() throws RepositoryException;
 
 	List<Commit> getCommits(int limit) throws RepositoryException;

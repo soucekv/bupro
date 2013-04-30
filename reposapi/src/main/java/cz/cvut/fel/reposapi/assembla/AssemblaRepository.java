@@ -20,6 +20,10 @@ public class AssemblaRepository implements Repository {
 		this.repositoryClient = repositoryClient;
 	}
 
+	public String getExternalUrl() {
+		return "https://www.assembla.com/spaces/show/" + space.getName();
+	}
+
 	public List<Commit> getCommits() throws RepositoryException {
 		// List<> repositoryClient.getCommits();
 		// TODO Auto-generated method stub
