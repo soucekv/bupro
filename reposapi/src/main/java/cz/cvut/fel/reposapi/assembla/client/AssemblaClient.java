@@ -1,9 +1,13 @@
 package cz.cvut.fel.reposapi.assembla.client;
 
+import java.net.HttpURLConnection;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -39,7 +43,7 @@ public class AssemblaClient {
 		return response.getBody();
 	}
 
-	private <T> T get(String url, Identity identity, Class<T> type, Map<String, ?> uriVariables) {
+	private <T> T get(String url, Identity identity, Class<T> type, Map<String, Object> uriVariables) {
 		HttpHeaders httpHeaders = createAuthorizationHeaders(identity);
 		ResponseEntity<T> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<T>(httpHeaders), type, uriVariables);
 		return response.getBody();
@@ -93,14 +97,14 @@ public class AssemblaClient {
 	}
 
 	private List<Ticket> getSpaceTickets(Identity identity, Space space, Ticket.State state, int page, int perPage) {
-		String url = ASSEMBLA_API_URL + "spaces/" + space.getId() + "/tickets" + TYPE_JSON;
+		String url = ASSEMBLA_API_URL + "spaces/" + space.getId() + "/tickets" + TYPE_JSON + "?report={report}&page={page}&per_page={per_page}";
 		Map<String, Object> map = new HashMap<String, Object>();
-		String report = (state == null) ? "0" : (state == State.OPEN) ? "1" : "4";
+		String report = (state == null) ? "0" : ((state == State.OPEN) ? "1" : "4");
 		map.put("report", report);
 		map.put("page", page);
 		map.put("per_page", perPage);
 		TicketList ticketList = get(url, identity, TicketList.class, map);
-		return ticketList;
+		return (ticketList == null) ? Collections.<Ticket> emptyList() : ticketList;
 	}
 
 	public List<Ticket> getSpaceTickets(Identity identity, Space space, Ticket.State state) {
