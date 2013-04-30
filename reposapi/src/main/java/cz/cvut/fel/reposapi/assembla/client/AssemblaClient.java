@@ -83,7 +83,7 @@ public class AssemblaClient {
 	}
 
 	public SpaceTool getSpaceRepositoryTool(Identity identity, Space space) {
-		String url = ASSEMBLA_API_URL + "spaces/" + space.getId() + "/space_tools" + TYPE_JSON;
+		String url = ASSEMBLA_API_URL + "spaces/" + space.getId() + "/space_tools/repo" + TYPE_JSON;
 		SpaceTool spaceTool = get(url, identity, SpaceTool.class);
 		return spaceTool;
 	}
