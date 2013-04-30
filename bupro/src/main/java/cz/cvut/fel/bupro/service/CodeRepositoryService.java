@@ -20,6 +20,7 @@ import cz.cvut.fel.reposapi.RepositoryClient;
 import cz.cvut.fel.reposapi.RepositoryClientFactory;
 import cz.cvut.fel.reposapi.RepositoryException;
 import cz.cvut.fel.reposapi.ServiceProvider;
+import cz.cvut.fel.reposapi.assembla.AssemblaCredentials;
 import cz.cvut.fel.reposapi.github.GitHubCredentials;
 
 /**
@@ -138,6 +139,7 @@ public class CodeRepositoryService {
 		case GITHUB:
 			return new GitHubCredentials(repositoryLink.getRepositoryUser());
 		case ASSEMBLA:
+			return new AssemblaCredentials(repositoryLink.getApplicationId(), repositoryLink.getApplicationSecret());
 		default:
 			throw new UnsupportedOperationException("Repository " + StringUtils.capitalize(String.valueOf(provider).toLowerCase()) + " is not supported yet!");
 		}
