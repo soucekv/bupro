@@ -16,9 +16,8 @@ public class AssemblaDateDeserializer extends JsonDeserializer<Date> {
 	@Override
 	public Date deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
 		// example: 2013-04-29T19:03:36Z
-		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		String text = jp.getText();
-
 		try {
 			return format.parse(text);
 		} catch (ParseException e) {
