@@ -1,7 +1,7 @@
 package cz.cvut.fel.reposapi.assembla.client;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -89,31 +89,41 @@ public class AssemblaClient {
 	}
 
 	public List<Ticket> getSpaceTickets(Identity identity, Space space) {
-		String url = ASSEMBLA_API_URL + "spaces/" + space.getId() + "/tickets" + TYPE_JSON;
-		TicketList ticketList = get(url, identity, TicketList.class);
-		return ticketList;
+		return getSpaceTickets(identity, space, null);
 	}
 
-	public List<Ticket> getSpaceTickets(Identity identity, Space space, Ticket.State state) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		map.put("report", (state == State.OPEN) ? "1" : "4");
-		map.put("page", 0);
-		map.put("per_page", 100); // default
+	private List<Ticket> getSpaceTickets(Identity identity, Space space, Ticket.State state, int page, int perPage) {
 		String url = ASSEMBLA_API_URL + "spaces/" + space.getId() + "/tickets" + TYPE_JSON;
+		Map<String, Object> map = new HashMap<String, Object>();
+		String report = (state == null) ? "0" : (state == State.OPEN) ? "1" : "4";
+		map.put("report", report);
+		map.put("page", page);
+		map.put("per_page", perPage);
 		TicketList ticketList = get(url, identity, TicketList.class, map);
 		return ticketList;
 	}
 
+	public List<Ticket> getSpaceTickets(Identity identity, Space space, Ticket.State state) {
+		int pageSize = 1000; // Assembla default
+		List<Ticket> page = getSpaceTickets(identity, space, state, 0, pageSize);
+		List<Ticket> list = page;
+		for (int i = 1; page.size() < pageSize; i++) {
+			page = getSpaceTickets(identity, space, state, i, pageSize);
+			list.addAll(page);
+		}
+		return list;
+	}
+
 	// FIXME find better method to GET list converted
-	private static final class SpaceList extends ArrayList<Space> {
+	private static final class SpaceList extends LinkedList<Space> {
 		private static final long serialVersionUID = 1L;
 	}
 
-	private static final class SpaceToolList extends ArrayList<SpaceTool> {
+	private static final class SpaceToolList extends LinkedList<SpaceTool> {
 		private static final long serialVersionUID = 1L;
 	}
 
-	private static final class TicketList extends ArrayList<Ticket> {
+	private static final class TicketList extends LinkedList<Ticket> {
 		private static final long serialVersionUID = 1L;
 	}
 

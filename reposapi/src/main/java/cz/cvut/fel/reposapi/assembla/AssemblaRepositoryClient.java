@@ -1,5 +1,8 @@
 package cz.cvut.fel.reposapi.assembla;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import cz.cvut.fel.reposapi.AbstractRepositoryClient;
@@ -11,6 +14,7 @@ import cz.cvut.fel.reposapi.assembla.client.ApiKey;
 import cz.cvut.fel.reposapi.assembla.client.AssemblaClient;
 import cz.cvut.fel.reposapi.assembla.client.Identity;
 import cz.cvut.fel.reposapi.assembla.client.Space;
+import cz.cvut.fel.reposapi.assembla.client.Ticket;
 import cz.cvut.fel.reposapi.assembla.client.Token;
 
 public class AssemblaRepositoryClient extends AbstractRepositoryClient<AssemblaCredentials> implements RepositoryClient {
@@ -53,8 +57,42 @@ public class AssemblaRepositoryClient extends AbstractRepositoryClient<AssemblaC
 		return null;
 	}
 
-	public void getCommits(Space space) {
+	public List<Ticket> getIssues(Space space) {
+		return assemblaClient.getSpaceTickets(getIdentity(), space);
+	}
 
+	public List<Ticket> getIssues(Space space, Ticket.State state) {
+		return assemblaClient.getSpaceTickets(getIdentity(), space, state);
+	}
+
+	public List<Ticket> getUpdatedIssues(Space space) {
+		List<Ticket> list = assemblaClient.getSpaceTickets(getIdentity(), space);
+		sortByUpdatedAtDesc(list);
+		return list;
+	}
+
+	public List<Ticket> getUpdatedIssues(Space space, int limit) {
+		return getUpdatedIssues(space).subList(0, limit);
+	}
+
+	public List<Ticket> getUpdatedIssues(Space space, Ticket.State state) {
+		List<Ticket> list = assemblaClient.getSpaceTickets(getIdentity(), space, state);
+		sortByUpdatedAtDesc(list);
+		return list;
+	}
+
+	public List<Ticket> getUpdatedIssues(Space space, Ticket.State state, int limit) {
+		return getUpdatedIssues(space, state).subList(0, limit);
+	}
+
+	private static void sortByUpdatedAtDesc(List<? extends Ticket> list) {
+		Collections.sort(list, Collections.reverseOrder(new Comparator<Ticket>() {
+			public int compare(Ticket o1, Ticket o2) {
+				Date d1 = o1.getUpdatedAt();
+				Date d2 = o2.getUpdatedAt();
+				return d1.before(d2) ? -1 : (d1.equals(d2) ? 0 : 1);
+			}
+		}));
 	}
 
 }
