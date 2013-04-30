@@ -6,6 +6,7 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<h1 th:text="#{project.log.title(${project.name})}"></h1>
+	<a th:if="${repository != null}" th:href="${repository.externalUrl}" th:text="${repository.name}">commit</a>
 	<div th:unless="${#lists.isEmpty(commits)}">
 		<h2 th:text="#{project.repository.commits.recent}">Recent commits:</h2>
 		<div th:each="commit : ${commits}">
@@ -14,11 +15,11 @@
 			</div>
 		</div>
 	</div>
-	<div th:unless="${#lists.isEmpty(issues)}" class="issues">
+	<div class="issues">
 		<h2 th:text="#{project.repository.issues}">Issues:</h2>
 		<div th:text="#{project.repository.issues.count(${open},${closed},${total})}"></div>
-		<h3 th:text="#{project.repository.issues.recent}">Recently updated issues:</h3>
-		<div th:each="issue : ${issues}" th:class="${#strings.toLowerCase(issue.state)}">
+		<h3 th:unless="${#lists.isEmpty(issues)}" th:text="#{project.repository.issues.recent}">Recently updated issues:</h3>
+		<div th:unless="${#lists.isEmpty(issues)}" th:each="issue : ${issues}" th:class="${#strings.toLowerCase(issue.state)}">
 			<span th:text="${#dates.format(issue.updatedAt, 'yyyy-MM-dd HH:mm')}"></span>&nbsp;<a th:href="${issue.externalUrl}" th:text="${issue.title}">issue</a>
 		</div>
 	</div>

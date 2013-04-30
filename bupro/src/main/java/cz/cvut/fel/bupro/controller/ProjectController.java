@@ -265,6 +265,7 @@ public class ProjectController {
 		String closed = (closedIssues == null) ? "?" : String.valueOf(closedIssues.size());
 		String total = (openedIssues == null || closedIssues == null) ? "?" : String.valueOf(openedIssues.size() + closedIssues.size());
 		model.addAttribute("project", project);
+		model.addAttribute("repository", codeRepositoryService.getRepository(project));
 		model.addAttribute("commits", codeRepositoryService.getCommits(project, LOG_LIMIT));
 		model.addAttribute("open", open);
 		model.addAttribute("closed", closed);
