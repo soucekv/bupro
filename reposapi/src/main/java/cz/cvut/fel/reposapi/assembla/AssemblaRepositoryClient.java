@@ -49,7 +49,7 @@ public class AssemblaRepositoryClient extends AbstractRepositoryClient<AssemblaC
 
 	public Repository getRepository(String name) {
 		Space space = assemblaClient.getSpace(getIdentity(), name);
-		return new AssemblaRepository(space, this) ;
+		return new AssemblaRepository(space, this);
 	}
 
 	public List<Ticket> getIssues(Space space) {
@@ -67,7 +67,8 @@ public class AssemblaRepositoryClient extends AbstractRepositoryClient<AssemblaC
 	}
 
 	public List<Ticket> getUpdatedIssues(Space space, int limit) {
-		return getUpdatedIssues(space).subList(0, limit);
+		List<Ticket> tickets = getUpdatedIssues(space);
+		return (tickets.size() < limit) ? tickets : tickets.subList(0, limit);
 	}
 
 	public List<Ticket> getUpdatedIssues(Space space, Ticket.State state) {
@@ -77,7 +78,8 @@ public class AssemblaRepositoryClient extends AbstractRepositoryClient<AssemblaC
 	}
 
 	public List<Ticket> getUpdatedIssues(Space space, Ticket.State state, int limit) {
-		return getUpdatedIssues(space, state).subList(0, limit);
+		List<Ticket> tickets = getUpdatedIssues(space, state);
+		return (tickets.size() < limit) ? tickets : tickets.subList(0, limit);
 	}
 
 	private static void sortByUpdatedAtDesc(List<? extends Ticket> list) {
