@@ -107,7 +107,7 @@ public class AssemblaClient {
 		int pageSize = 1000; // Assembla default
 		List<Ticket> page = getSpaceTickets(identity, space, state, 0, pageSize);
 		List<Ticket> list = page;
-		for (int i = 1; page.size() < pageSize; i++) {
+		for (int i = 1; page.size() >= pageSize; i++) {
 			page = getSpaceTickets(identity, space, state, i, pageSize);
 			list.addAll(page);
 		}
