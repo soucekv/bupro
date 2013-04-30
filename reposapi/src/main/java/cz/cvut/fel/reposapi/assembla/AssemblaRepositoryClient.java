@@ -48,13 +48,8 @@ public class AssemblaRepositoryClient extends AbstractRepositoryClient<AssemblaC
 	}
 
 	public Repository getRepository(String name) {
-		List<Space> spaces = assemblaClient.getSpaces(getIdentity());
-		for (Space space : spaces) {
-			if (space.getName().equals(name)) {
-				return new AssemblaRepository(space, this);
-			}
-		}
-		return null;
+		Space space = assemblaClient.getSpace(getIdentity(), name);
+		return new AssemblaRepository(space, this) ;
 	}
 
 	public List<Ticket> getIssues(Space space) {
