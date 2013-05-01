@@ -91,4 +91,14 @@ public class EmailService {
 	public void sendEmail(Email email) {
 		sendEmail(email.getTo(), email.getC(), email.getTitle(), email.getText());
 	}
+
+	public void sendRegistrationEmail(User user, String password, Locale locale) {
+		final String titleKey = "notify.user.registration.title";
+		final String textKey = "notify.user.registration.text";
+		String title = emailsMessageSource.getMessage(titleKey, new String[] {}, "Bupro: registration complete", locale);
+		String[] args = new String[] { user.getUsername(), password };
+		String defaultText = "Welcome to bupro. Your registration user:" + user.getUsername() + " pass:" + password;
+		String text = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
+		sendEmail(user, title, text);
+	}
 }

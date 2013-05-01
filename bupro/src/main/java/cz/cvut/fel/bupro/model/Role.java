@@ -6,6 +6,7 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -16,10 +17,14 @@ import org.springframework.security.core.GrantedAuthority;
 public class Role extends BaseEntity implements GrantedAuthority, Serializable {
 	private static final long serialVersionUID = -983927348937047953L;
 
+	public static final String ADMIN = "ROLE_ADMIN";
+	public static final String STUDENT = "ROLE_STUDENT";
+	public static final String TEACHER = "ROLE_TEACHER";
+
 	@Column(unique = true, nullable = false)
 	private String authority;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<User> users = new HashSet<User>();
 
 	public Role() {
@@ -43,6 +48,11 @@ public class Role extends BaseEntity implements GrantedAuthority, Serializable {
 
 	public Set<User> getUsers() {
 		return users;
+	}
+
+	public void grantTo(User user) {
+		getUsers().add(user);
+		user.getRoles().add(this);
 	}
 
 }

@@ -1,5 +1,7 @@
 package cz.cvut.fel.bupro.security;
 
+import java.util.Locale;
+
 import cz.cvut.fel.bupro.model.User;
 
 public interface SecurityService {
@@ -9,5 +11,5 @@ public interface SecurityService {
 	 */
 	User getCurrentUser();
 
-	User createUser(User user);
+	User createUser(User user, Locale locale);
 }

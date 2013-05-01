@@ -1,0 +1,15 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:include="header :: head">
+<title th:text="#{login.title}">Bupro - new account</title>
+</head>
+<body>
+	<h1 th:text="#{signup.title}" >Create new account</h1>
+	<div th:text="#{signup.description}">Create a new account using KOS credentials</div>
+	<form th:action="@{/signup}" th:object="${registration}" method="post" accept-charset="UTF-8">
+		<label th:for="${'username'}" th:text="#{login.username}">username:</label>
+		<input type="text" id="username" th:field="*{username}" />
+		<input type="submit" th:value="#{signup.submit}" />
+	</form>
+</body>
+</html>

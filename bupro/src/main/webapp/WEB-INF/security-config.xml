@@ -22,9 +22,12 @@
 	<sec:http auto-config="true">
 		<sec:form-login login-page="/login" authentication-failure-url="/login-error" default-target-url="/project/list"/>
 		<sec:logout logout-success-url="/login" />
-		<sec:intercept-url pattern="/login*" access="ROLE_ANONYMOUS,ROLE_USER" />
-		<sec:intercept-url pattern="/logout" access="ROLE_ANONYMOUS,ROLE_USER" />
-		<sec:intercept-url pattern="/**" access="ROLE_USER" />
+		<sec:intercept-url pattern="/login*" access="ROLE_ANONYMOUS,ROLE_STUDENT,ROLE_TEACHER,ROLE_ADMIN" />
+		<sec:intercept-url pattern="/signup" access="ROLE_ANONYMOUS,ROLE_STUDENT,ROLE_TEACHER,ROLE_ADMIN" />
+		<sec:intercept-url pattern="/logout" access="ROLE_ANONYMOUS,ROLE_STUDENT,ROLE_TEACHER,ROLE_ADMIN" />
+		<sec:intercept-url pattern="/project/create" access="ROLE_TEACHER" />
+		<sec:intercept-url pattern="/project/edit" access="ROLE_TEACHER" />
+		<sec:intercept-url pattern="/**" access="ROLE_STUDENT,ROLE_TEACHER,ROLE_ADMIN" />
 	</sec:http>
 
 </beans>
