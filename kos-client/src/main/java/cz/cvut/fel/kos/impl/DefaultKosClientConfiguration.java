@@ -21,7 +21,7 @@ import cz.cvut.fel.kos.KosClientFactory;
  * spring implementation.
  */
 @Configuration
-public class DefaultKosConfiguration {
+public class DefaultKosClientConfiguration {
 
 	@Bean
 	public ValidationEventHandler kosValidationEventHandler() {
@@ -55,7 +55,11 @@ public class DefaultKosConfiguration {
 
 	@Bean
 	public KosClientFactory kosClientFactory() {
-		return new KosClientFactoryImpl();
+		return new KosClientFactoryImpl(kosRestTemplate());
+	}
+
+	public static KosClientFactory createKosClientFactory() {
+		return new DefaultKosClientConfiguration().kosClientFactory();
 	}
 
 }

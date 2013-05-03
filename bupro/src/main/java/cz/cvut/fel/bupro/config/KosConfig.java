@@ -10,10 +10,10 @@ import org.springframework.context.annotation.PropertySource;
 import cz.cvut.fel.kos.Configuration.Authentication;
 import cz.cvut.fel.kos.KosClient;
 import cz.cvut.fel.kos.KosClientFactory;
-import cz.cvut.fel.kos.impl.DefaultKosConfiguration;
+import cz.cvut.fel.kos.impl.DefaultKosClientConfiguration;
 
 @Configuration
-@Import(DefaultKosConfiguration.class)
+@Import(DefaultKosClientConfiguration.class)
 @PropertySource({ "classpath:cfg/kos.properties" })
 public class KosConfig {
 
