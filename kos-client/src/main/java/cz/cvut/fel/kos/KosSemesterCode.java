@@ -12,10 +12,30 @@ package cz.cvut.fel.kos;
 public class KosSemesterCode {
 	public static final String REGEX_PATTERN = "^[A-B][0-9]{2}[1-2]$";
 
+	/**
+	 * Validates Semester code
+	 * 
+	 * @param code
+	 * @return true if string contains valid KOS Semester code
+	 * @throws NullPointerException
+	 *             if code is <code>null</code>
+	 */
 	public static boolean validate(String code) {
 		return code.matches(REGEX_PATTERN);
 	}
 
+	/**
+	 * Calculates KOS code from given year and period
+	 * 
+	 * @param year
+	 * @param period
+	 *            Winter/Summer semester
+	 * @return string containing Semester KOS code
+	 * @throws NullPointerException
+	 *             if period is <code>null</code>
+	 * @throws IllegalArgumentException
+	 *             if year is not from 20th or 21th century
+	 */
 	public static String encode(int year, Period period) {
 		if (period == null) {
 			throw new NullPointerException("Period is required for Semester code");
@@ -33,6 +53,16 @@ public class KosSemesterCode {
 		return code;
 	}
 
+	/**
+	 * Decodes period (Winter/Summer semester) from KOS code
+	 * 
+	 * @param code
+	 * @return period (Winter/Summer semester)
+	 * @throws NullPointerException
+	 *             if code is <code>null</code>
+	 * @throws IllegalArgumentException
+	 *             if code is not valid
+	 */
 	public static Period decodePeriod(String code) {
 		if (code == null) {
 			throw new NullPointerException();
@@ -51,6 +81,16 @@ public class KosSemesterCode {
 		throw new IllegalArgumentException("Uknown period value " + code);
 	}
 
+	/**
+	 * Decodes year from KOS code
+	 * 
+	 * @param code
+	 * @return year
+	 * @throws NullPointerException
+	 *             if code is <code>null</code>
+	 * @throws IllegalArgumentException
+	 *             if code is not valid
+	 */
 	public static int decodeYear(String code) {
 		if (code == null) {
 			throw new NullPointerException();
@@ -64,6 +104,16 @@ public class KosSemesterCode {
 		return year;
 	}
 
+	/**
+	 * Calculates code for next semester from semester code.
+	 * 
+	 * @param code
+	 * @return code for next semester
+	 * @throws NullPointerException
+	 *             if code is <code>null</code>
+	 * @throws IllegalArgumentException
+	 *             if code is not valid
+	 */
 	public static String next(String code) {
 		int year = decodeYear(code);
 		Period period = decodePeriod(code);
@@ -73,6 +123,16 @@ public class KosSemesterCode {
 		return encode(year, Period.WINTER);
 	}
 
+	/**
+	 * Calculates code for previous semester from semester code.
+	 * 
+	 * @param code
+	 * @return
+	 * @throws NullPointerException
+	 *             if code is <code>null</code>
+	 * @throws IllegalArgumentException
+	 *             if code is not valid
+	 */
 	public static String prev(String code) {
 		int year = decodeYear(code);
 		Period period = decodePeriod(code);
