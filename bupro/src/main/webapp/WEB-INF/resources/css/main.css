@@ -151,11 +151,11 @@ li.disabled {
 }
 
 .issues .open {
-	background-color: #DDFFDD;
+	background-color: #FFDDDD;
 }
 
 .issues .closed {
-	background-color: #FFDDDD;
+	background-color: #DDFFDD;
 }
 
 .email input[type=text],
