@@ -46,6 +46,8 @@ public class InitilazationService {
 			log.info("Initializing admin account");
 			User user = new User();
 			user.setUsername("admin");
+			user.setFirstName("Admin");
+			user.setLastName("");
 			user.setPassword(passwordEncoder.encode("changeit"));
 			user.setEmail("admin@bupro.org");
 			adminRole.grantTo(user);
