@@ -101,4 +101,16 @@ public class EmailService {
 		String text = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
 		sendEmail(user, title, text);
 	}
+
+	public void sendProjectExpiresWarning(Project project, int days) {
+		Locale locale = Locale.ENGLISH;
+		final String titleKey = "notify.project.expires.soon.title";
+		final String textKey = "notify.project.expires.soon.text";
+		// TODO language locale
+		String title = emailsMessageSource.getMessage(titleKey, new String[] {}, "Bupro: project expiration", locale);
+		String[] args = new String[] { project.getName(), String.valueOf(project.getId()), String.valueOf(days) };
+		String defaultText = "Your project:" + args[0] + " expire in " + args[2] + " days";
+		String text = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
+		sendEmail(project.getOwner(), title, text);
+	}
 }
