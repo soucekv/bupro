@@ -10,6 +10,14 @@
 		<form th:action="@{/user/save}" th:object="${user}" method="post" accept-charset="UTF-8">
 			<input type="hidden" th:field="*{id}" />
 			<div>
+				<label th:for="${'lang'}" th:text="#{user.preffered.language}" >My language:</label>
+				<br />
+				<div th:if="${#fields.hasErrors('lang')}" th:errors="*{lang}" class="field-error" >Invalid value</div>
+				<select th:field="*{lang}">
+					<option th:each="locale : ${locales}" th:value="${locale.language}" th:text="#{${locale.language}}" >cs</option>
+				</select>
+			</div>
+			<div>
 				<label th:for="${'aboutme'}" th:text="#{user.aboutme}" >About me:</label>
 				<br />
 				<div th:if="${#fields.hasErrors('aboutme')}" th:errors="*{aboutme}" class="field-error" >Invalid value</div>

@@ -213,9 +213,9 @@ public class ProjectController {
 		String baseLinkUrl = getContextRoot(request);
 		if (project.isAutoApprove()) {
 			membership.setMembershipState(MembershipState.APPROVED);
-			emailService.sendMembershipAutoapproved(baseLinkUrl, locale, project, user);
+			emailService.sendMembershipAutoapproved(baseLinkUrl, project, user);
 		} else {
-			emailService.sendMembershipRequest(baseLinkUrl, locale, project, user);
+			emailService.sendMembershipRequest(baseLinkUrl, project, user);
 		}
 		return viewPage(model, project);
 	}
@@ -235,11 +235,11 @@ public class ProjectController {
 			if (membership.getUser().getId().equals(userId)) {
 				MembershipState state = MembershipState.APPROVED;
 				membership.setMembershipState(state);
-				emailService.sendMembershipState(baseLinkUrl, locale, membership.getProject(), membership.getUser(), state);
+				emailService.sendMembershipState(baseLinkUrl, membership.getProject(), membership.getUser(), state);
 			} else if (full && membership.getMembershipState() == MembershipState.WAITING_APPROVAL) {
 				MembershipState state = MembershipState.DECLINED;
 				membership.setMembershipState(state);
-				emailService.sendMembershipState(baseLinkUrl, locale, membership.getProject(), membership.getUser(), state);
+				emailService.sendMembershipState(baseLinkUrl, membership.getProject(), membership.getUser(), state);
 			}
 		}
 		return viewPage(model, project);
@@ -253,7 +253,7 @@ public class ProjectController {
 		Membership membership = membershipService.getMembership(projectId, userId);
 		membership.setMembershipState(membershipState);
 		String baseLinkUrl = getContextRoot(request);
-		emailService.sendMembershipState(baseLinkUrl, locale, membership.getProject(), membership.getUser(), membershipState);
+		emailService.sendMembershipState(baseLinkUrl, membership.getProject(), membership.getUser(), membershipState);
 		return viewPage(model, membership.getProject());
 	}
 

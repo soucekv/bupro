@@ -51,7 +51,8 @@ public class EmailService {
 		return getLocalizedFullName(locale, user.getFirstName(), user.getLastName());
 	}
 
-	public void sendMembershipAutoapproved(String linkUrl, Locale locale, Project project, User user) {
+	public void sendMembershipAutoapproved(String linkUrl, Project project, User user) {
+		Locale locale = new Locale(project.getOwner().getLang());
 		String title = emailsMessageSource.getMessage("notify.new.membership.autoapproved.title", new String[] {}, "Bupro: membership automaticaliy approved",
 				locale);
 		String defaultBody = "User " + getLocalizedFullName(locale, user) + " joined your project " + project.getName();
@@ -60,7 +61,8 @@ public class EmailService {
 		sendEmail(project.getOwner(), title, body);
 	}
 
-	public void sendMembershipRequest(String linkUrl, Locale locale, Project project, User user) {
+	public void sendMembershipRequest(String linkUrl, Project project, User user) {
+		Locale locale = new Locale(project.getOwner().getLang());
 		String title = emailsMessageSource.getMessage("notify.new.membership.request.title", new String[] {}, "Bupro: membership request", locale);
 		String defaultBody = "User " + getLocalizedFullName(locale, user) + " requested to join your project " + project.getName();
 		String[] args = new String[] { project.getName(), projectLink(linkUrl, project), getLocalizedFullName(locale, user), userLink(linkUrl, user) };
@@ -68,7 +70,8 @@ public class EmailService {
 		sendEmail(project.getOwner(), title, body);
 	}
 
-	public void sendMembershipState(String linkUrl, Locale locale, Project project, User user, MembershipState membershipState) {
+	public void sendMembershipState(String linkUrl, Project project, User user, MembershipState membershipState) {
+		Locale locale = new Locale(user.getLang());
 		final String titleKey = "notify.membership.request." + String.valueOf(membershipState).toLowerCase() + ".title";
 		final String textKey = "notify.membership.request." + String.valueOf(membershipState).toLowerCase() + ".text";
 		String title = emailsMessageSource.getMessage(titleKey, new String[] {}, "Bupro: membership " + String.valueOf(membershipState), locale);
@@ -103,10 +106,9 @@ public class EmailService {
 	}
 
 	public void sendProjectExpiresWarning(Project project, int days) {
-		Locale locale = Locale.ENGLISH;
+		Locale locale = new Locale(project.getOwner().getLang());
 		final String titleKey = "notify.project.expires.soon.title";
 		final String textKey = "notify.project.expires.soon.text";
-		// TODO language locale
 		String title = emailsMessageSource.getMessage(titleKey, new String[] {}, "Bupro: project expiration", locale);
 		String[] args = new String[] { project.getName(), String.valueOf(project.getId()), String.valueOf(days) };
 		String defaultText = "Your project:" + args[0] + " expire in " + args[2] + " days";

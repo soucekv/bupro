@@ -38,6 +38,10 @@ public class UserController {
 	@Autowired
 	private SecurityService securityService;
 
+	private Locale[] getAvailableLocales() {
+		return new Locale[]{ new Locale("cs"), Locale.ENGLISH};
+	}
+
 	@RequestMapping("/list")
 	@Transactional
 	public String showUserList(Model model, Locale locale, @PageableDefaults Pageable pageable, Filterable filterable) {
@@ -53,6 +57,7 @@ public class UserController {
 		User user = userService.getUser(id);
 		user.getComments().size(); // force fetch
 		boolean profile = securityService.getCurrentUser().equals(user);
+		model.addAttribute("locales", getAvailableLocales());
 		model.addAttribute("profile", profile);
 		model.addAttribute("teached", projectService.getOwnedProjects(user, locale));
 		model.addAttribute("membershiped", projectService.getMemberProjects(user, locale));
@@ -68,7 +73,9 @@ public class UserController {
 			log.warn("Invalid accesss not a logged user");
 			return "redirect:/user/view/" + user.getId();
 		}
+		u.setLang(user.getLang());
 		u.setAboutme(user.getAboutme());
+		model.addAttribute("locales", getAvailableLocales());
 		model.addAttribute("profile", true);
 		model.addAttribute("teached", projectService.getOwnedProjects(user, locale));
 		model.addAttribute("membershiped", projectService.getMemberProjects(user, locale));

@@ -3,6 +3,7 @@ package cz.cvut.fel.bupro.model;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -33,6 +34,8 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 	private String password;
 	@Column(columnDefinition = "TEXT")
 	private String aboutme;
+
+	private String lang = Locale.ENGLISH.getLanguage();
 
 	@OneToMany(mappedBy = "user")
 	private Set<Membership> memberships = new HashSet<Membership>();
@@ -107,6 +110,14 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 
 	public void setAboutme(String aboutme) {
 		this.aboutme = aboutme;
+	}
+
+	public String getLang() {
+		return lang;
+	}
+
+	public void setLang(String lang) {
+		this.lang = lang;
 	}
 
 	public boolean isAccountNonExpired() {
