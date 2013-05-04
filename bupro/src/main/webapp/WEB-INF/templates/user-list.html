@@ -26,7 +26,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="user : ${users}">
+			<tr th:each="user : ${users}" th:unless="${user.username.equals('admin')}">
 				<td>
 					<a href="http://localhost:8080/" th:href="@{'/user/view/' + ${user.id}}" th:text="#{detail}">Detail</a>
 				</td>
