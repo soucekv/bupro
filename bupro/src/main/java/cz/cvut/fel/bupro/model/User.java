@@ -31,6 +31,8 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 	@Column(nullable = false)
 	@NotEmpty
 	private String password;
+	@Column(columnDefinition = "TEXT")
+	private String aboutme;
 
 	@OneToMany(mappedBy = "user")
 	private Set<Membership> memberships = new HashSet<Membership>();
@@ -99,6 +101,14 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 		this.password = password;
 	}
 
+	public String getAboutme() {
+		return aboutme;
+	}
+
+	public void setAboutme(String aboutme) {
+		this.aboutme = aboutme;
+	}
+
 	public boolean isAccountNonExpired() {
 		return true;
 	}
@@ -122,36 +132,6 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 			}
 		}
 		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((getUsername() == null) ? 0 : getUsername().hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (!(obj instanceof User)) {
-			return false;
-		}
-		User other = (User) obj;
-		if (getUsername() == null) {
-			if (other.getUsername() != null) {
-				return false;
-			}
-		} else if (!getUsername().equals(other.getUsername())) {
-			return false;
-		}
-		return true;
 	}
 
 }
