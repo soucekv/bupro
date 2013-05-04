@@ -49,7 +49,7 @@ public class ExpirationService {
 		}
 	}
 
-	@Scheduled(cron = "0 3 * * * *")
+	@Scheduled(cron = "0 0 3 * * * ")
 	@Transactional
 	public void checkProjectsExpiration() {
 		log.info("Checking projects for expiration");
