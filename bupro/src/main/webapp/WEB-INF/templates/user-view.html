@@ -62,6 +62,8 @@
 						var title = $("#comment-title")[0].value;
 						var text = $("#comment-text")[0].value;
 						client.comment('user', id , title, text);
+						$("#comment-title")[0].value = "";
+						$("#comment-text")[0].value = "";
 					}
 				/*]]>*/
 				</script>
