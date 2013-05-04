@@ -1,6 +1,17 @@
 package cz.cvut.fel.bupro.service;
 
 import java.util.Locale;
+import java.util.Properties;
+
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -28,6 +39,32 @@ public class EmailService {
 	private MessageSource emailsMessageSource;
 	@Autowired
 	private MessageSource messageSource;
+	@Autowired
+	@Qualifier(Qualifiers.EMAIL)
+	private Properties properties;
+
+	private static InternetAddress[] parse(String to) throws AddressException {
+		String[] values = to.split("\\s*;\\s*");
+		InternetAddress[] addresses = new InternetAddress[values.length];
+		for (int i = 0; i < addresses.length && i < values.length; i++) {
+			addresses[i] = new InternetAddress(values[i]);
+		}
+		return addresses;
+	}
+
+	private static String encapsulateHtmlBody(String body) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("<!DOCTYPE html>");
+		sb.append("<html xmlns=\"http://www.w3.org/1999/xhtml\">");
+		sb.append("<head>");
+		sb.append("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />");
+		sb.append("</head>");
+		sb.append("<body>");
+		sb.append(body);
+		sb.append("</body>");
+		sb.append("</html>");
+		return sb.toString();
+	}
 
 	private static String projectLink(String urlBase, Project project) {
 		if (!urlBase.endsWith("/")) {
@@ -58,6 +95,9 @@ public class EmailService {
 		String defaultBody = "User " + getLocalizedFullName(locale, user) + " joined your project " + project.getName();
 		String[] args = new String[] { project.getName(), projectLink(linkUrl, project), getLocalizedFullName(locale, user), userLink(linkUrl, user) };
 		String body = emailsMessageSource.getMessage("notify.new.membership.autoapproved.text", args, defaultBody, locale);
+		if (isHtmlEmail()) {
+			body = encapsulateHtmlBody(body);
+		}
 		sendEmail(project.getOwner(), title, body);
 	}
 
@@ -67,6 +107,9 @@ public class EmailService {
 		String defaultBody = "User " + getLocalizedFullName(locale, user) + " requested to join your project " + project.getName();
 		String[] args = new String[] { project.getName(), projectLink(linkUrl, project), getLocalizedFullName(locale, user), userLink(linkUrl, user) };
 		String body = emailsMessageSource.getMessage("notify.new.membership.request.text", args, defaultBody, locale);
+		if (isHtmlEmail()) {
+			body = encapsulateHtmlBody(body);
+		}
 		sendEmail(project.getOwner(), title, body);
 	}
 
@@ -77,18 +120,59 @@ public class EmailService {
 		String title = emailsMessageSource.getMessage(titleKey, new String[] {}, "Bupro: membership " + String.valueOf(membershipState), locale);
 		String[] args = new String[] { project.getName(), projectLink(linkUrl, project) };
 		String defaultText = "Your request to join project " + project.getName() + " " + String.valueOf(membershipState).toLowerCase();
-		String text = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
-		sendEmail(user, title, text);
+		String body = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
+		if (isHtmlEmail()) {
+			body = encapsulateHtmlBody(body);
+		}
+		sendEmail(user, title, body);
+	}
+
+	private Session createSession() {
+		final String username = (String) properties.get("mail.smpt.auth.username");
+		final String password = (String) properties.get("mail.smpt.auth.password");
+		Authenticator authenticator = new Authenticator() {
+			@Override
+			protected PasswordAuthentication getPasswordAuthentication() {
+				return new PasswordAuthentication(username, password);
+			}
+		};
+		boolean passwordAuth = "true".equalsIgnoreCase(properties.getProperty("mail.smtp.auth", null));
+		return (passwordAuth) ? Session.getDefaultInstance(properties, authenticator) : Session.getDefaultInstance(properties);
+	}
+
+	private boolean isHtmlEmail() {
+		return "html".equalsIgnoreCase(properties.getProperty("mail.text.type", null));
 	}
 
 	@Transactional
-	public void sendEmail(User to, String title, String body) {
-		sendEmail(to.getEmail(), null, title, body);
+	public void sendEmail(User to, String subject, String text) {
+		sendEmail(to.getEmail(), null, subject, text);
 	}
 
-	public void sendEmail(String to, String cc, String title, String body) {
-		log.info("Sending email to:" + to + " cc:" + cc + " title:'" + title + "' body:'" + body + "'");
-		// TODO implement javax mail sending
+	public void sendEmail(String to, String cc, String subject, String text) {
+		log.info("Sending email to:" + to + " cc:" + cc + " title:'" + subject + "' body:'" + text + "'");
+		Session session = createSession();
+		MimeMessage message = new MimeMessage(session);
+		try {
+			String from = (String) session.getProperties().get("mail.from");
+			if (from != null && !from.trim().isEmpty()) {
+				log.debug("use mail.from=" + from);
+				message.setFrom(new InternetAddress(from));
+			}
+			message.addRecipients(Message.RecipientType.TO, parse(to));
+			message.setSubject(subject);
+			if (isHtmlEmail()) {
+				message.setText(text, "utf-8", "html");
+			} else {
+				message.setText(text);
+			}
+			Transport.send(message);
+			log.info("Email successfully sent");
+		} catch (AddressException e) {
+			log.error(e);
+		} catch (MessagingException e) {
+			log.error(e);
+		}
 	}
 
 	public void sendEmail(Email email) {
