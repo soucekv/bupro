@@ -128,8 +128,8 @@ public class EmailService {
 	}
 
 	private Session createSession() {
-		final String username = (String) properties.get("mail.smpt.auth.username");
-		final String password = (String) properties.get("mail.smpt.auth.password");
+		final String username = (String) properties.get("mail.smtp.auth.username");
+		final String password = (String) properties.get("mail.smtp.auth.password");
 		Authenticator authenticator = new Authenticator() {
 			@Override
 			protected PasswordAuthentication getPasswordAuthentication() {
