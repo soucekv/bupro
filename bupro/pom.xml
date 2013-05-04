@@ -222,6 +222,12 @@
 		   <version>4.2.4</version>
 		</dependency>
 		<!-- KOS OAUTH2 - OAuth 2.0 -->
+		<!-- email -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
 		<!-- Other -->
 		<dependency>
 			<groupId>cglib</groupId>
