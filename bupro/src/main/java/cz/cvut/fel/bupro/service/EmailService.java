@@ -1,7 +1,9 @@
 package cz.cvut.fel.bupro.service;
 
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -193,10 +195,38 @@ public class EmailService {
 		Locale locale = new Locale(project.getOwner().getLang());
 		final String titleKey = "notify.project.expires.soon.title";
 		final String textKey = "notify.project.expires.soon.text";
-		String title = emailsMessageSource.getMessage(titleKey, new String[] {}, "Bupro: project expiration", locale);
+		String defaultTitle = "Bupro: 1 project expires in " + days + " day(s)";
+		String title = emailsMessageSource.getMessage(titleKey, new String[] { String.valueOf(days) }, defaultTitle, locale);
 		String[] args = new String[] { project.getName(), String.valueOf(project.getId()), String.valueOf(days) };
-		String defaultText = "Your project:" + args[0] + " expire in " + args[2] + " days";
-		String text = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
-		sendEmail(project.getOwner(), title, text);
+		String defaultText = project.getName();
+		String body = emailsMessageSource.getMessage(textKey, args, defaultText, locale);
+		if (isHtmlEmail()) {
+			body = encapsulateHtmlBody(body);
+		}
+		sendEmail(project.getOwner(), title, body);
+	}
+
+	public void sendProjectExpiresWarning(Map<User, Set<Project>> expirationMap, int days) {
+		final String titleKey = "notify.project.expires.soon.title";
+		final String textKey = "notify.project.expires.soon.text";
+		for (Map.Entry<User, Set<Project>> entry : expirationMap.entrySet()) {
+			Locale locale = new Locale(entry.getKey().getLang());
+			Set<Project> projects = entry.getValue();
+			String defaultTitle = "Bupro: " + projects.size() + " project(s) expires in " + days + " day(s)";
+			String subjectArgs[] = new String[] { String.valueOf(projects.size()), String.valueOf(days) };
+			String subject = emailsMessageSource.getMessage(titleKey, subjectArgs, defaultTitle, locale);
+			StringBuilder sb = new StringBuilder();
+			for (Project project : projects) {
+				String[] args = new String[] { project.getName(), String.valueOf(project.getId()), String.valueOf(days) };
+				String defaultText = project.getName();
+				sb.append(emailsMessageSource.getMessage(textKey, args, defaultText, locale));
+				sb.append("\n");
+			}
+			String body = sb.toString();
+			if (isHtmlEmail()) {
+				body = encapsulateHtmlBody(body);
+			}
+			sendEmail(entry.getKey(), subject, body);
+		}
 	}
 }
