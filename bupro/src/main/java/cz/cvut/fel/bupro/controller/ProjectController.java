@@ -3,10 +3,8 @@ package cz.cvut.fel.bupro.controller;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -33,7 +31,6 @@ import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.ProjectCourse;
-import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.Tag;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.security.SecurityService;
@@ -84,15 +81,6 @@ public class ProjectController {
 		}
 	}
 
-	private static Set<SemesterCode> semesterCodeSet(Collection<Project> c) {
-		Set<SemesterCode> set = new HashSet<SemesterCode>();
-		for (Project project : c) {
-			set.add(project.getStartSemester());
-			set.add(project.getEndSemester());
-		}
-		return set;
-	}
-
 	private void log(List<ObjectError> errors) {
 		log.info("Validation errors");
 		for (ObjectError error : errors) {
@@ -129,7 +117,6 @@ public class ProjectController {
 	public String showProjectList(Model model, Locale locale, @PageableDefaults Pageable pageable, Filterable filterable) {
 		Page<Project> projects = projectService.getProjects(locale, pageable, filterable);
 		model.addAttribute("projects", projects);
-		model.addAttribute("semester", semesterService.getSemestersNames(semesterCodeSet(projects.getContent()), locale));
 		model.addAttribute("filter", filterable);
 		model.addAttribute("tags", tagService.getAllTags());
 		model.addAttribute("courses", courseService.getProjectCourses(locale));

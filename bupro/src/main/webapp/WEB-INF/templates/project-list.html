@@ -130,8 +130,8 @@
 					<td><a class="owner" th:href="@{'/user/view/' + ${project.owner.id}}" th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</a></td>
 					<td><a class="course" th:href="@{/project/list(filter.course=${project.course.code})}" th:text="${project.course.name}">Project Course</a></td>
 					<td th:text="${project.creationTime}">Created</td>
-					<td th:text="${semester[project.startSemester]}">Begins in semester</td>
-					<td th:text="${semester[project.endSemester]}">Ends in semester</td>
+					<td th:text="${project.startSemester.name}">Begins in semester</td>
+					<td th:text="${project.endSemester.name}">Ends in semester</td>
 				</tr>
 			</tbody>
 		</table>
