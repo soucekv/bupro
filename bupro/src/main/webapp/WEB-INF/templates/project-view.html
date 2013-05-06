@@ -55,33 +55,7 @@
 		</div>
 		<div>
 			<h3 th:text="#{comment.new}" >New Comment</h3>
-			<form action="#">
-				<table>
-					<tbody>
-						<tr>
-							<td><label for="comment-title" th:text="#{comment.title}" >title:</label></td>
-							<td><input id="comment-title" type="text" /></td>
-						</tr>
-						<tr>
-							<td><label for="comment-text" th:text="#{comment.text}">comment:</label></td>
-							<td><textarea id="comment-text"></textarea></td>
-						</tr>
-					</tbody>
-				</table>
-				<script type="text/javascript" th:inline="javascript">
-				/*<![CDATA[*/
-					function submitComment() {
-						var id = /*[[${project.id}]]*/ 0;
-						var title = $("#comment-title")[0].value;
-						var text = $("#comment-text")[0].value;
-						client.comment('project', id , title, text);
-						$("#comment-title")[0].value = "";
-						$("#comment-text")[0].value = "";
-					}
-				/*]]>*/
-				</script>
-				<input type="button" value="Comment" th:value="#{comment}" onclick="submitComment();" />
-			</form>
+			<div th:include="comment :: form" th:with="object=${project},type='project'">Add comment form</div>
 		</div>
 	</div>
 </body>
