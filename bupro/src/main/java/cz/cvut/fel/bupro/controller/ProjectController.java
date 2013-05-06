@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -32,6 +33,7 @@ import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.Tag;
+import cz.cvut.fel.bupro.model.TagGroup;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.bupro.security.SecurityService;
 import cz.cvut.fel.bupro.service.CodeRepositoryService;
@@ -97,9 +99,14 @@ public class ProjectController {
 	}
 
 	private String editPage(Model model, Locale locale, Project project, Collection<ProjectCourse> courses) {
-		model.addAttribute("project", project);
+		if (project.getTagGroup() == null) {
+			Set<Tag> set = project.getTags();
+			if (!set.isEmpty()) {
+				project.setTagGroup(set.iterator().next().getGroup());
+			}
+		}
 		model.addAttribute("courseList", courses);
-		model.addAttribute("tags", tagService.getAllTags());
+		model.addAttribute("tags", tagService.getTagNameMap());
 		model.addAttribute("semesterList", semesterService.getAllSemesters());
 		model.addAttribute("translator", new Translator(locale));
 		model.addAttribute("providerList", ServiceProvider.values());
@@ -136,6 +143,7 @@ public class ProjectController {
 		log.trace("ProjectManagementController.editProjectDetail()");
 		Project project = projectService.getProject(id);
 		Collection<ProjectCourse> courses = courseService.getProjectCourses();
+		model.addAttribute("project", project);
 		return editPage(model, locale, project, courses);
 	}
 
@@ -143,9 +151,10 @@ public class ProjectController {
 	@Transactional
 	public String createProject(Model model, Locale locale) {
 		log.trace("ProjectManagementController.createProject()");
-		User user = securityService.getCurrentUser();
+		// User user = securityService.getCurrentUser();
 		Project project = new Project();
 		Collection<ProjectCourse> courses = courseService.getProjectCourses(locale);
+		model.addAttribute("project", project);
 		return editPage(model, locale, project, courses);
 	}
 
@@ -155,18 +164,23 @@ public class ProjectController {
 		User user = securityService.getCurrentUser();
 		if (bindingResult.hasErrors()) {
 			log(bindingResult.getAllErrors());
-			model.addAttribute("courseList", courseService.getProjectCourses(locale));
-			model.addAttribute("tags", tagService.getAllTags());
-			model.addAttribute("semesterList", semesterService.getAllSemesters());
-			model.addAttribute("translator", new Translator(locale));
-			return "project-edit";
+			Collection<ProjectCourse> courses = courseService.getProjectCourses(locale);
+			return editPage(model, locale, project, courses);
 		}
 		if (project.getOwner() == null) {
 			project.setOwner(user);
 		}
 		if (project.getOwner().equals(user)) {
+			TagGroup tagGroup = project.getTagGroup();
+			if (tagGroup != null && tagGroup.getId() == null) {
+				tagGroup = tagService.createNewTagGroup(tagGroup);
+			} else {
+				tagGroup = tagService.refresh(tagGroup);
+			}
+			log.info(tagGroup);
 			project.setTags(tagService.refresh(project.getTags()));
 			for (Tag tag : project.getTags()) {
+				tagGroup.add(tag);
 				tag.getProjects().add(project);
 			}
 			project = projectService.save(project);

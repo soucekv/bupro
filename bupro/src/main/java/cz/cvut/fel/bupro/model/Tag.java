@@ -1,12 +1,17 @@
 package cz.cvut.fel.bupro.model;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -20,6 +25,9 @@ public class Tag extends BaseEntity implements Serializable {
 
 	@ManyToMany(mappedBy = "tags")
 	private Set<Project> projects = new HashSet<Project>();
+
+	@ManyToOne(cascade = {CascadeType.MERGE})
+	private TagGroup group;
 
 	public Tag() {
 	}
@@ -42,6 +50,18 @@ public class Tag extends BaseEntity implements Serializable {
 
 	public void setProjects(Set<Project> projects) {
 		this.projects = projects;
+	}
+
+	public TagGroup getGroup() {
+		return group;
+	}
+
+	public void setGroup(TagGroup group) {
+		this.group = group;
+	}
+
+	public int getRanking() {
+		return getProjects().size();
 	}
 
 	@Override
@@ -72,6 +92,14 @@ public class Tag extends BaseEntity implements Serializable {
 			return false;
 		}
 		return true;
+	}
+
+	public static void sortByRanking(List<Tag> tags) {
+		Collections.sort(tags, Collections.reverseOrder(new Comparator<Tag>() {
+			public int compare(Tag t1, Tag t2) {
+				return Integer.compare(t1.getRanking(), t2.getRanking());
+			}
+		}));
 	}
 
 }

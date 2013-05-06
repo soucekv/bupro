@@ -69,9 +69,31 @@
 					<td><textarea th:field="*{description}"></textarea></td>
 				</tr>
 				<tr>
+					<td><label th:for="${'tagGroup'}" th:text="#{project.tagGroup}">Tag group:</label></td>
+					<td>
+						<!-- 
+						<script type="text/javascript" th:inline="javascript">
+						/*<![CDATA[*/
+							$(function() {
+								var values = /*[[${#strings.listToString(tags.keySet())}]]*/ [];
+								var map = /*[[${tags}]]*/ {};
+								$("#group").autocomplete({
+									source: values,
+									select: function( event, ui ) {
+										$("#tags").autocomplete("option", "source", map[ui.item.label]);
+									}
+								});
+							});
+						/*]]>*/
+						</script>
+						 -->
+						<input id="group" type="text" th:field="*{tagGroup}" />
+					</td>
+				</tr>
+				<tr>
 					<td><label th:for="${'tags'}" th:text="#{project.tags}">tags:</label></td>
 					<td>
-						<span th:include="autocompletion :: multi" th:with="availableTags=${#strings.listToString(tags)}"></span>
+						<span th:include="autocompletion :: multi" th:with="tags=${tags}"></span>
 						<input type="text" th:field="*{tags}" />
 					</td>
 				</tr>

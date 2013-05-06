@@ -19,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -63,6 +64,9 @@ public class Project extends CommentableEntity implements Serializable {
 
 	@Embedded
 	private RepositoryLink repository = new RepositoryLink();
+
+	@Transient
+	private TagGroup tagGroup; // selected tag group in form;
 
 	public Project() {
 		creationTime = TimeUtils.createCurrentTimestamp();
@@ -210,6 +214,14 @@ public class Project extends CommentableEntity implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public TagGroup getTagGroup() {
+		return tagGroup;
+	}
+
+	public void setTagGroup(TagGroup tagGroup) {
+		this.tagGroup = tagGroup;
 	}
 
 	@Override

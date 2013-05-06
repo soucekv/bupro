@@ -59,7 +59,16 @@
 		<script type="text/javascript" th:inline="javascript">
 		/*<![CDATA[*/
 		$(function() {
-			var availableTags =  /*[[${availableTags}]]*/ [];
+			var values = /*[[${#strings.listToString(tags.keySet())}]]*/ [];
+			var availableTags = [];
+			var map = /*[[${tags}]]*/ {};
+			$("#group").autocomplete({
+				source: values,
+				select: function( event, ui ) {
+					availableTags = map[ui.item.label];
+					/*$("#tags").autocomplete("option", "source", availableTags);*/
+				}
+			});
 			function split( val ) {
 				return val.split( /,\s*/ );
 			}

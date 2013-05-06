@@ -2,6 +2,8 @@ package cz.cvut.fel.bupro.support;
 
 import java.io.Serializable;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
@@ -11,10 +13,13 @@ import org.springframework.data.repository.support.DomainClassConverter;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.util.StringUtils;
 
+import cz.cvut.fel.bupro.dao.TagGroupRepository;
 import cz.cvut.fel.bupro.dao.TagRepository;
 import cz.cvut.fel.bupro.model.Tag;
+import cz.cvut.fel.bupro.model.TagGroup;
 
 public class ExtendedDomainClassConverter<T extends ConversionService & ConverterRegistry> extends DomainClassConverter<T> {
+	private final Log log = LogFactory.getLog(getClass());
 
 	private Repositories repositories = null;
 
@@ -22,13 +27,24 @@ public class ExtendedDomainClassConverter<T extends ConversionService & Converte
 		super(conversionService);
 	}
 
-	private Tag get(String tagString) {
+	private TagGroup getTagGroup(String value) {
+		CrudRepository<?, Serializable> repository = repositories.getRepositoryFor(TagGroup.class);
+		TagGroupRepository tagGroupRepository = TagGroupRepository.class.cast(repository);
+		TagGroup tagGroup = tagGroupRepository.findByName(value);
+		log.trace("TagGroup " + value + " = " + tagGroup);
+		if (tagGroup == null) {
+			tagGroup = new TagGroup(value);
+		}
+		return tagGroup;
+	}
+
+	private Tag getTag(String value) {
 		CrudRepository<?, Serializable> repository = repositories.getRepositoryFor(Tag.class);
 		TagRepository tagRepository = TagRepository.class.cast(repository);
-		Tag tag = tagRepository.findByName(tagString);
+		Tag tag = tagRepository.findByName(value);
+		log.trace("Tag " + value + " = " + tag);
 		if (tag == null) {
-			tag = new Tag();
-			tag.setName(tagString);
+			tag = new Tag(value);
 		}
 		return tag;
 	}
@@ -38,8 +54,11 @@ public class ExtendedDomainClassConverter<T extends ConversionService & Converte
 		if (source == null || !StringUtils.hasText(source.toString())) {
 			return null;
 		}
+		log.trace("convert " + source + " sourceType " + sourceType.getType() + " targetType " + targetType.getType());
 		if (sourceType.getType().equals(String.class) && targetType.getType().equals(Tag.class)) {
-			return get(String.valueOf(source));
+			return getTag(String.valueOf(source));
+		} else if (sourceType.getType().equals(String.class) && targetType.getType().equals(TagGroup.class)) {
+			return getTagGroup(String.valueOf(source));
 		}
 		return super.convert(source, sourceType, targetType);
 	}
