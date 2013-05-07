@@ -28,7 +28,7 @@ import cz.cvut.fel.bupro.security.SpringSecurityService;
 @Configuration
 @EnableJpaRepositories(basePackages = { "cz.cvut.fel.bupro.dao" })
 @EnableTransactionManagement
-@ComponentScan({ "cz.cvut.fel.bupro.controller", "cz.cvut.fel.bupro.service" })
+@ComponentScan({ "cz.cvut.fel.bupro.controller", "cz.cvut.fel.bupro.service", "cz.cvut.fel.bupro.test.mock" })
 public class CommonTestConfig {
 
 	@Bean
