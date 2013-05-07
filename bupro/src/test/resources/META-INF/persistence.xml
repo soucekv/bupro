@@ -13,6 +13,7 @@
 		<class>cz.cvut.fel.bupro.model.Membership</class>
 		<class>cz.cvut.fel.bupro.model.Project</class>
 		<class>cz.cvut.fel.bupro.model.Tag</class>
+		<class>cz.cvut.fel.bupro.model.TagGroup</class>
 		<class>cz.cvut.fel.bupro.model.ProjectCourse</class>
 		<class>cz.cvut.fel.bupro.model.SemesterCode</class>
 		<properties>
