@@ -177,11 +177,12 @@ public class ProjectController {
 			} else {
 				tagGroup = tagService.refresh(tagGroup);
 			}
-			log.info(tagGroup);
-			project.setTags(tagService.refresh(project.getTags()));
-			for (Tag tag : project.getTags()) {
-				tagGroup.add(tag);
-				tag.getProjects().add(project);
+			if (tagGroup != null) {
+				project.setTags(tagService.refresh(project.getTags()));
+				for (Tag tag : project.getTags()) {
+					tagGroup.add(tag);
+					tag.getProjects().add(project);
+				}
 			}
 			project = projectService.save(project);
 			tagService.removeUnusedTags();
