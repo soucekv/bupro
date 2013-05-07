@@ -24,8 +24,10 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 	@Column(unique = true, nullable = false)
 	@NotEmpty
 	private String username;
+	private String titlePre;
 	private String firstName;
 	private String lastName;
+	private String titlePost;
 	@Column(unique = true, nullable = false)
 	@Email
 	private String email;
@@ -48,8 +50,16 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 		return username;
 	}
 
+	public String getTitlePre() {
+		return titlePre;
+	}
+
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public void setTitlePre(String titlePre) {
+		this.titlePre = titlePre;
 	}
 
 	public String getFirstName() {
@@ -66,6 +76,14 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
+	}
+
+	public String getTitlePost() {
+		return titlePost;
+	}
+
+	public void setTitlePost(String titlePost) {
+		this.titlePost = titlePost;
 	}
 
 	public String getEmail() {
@@ -136,6 +154,23 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 		return true;
 	}
 
+	public String getFullName() {
+		StringBuilder sb = new StringBuilder();
+		if (getTitlePre() != null && !getTitlePre().trim().isEmpty()) {
+			sb.append(getTitlePre());
+			sb.append(' ');
+		}
+		sb.append(getFirstName());
+		sb.append(' ');
+		sb.append(getLastName());
+
+		if (getTitlePost() != null && !getTitlePost().trim().isEmpty()) {
+			sb.append(' ');
+			sb.append(getTitlePost());
+		}
+		return sb.toString();
+	}
+
 	public boolean isTeacher() {
 		for (Role role : getRoles()) {
 			if ("ROLE_TEACHER".equals(role.getAuthority())) {
@@ -145,4 +180,40 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 		return false;
 	}
 
+	/**
+	 * Creates new {@link User} instance and sets properties using string
+	 * containing full name
+	 * 
+	 * @param fullName
+	 * @return
+	 */
+	public static User parseFullName(String fullName) {
+		String[] tokens = fullName.split("\\s+");
+		User user = new User();
+		for (int i = 0; i < tokens.length; i++) {
+			String token = tokens[i];
+			if (token.endsWith(".")) {
+				if (user.getFirstName() == null) {
+					if (user.getTitlePre() == null) {
+						user.setTitlePre(token);
+					} else {
+						user.setTitlePre(user.getTitlePre() + " " + token);
+					}
+				} else {
+					if (user.getTitlePost() == null) {
+						user.setTitlePost(token);
+					} else {
+						user.setTitlePost(user.getTitlePost() + " " + token);
+					}
+				}
+			} else {
+				if (user.getFirstName() == null) {
+					user.setFirstName(token);
+				} else if (user.getLastName() == null) {
+					user.setLastName(token);
+				}
+			}
+		}
+		return user;
+	}
 }

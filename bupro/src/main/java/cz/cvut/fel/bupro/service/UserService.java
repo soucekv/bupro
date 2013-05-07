@@ -76,16 +76,20 @@ public class UserService {
 		Student student = kos.getStudent(username);
 		if (student != null) {
 			email = student.getEmail();
+			user.setTitlePre(student.getTitlesPre());
 			user.setFirstName(student.getFirstName());
 			user.setLastName(student.getLastName());
+			user.setTitlePost(student.getTitlesPost());
 			Role studentRole = roleRepository.findByAuthority(Role.STUDENT);
 			studentRole.grantTo(user);
 		}
 		Teacher teacher = kos.getTeacher(username);
 		if (teacher != null) {
 			email = teacher.getEmail();
+			user.setTitlePre(teacher.getTitlesPre());
 			user.setFirstName(teacher.getFirstName());
 			user.setLastName(teacher.getLastName());
+			user.setTitlePost(teacher.getTitlesPost());
 			Role teacherRole = roleRepository.findByAuthority(Role.TEACHER);
 			teacherRole.grantTo(user);
 		}

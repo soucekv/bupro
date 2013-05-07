@@ -82,12 +82,8 @@ public class EmailService {
 		return urlBase + "user/view/" + user.getId();
 	}
 
-	private String getLocalizedFullName(Locale locale, String firstName, String lastName) {
-		return messageSource.getMessage("format.fullname", new String[] { firstName, lastName }, firstName + " " + lastName, locale);
-	}
-
 	private String getLocalizedFullName(Locale locale, User user) {
-		return getLocalizedFullName(locale, user.getFirstName(), user.getLastName());
+		return user.getFullName();
 	}
 
 	public void sendMembershipAutoapproved(String linkUrl, Project project, User user) {

@@ -11,7 +11,7 @@
 		<a class="button" href="http://localhost:8080/" th:href="@{'/project/log/' + *{id}}" th:text="#{project.log}">Project log</a>
 		<a th:if="${project.owner.equals(user)}" class="button" href="http://localhost:8080/" th:href="@{'/project/email/' + *{id}}" th:text="#{project.email}">Project email</a>
 	</div>
-	<div th:include="commons :: label" th:with="label=#{owner},value=#{format.fullname(*{owner.firstName}, *{owner.lastName})}"></div>
+	<div th:include="commons :: label" th:with="label=#{owner},value=*{owner.fullName}"></div>
 	<div th:include="commons :: label" th:with="label=#{creation.time},value=*{#dates.format(creationTime,'yyyy-MM-dd')}"></div>
 	<div th:include="commons :: label" th:with="label=#{project.start},value=*{startSemester.name}"></div>
 	<div th:include="commons :: label" th:with="label=#{project.end},value=*{endSemester.name}"></div>
@@ -22,13 +22,13 @@
 	</div>
 	<h3 th:text="#{project.tags}">tags:</h3>
 	<div>
-		<span th:each="tag : *{tags}"><a th:href="@{/project/list/(filter.tag=${tag.name})}" th:text="${tag.name}">Tag1</a></span>
+		<span th:each="tag : *{tags}"><a th:href="@{/project/list/(filter.tag=${tag.name})}" th:text="${tag.name}">Tag1</a>&nbsp;</span>
 	</div>
 	<div>
 		<h2 th:text="#{project.members}" >Members</h2>
 		<ul class="memberships" th:unless="*{#lists.isEmpty(memberships)}">
 			<li th:each="membership : *{memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
-				<span th:text="#{format.fullname(${membership.user.firstName}, ${membership.user.lastName})}">Milan Vomacka</span>
+				<span th:text="${membership.user.fullName}">Milan Vomacka</span>
 				<span th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 				<span th:if="${project.owner.equals(user)}" >
 					<a class="button" href="#" th:href="@{'/user/view/' + ${membership.user.id}}" th:text="#{detail}" >detail</a>
@@ -46,7 +46,7 @@
 		<div id="comments">
 			<div class="comment" th:each="comment : *{comments}">
 				<div>
-					<span class="author" th:text="#{format.fullname(${comment.user.firstName},${comment.user.lastName})}">Comment-Author</span>
+					<span class="author" th:text="${comment.user.fullName}">Comment-Author</span>
 					<span class="time" th:text="${#dates.format(comment.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 					<span class="title" th:text="${comment.title}">Comment-Title</span>
 				</div>

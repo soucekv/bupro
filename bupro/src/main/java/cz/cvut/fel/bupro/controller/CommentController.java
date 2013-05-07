@@ -38,8 +38,7 @@ public class CommentController {
 		if (comment.getUser() != null) {
 			User user = comment.getUser();
 			if (user != null) {
-				String name = user.getFirstName() + " " + user.getLastName();
-				jsonObject.put("author", name);
+				jsonObject.put("author", user.getFullName());
 			}
 			Timestamp timestamp = comment.getCreationTime();
 			if (timestamp != null) {

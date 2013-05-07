@@ -187,11 +187,24 @@ public class ProjectService {
 				return new Specification<Project>() {
 					public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 						Join<Project, User> join = root.<Project, User> join("owner");
-						String[] name = value.trim().split("\\s");
-						if (name.length < 2) {
-							return cb.or(cb.like(join.<String> get("firstName"), value + "%"), cb.like(join.<String> get("lastName"), value + "%"));
+						User user = User.parseFullName(value);
+						if (user.getLastName() == null) {
+							user.setLastName(user.getFirstName());
 						}
-						return cb.or(cb.like(join.<String> get("firstName"), name[0] + "%"), cb.like(join.<String> get("lastName"), name[1] + "%"));
+						List<Predicate> predicates = new LinkedList<Predicate>();
+						if (user.getFirstName() != null) {
+							predicates.add(cb.like(join.<String> get("firstName"), "%" + user.getFirstName() + "%"));
+						}
+						if (user.getLastName() != null) {
+							predicates.add(cb.like(join.<String> get("lastName"), "%" + user.getLastName() + "%"));
+						}
+						if (user.getTitlePre() != null) {
+							predicates.add(cb.like(join.<String> get("titlePre"), "%" + user.getTitlePre() + "%"));
+						}
+						if (user.getTitlePost() != null) {
+							predicates.add(cb.like(join.<String> get("titlePost"), "%" + user.getTitlePost() + "%"));
+						}
+						return cb.or(predicates.toArray(new Predicate[predicates.size()]));
 					}
 				};
 			}

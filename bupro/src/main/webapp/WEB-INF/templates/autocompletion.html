@@ -23,8 +23,8 @@
 			          success: function( data ) {
 			            response( $.map( data.items, function( item ) {
 			              return {
-			                label: item.firstName + " " + item.lastName,
-			                value: item.firstName + " " + item.lastName
+			                label: item.name,
+			                value: item.name
 			              }
 			            }));
 			          }

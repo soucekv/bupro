@@ -83,21 +83,22 @@ public class UserController {
 		return "user-view";
 	}
 
-	@RequestMapping("/user/json")
+	@RequestMapping("/json")
 	@Transactional
 	@ResponseBody
 	@SuppressWarnings("unchecked")
 	public String jsonUserList(Locale locale, @RequestParam String nameStartsWith, @RequestParam int maxRows) {
+		log.info("jsonUserList " + nameStartsWith);
 		Map<String, Object> jsonObject = new JSONObject();
 		ArrayList<Object> items = new JSONArray();
 		for (User user : userService.getByName(nameStartsWith, maxRows)) {
 			Map<String, Object> userJson = new JSONObject();
 			userJson.put("id", user.getId());
-			userJson.put("firstName", user.getFirstName());
-			userJson.put("lastName", user.getLastName());
+			userJson.put("name", user.getFullName());
 			items.add(userJson);
 		}
 		jsonObject.put("items", items);
+		log.info("User list " + jsonObject.toString());
 		return jsonObject.toString();
 	}
 }

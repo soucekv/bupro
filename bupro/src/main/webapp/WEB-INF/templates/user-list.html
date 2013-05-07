@@ -13,14 +13,8 @@
 				<th></th>
 				<th>
 					<div class="header">
-						<span th:with="prop='firstName'" th:include="pagination :: sort"></span>
-						<span th:text="#{user.firstName}">First Name</span>
-					</div>
-				</th>
-				<th>
-					<div class="header">
 						<span th:with="prop='lastName'" th:include="pagination :: sort"></span>
-						<span th:text="#{user.lastName}">Last Name</span>
+						<span th:text="#{user.name}">Name</span>
 					</div>
 				</th>
 			</tr>
@@ -30,8 +24,7 @@
 				<td>
 					<a href="http://localhost:8080/" th:href="@{'/user/view/' + ${user.id}}" th:text="#{detail}">Detail</a>
 				</td>
-				<td th:text="${user.firstName}">first name</td>
-				<td th:text="${user.lastName}">last name</td>
+				<td th:text="${user.fullName}">name</td>
 			</tr>
 		</tbody>
 	</table>

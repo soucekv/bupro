@@ -127,7 +127,7 @@
 						<a th:if="${project.owner.equals(user)}" href="http://localhost:8080/" th:href="@{'/project/edit/' + ${project.id}}" ><img th:src="@{/images/edit.png}" height="19" width="19" /></a>
 					</td>
 					<td><a class="name" href="http://localhost:8080/" th:href="@{'/project/view/' + ${project.id}}" th:text="${project.name}">Project name</a></td>
-					<td><a class="owner" th:href="@{'/user/view/' + ${project.owner.id}}" th:text="#{format.fullname(${project.owner.firstName}, ${project.owner.lastName})}">Project Leader</a></td>
+					<td><a class="owner" th:href="@{'/user/view/' + ${project.owner.id}}" th:text="${project.owner.fullName}">Project Leader</a></td>
 					<td><a class="course" th:href="@{/project/list(filter.course=${project.course.code})}" th:text="${project.course.name}">Project Course</a></td>
 					<td th:text="${project.creationTime}">Created</td>
 					<td th:text="${project.startSemester.name}">Begins in semester</td>

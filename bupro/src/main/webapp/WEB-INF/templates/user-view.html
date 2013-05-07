@@ -5,7 +5,7 @@
 </head>
 <body>
 	<div th:include="header :: menu"></div>
-	<h1 th:text="#{format.fullname(${user.firstName}, ${user.lastName})}">User name</h1>
+	<h1 th:text="${user.fullName}">User name</h1>
 	<div th:if="${profile}" >
 		<form th:action="@{/user/save}" th:object="${user}" method="post" accept-charset="UTF-8">
 			<input type="hidden" th:field="*{id}" />
@@ -42,7 +42,7 @@
 		<div id="comments">
 			<div class="comment" th:each="comment : ${user.comments}">
 				<div>
-					<span class="author" th:text="#{format.fullname(${comment.user.firstName},${comment.user.lastName})}">Comment-Author</span>
+					<span class="author" th:text="${comment.user.fullName}">Comment-Author</span>
 					<span class="time" th:text="${#dates.format(comment.creationTime,'yyyy-MM-dd HH:mm')}">Creation Time</span>
 					<span class="title" th:text="${comment.title}">Comment-Title</span>
 				</div>
