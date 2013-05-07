@@ -69,7 +69,7 @@ public class TagService {
 
 	@Transactional
 	public TagGroup refresh(TagGroup tagGroup) {
-		return tagGroupRepository.findOne(tagGroup.getId());
+		return (tagGroup == null) ? null : tagGroupRepository.findOne(tagGroup.getId());
 	}
 
 	@Transactional
