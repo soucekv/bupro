@@ -161,9 +161,10 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 			sb.append(' ');
 		}
 		sb.append(getFirstName());
-		sb.append(' ');
-		sb.append(getLastName());
-
+		if (getLastName() != null) {
+			sb.append(' ');
+			sb.append(getLastName());
+		}
 		if (getTitlePost() != null && !getTitlePost().trim().isEmpty()) {
 			sb.append(' ');
 			sb.append(getTitlePost());
