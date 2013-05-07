@@ -5,11 +5,18 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 
+import cz.cvut.fel.bupro.support.RandomPasswordGenerator;
+
 @Configuration
 public class SecurityConfig {
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return new StandardPasswordEncoder();
+	}
+
+	@Bean
+	public RandomPasswordGenerator randomPasswordGenerator() {
+		return new RandomPasswordGenerator();
 	}
 }
