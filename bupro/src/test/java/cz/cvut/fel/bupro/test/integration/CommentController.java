@@ -106,7 +106,7 @@ public class CommentController extends AbstractControllerTest {
 		Assert.assertEquals(200, response.getStatus());
 		//Check JSON response
 		JSONObject json = new JSONObject(response.getContentAsString());
-		Assert.assertEquals("My great test comment on project", json.get("text"));
+		Assert.assertEquals(text, json.get("text"));
 		Assert.assertEquals(title, json.get("title"));
 		Assert.assertEquals(text, json.get("text"));
 		Assert.assertEquals(user.getFullName(), json.get("author"));
