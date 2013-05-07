@@ -43,8 +43,8 @@ public class CourseController {
 	@RequestMapping({ "/course/edit/{id}" })
 	@Transactional
 	public String edit(Model model, Locale locale, @PathVariable Long id) {
-		ProjectCourse course = courseService.getProjectCourse(id);
-		model.addAttribute("course", course);
+		ProjectCourse projectCourse = courseService.getProjectCourse(id);
+		model.addAttribute("projectCourse", projectCourse);
 		return "course-edit";
 	}
 
