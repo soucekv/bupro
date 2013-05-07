@@ -27,7 +27,7 @@ import cz.cvut.fel.bupro.security.SecurityService;
 import cz.cvut.fel.bupro.test.configuration.AbstractControllerTest;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class CommentController extends AbstractControllerTest {
+public class CommentControllerTest extends AbstractControllerTest {
 	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
