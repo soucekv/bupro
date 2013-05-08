@@ -1,20 +1,21 @@
 package cz.cvut.fel.bupro.test.model;
 
+import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolationException;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.bupro.test.configuration.TestJpaConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:testContext.xml" })
+@ContextConfiguration(classes = {TestJpaConfig.class})
 @Transactional
 public class UserTest {
 
@@ -46,7 +47,7 @@ public class UserTest {
 		userRepository.saveAndFlush(user);
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = PersistenceException.class)
 	public void shouldPreventDuplicateUsername() {
 		User user1 = new User();
 		user1.setFirstName("Frantisek");
@@ -69,7 +70,7 @@ public class UserTest {
 		userRepository.saveAndFlush(user2);
 	}
 
-	@Test(expected = ConstraintViolationException.class)
+	@Test(expected = PersistenceException.class)
 	public void shouldPreventNullEmail() {
 		User user = new User();
 		user.setFirstName("Frantisek");
@@ -80,7 +81,7 @@ public class UserTest {
 		userRepository.saveAndFlush(user);
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = PersistenceException.class)
 	public void shouldPreventDuplicateEmail() {
 		User user1 = new User();
 		user1.setFirstName("Frantisek");

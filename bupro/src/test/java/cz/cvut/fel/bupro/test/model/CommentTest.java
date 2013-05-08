@@ -12,9 +12,10 @@ import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.Comment;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.bupro.test.configuration.TestJpaConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:testContext.xml" })
+@ContextConfiguration(classes = {TestJpaConfig.class})
 @Transactional
 public class CommentTest {
 

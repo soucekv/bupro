@@ -241,7 +241,8 @@ public class ProjectControllerTest extends AbstractControllerTest {
 			.andExpect(model().attribute("project", project))
 			.andExpect(view().name("project-view"))
 			.andExpect(content().string(new Contains(project.getName())))
-			.andExpect(content().string(new Contains(securityService.getCurrentUser().getFullName())));
+			.andExpect(content().string(new Contains(securityService.getCurrentUser().getFullName())))
+			.andExpect(content().string(new Contains("waiting_approval")));
 	}
 
 }

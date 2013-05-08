@@ -1,9 +1,10 @@
 package cz.cvut.fel.bupro.test.model;
 
+import javax.persistence.PersistenceException;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,9 +16,10 @@ import cz.cvut.fel.bupro.model.Membership;
 import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.bupro.test.configuration.TestJpaConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:testContext.xml" })
+@ContextConfiguration(classes = {TestJpaConfig.class})
 @Transactional
 public class MembershipTest {
 
@@ -49,7 +51,7 @@ public class MembershipTest {
 		return project;
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = PersistenceException.class)
 	public void testPreventNullProject() {
 		User user = createUser("Karel", "Novak", "novak@exmple.com", "novak");
 
@@ -61,7 +63,7 @@ public class MembershipTest {
 		membershipRepository.save(membership);
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = PersistenceException.class)
 	public void testPreventNullUser() {
 		User author = createUser("Frantisek", "Vomacka", "vomacka@exmple.com", "vomacka");
 		Project project = createProject("Test Project", author);
@@ -74,7 +76,7 @@ public class MembershipTest {
 		membershipRepository.save(membership);
 	}
 
-	@Test(expected = DataIntegrityViolationException.class)
+	@Test(expected = PersistenceException.class)
 	public void testPreventDuplicateMembership() {
 		User user = createUser("Karel", "Novak", "novak@exmple.com", "novak");
 		User author = createUser("Frantisek", "Vomacka", "vomacka@exmple.com", "vomacka");
