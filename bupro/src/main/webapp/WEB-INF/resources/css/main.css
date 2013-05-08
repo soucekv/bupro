@@ -79,9 +79,6 @@ span.field-error {
 }
 
 /*Membership states*/
-ul.memberships {
-	list-style: none;
-}
 
 .waiting_approval {
 	color: gray;

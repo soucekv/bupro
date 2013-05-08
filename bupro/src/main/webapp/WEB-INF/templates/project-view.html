@@ -26,17 +26,19 @@
 	</div>
 	<div>
 		<h2 th:text="#{project.members}" >Members</h2>
-		<ul class="memberships" th:unless="*{#lists.isEmpty(memberships)}">
-			<li th:each="membership : *{memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
-				<span th:text="${membership.user.fullName}">Milan Vomacka</span>
-				<span th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span>
-				<span th:if="${project.owner.equals(user)}" >
+		<table th:unless="*{#lists.isEmpty(memberships)}">
+			<tbody>
+			<tr th:each="membership : *{memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
+				<td><span th:text="${membership.user.fullName}">Milan Vomacka</span></td>
+				<td><span th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span></td>
+				<td th:if="${project.owner.equals(user)}">
 					<a class="button" href="#" th:href="@{'/user/view/' + ${membership.user.id}}" th:text="#{detail}" >detail</a>
 					<a class="button" href="#" th:href="@{/project/membership/approve(projectId=*{id},userId=${membership.user.id})}" th:text="#{member.accept}" >accept</a>
 					<a class="button" href="#" th:href="@{/project/membership/decline(projectId=*{id},userId=${membership.user.id})}" th:text="#{member.decline}" >decline</a>
-				</span>
-			</li>
-		</ul>
+				</td>
+			</tr>
+			</tbody>
+		</table>
 		<span th:if="*{#lists.isEmpty(memberships)}"  th:text="#{project.members.none}">This project has no members yet.</span>
 		<span th:if="*{capacityFull}" th:text="#{project.members.capacity.full}">Sorry, project capacity is full.</span>
 		<a class="button" th:unless="${project.capacityFull or project.owner.equals(user) or project.hasMember(user)}" href="#" th:href="@{'/project/join/' + *{id}}" th:text="#{join}">Join</a>
