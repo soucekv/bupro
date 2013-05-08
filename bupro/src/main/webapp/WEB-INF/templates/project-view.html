@@ -32,7 +32,7 @@
 			<tbody>
 			<tr th:each="membership : *{memberships}" th:class="${#strings.toLowerCase(membership.membershipState)}">
 				<td><span th:text="${membership.user.fullName}">Milan Vomacka</span></td>
-				<td><span th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span></td>
+				<td><span th:if="${membership.created != null}" th:text="${#dates.format(membership.created,'yyyy-MM-dd HH:mm')}">Creation Time</span></td>
 				<td th:if="${project.owner.equals(user)}">
 					<a class="button" href="#" th:href="@{'/user/view/' + ${membership.user.id}}" th:text="#{detail}" >detail</a>
 					<a class="button" href="#" th:href="@{/project/membership/approve(projectId=*{id},userId=${membership.user.id})}" th:text="#{member.accept}" >accept</a>
