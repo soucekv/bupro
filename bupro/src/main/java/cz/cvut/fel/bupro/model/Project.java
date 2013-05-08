@@ -19,6 +19,7 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 
@@ -41,6 +42,7 @@ public class Project extends CommentableEntity implements Serializable {
 	private Timestamp creationTime;
 
 	@OneToMany(mappedBy = "project", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OrderBy("user")
 	private List<Membership> memberships = new LinkedList<Membership>();
 
 	@ManyToMany(cascade = { CascadeType.ALL })

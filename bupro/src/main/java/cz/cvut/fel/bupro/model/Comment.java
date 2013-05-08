@@ -20,7 +20,7 @@ public class Comment extends BaseEntity implements Serializable {
 
 	@Column(nullable = false)
 	private String title;
-	@Column(nullable = false)
+	@Column(nullable = false, length = 2048)
 	private String text;
 	
 	public Comment() {

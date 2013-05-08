@@ -34,7 +34,7 @@ public class User extends CommentableEntity implements UserDetails, Serializable
 	@Column(nullable = false)
 	@NotEmpty
 	private String password;
-	@Column(columnDefinition = "TEXT")
+	@Column(length = 2048)
 	private String aboutme;
 
 	private String lang = Locale.ENGLISH.getLanguage();
