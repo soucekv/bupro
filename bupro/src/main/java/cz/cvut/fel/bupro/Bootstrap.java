@@ -46,6 +46,8 @@ public class Bootstrap {
 			Connector defaultConnector = tomcat.getConnector();
 			defaultConnector.setRedirectPort(httpsPort);
 		}
+		tomcat.getConnector().setProperty("URIEncoding", "UTF-8");
+
 		StandardContext ctx = (StandardContext) tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
 		// tomcat.addWebapp("/", new File(webappDirLocation).getAbsolutePath());
 		System.out.println("configuring app with basedir: " + new File(webappDirLocation).getAbsolutePath());
