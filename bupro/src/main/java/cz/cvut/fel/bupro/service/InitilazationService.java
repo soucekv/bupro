@@ -60,6 +60,6 @@ public class InitilazationService {
 		log.info("Web application bootstrap Initilzation Service - initialize application");
 		initializeRoles();
 		initializeAdminAccount();
-		initDevelService.initDevelData();
+		//initDevelService.initDevelData();
 	}
 }
