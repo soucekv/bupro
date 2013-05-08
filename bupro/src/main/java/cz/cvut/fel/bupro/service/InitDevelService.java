@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import cz.cvut.fel.bupro.dao.CourseRepository;
 import cz.cvut.fel.bupro.dao.ProjectRepository;
 import cz.cvut.fel.bupro.dao.RoleRepository;
+import cz.cvut.fel.bupro.dao.TagGroupRepository;
 import cz.cvut.fel.bupro.dao.TagRepository;
 import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.Comment;
@@ -21,9 +22,11 @@ import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.Role;
 import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.Tag;
+import cz.cvut.fel.bupro.model.TagGroup;
 import cz.cvut.fel.bupro.model.User;
 import cz.cvut.fel.kos.KosClient;
 import cz.cvut.fel.kos.jaxb.Course;
+import cz.cvut.fel.kos.jaxb.Teacher;
 import cz.cvut.fel.reposapi.ServiceProvider;
 
 @Service
@@ -41,6 +44,8 @@ public class InitDevelService {
 	private CourseRepository courseRepository;
 	@Autowired
 	private TagRepository tagRepository;
+	@Autowired
+	private TagGroupRepository tagGroupRepository;
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	@Autowired
@@ -72,7 +77,7 @@ public class InitDevelService {
 		User user2 = new User();
 		user2.setFirstName("Venca");
 		user2.setLastName("Rohlik");
-		user2.setEmail("rohlik@exmple.com");
+		user2.setEmail("rohlik@example.com");
 		user2.setUsername("rohlik");
 		user2.setPassword(passwordEncoder.encode("devel"));
 		user2.getRoles().add(userRole);
@@ -94,6 +99,17 @@ public class InitDevelService {
 		user4.setUsername("srb");
 		user4.setPassword(passwordEncoder.encode("devel"));
 		userRepository.save(user4);
+
+		Teacher teacher = kos.getTeacher("tvrdik");
+		User user5 = new User();
+		user5.setTitlePre(teacher.getTitlesPre());
+		user5.setFirstName(teacher.getFirstName());
+		user5.setLastName(teacher.getLastName());
+		user5.setTitlePost(teacher.getTitlesPost());
+		user5.setEmail(teacher.getEmail());
+		user5.setUsername(teacher.getUsername());
+		user5.setPassword(passwordEncoder.encode("devel"));
+		userRepository.save(user5);
 
 		Course course = kos.getCourse("X36PMI");
 
@@ -156,11 +172,22 @@ public class InitDevelService {
 		p2.getMemberships().add(membership);
 
 		projectRepository.save(p2);
-		Tag t1 = new Tag("tag1");
-		tagRepository.save(Arrays.asList(new Tag("tag2"), new Tag("special"), new Tag("one two")));
 
-		p1.getTags().add(t1);
-		projectRepository.save(p1);
+		TagGroup tagGroup = new TagGroup("Software");
+		tagGroup.addAll(Arrays.asList(new Tag("Java"), new Tag("C++"), new Tag("Perl"), new Tag("Ruby"), new Tag("Scala")));
+		tagGroupRepository.save(tagGroup);
+
+		tagGroup = new TagGroup("Hardware");
+		tagGroup.addAll(Arrays.asList(new Tag("VLSI"), new Tag("gpu"), new Tag("cpu"), new Tag("mikrotic")));
+		tagGroupRepository.save(tagGroup);
+
+		Project project3 = new Project();
+		project3.setName("Paralelni algoritmus");
+		project3.setOwner(user5);
+		project3.setCourse(c1);
+		project3.setStartSemester(s1);
+		project3.setEndSemester(s2);
+		projectRepository.save(project3);
 
 		for (int i = 0; i < 25; i++) {
 			Project project = new Project();
