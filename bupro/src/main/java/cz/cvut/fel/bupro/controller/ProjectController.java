@@ -226,7 +226,7 @@ public class ProjectController {
 	@Transactional
 	public String approveMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId, HttpServletRequest request) {
-		Project project = projectService.getProject(projectId);
+		Project project = projectService.getProject(projectId, locale);
 		if (project.isCapacityFull()) {
 			log.error("Project " + project.getId() + " is at full capacity can not approve more members");
 			return viewPage(model, project);
@@ -256,7 +256,7 @@ public class ProjectController {
 		membership.setMembershipState(membershipState);
 		String baseLinkUrl = getContextRoot(request);
 		emailService.sendMembershipState(baseLinkUrl, membership.getProject(), membership.getUser(), membershipState);
-		return viewPage(model, membership.getProject());
+		return viewPage(model, projectService.localize(membership.getProject(), locale));
 	}
 
 	@RequestMapping("/project/log/{id}")

@@ -59,6 +59,11 @@ public class ProjectService {
 		semesterCode.setName(translator.localizedString(semester.getName()));
 	}
 
+	public Project localize(Project project, Locale locale) {
+		localize(project, new Translator(locale));
+		return project;
+	}
+
 	@Transactional
 	public List<Project> getAllProjects() {
 		log.info("get all projects");
