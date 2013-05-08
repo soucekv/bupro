@@ -48,7 +48,7 @@ public class InitilazationService {
 			user.setUsername("admin");
 			user.setFirstName("Admin");
 			user.setLastName("");
-			user.setPassword(passwordEncoder.encode("changeit"));
+			user.setPassword(passwordEncoder.encode("admin"));
 			user.setEmail("admin@bupro.org");
 			adminRole.grantTo(user);
 			userRepository.save(user);
