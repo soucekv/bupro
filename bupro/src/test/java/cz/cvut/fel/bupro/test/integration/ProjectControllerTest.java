@@ -6,6 +6,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -34,6 +36,7 @@ import cz.cvut.fel.bupro.model.MembershipState;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.ProjectCourse;
 import cz.cvut.fel.bupro.model.User;
+import cz.cvut.fel.bupro.security.SecurityService;
 import cz.cvut.fel.bupro.test.configuration.AbstractControllerTest;
 import cz.cvut.fel.kos.KosSemesterCode;
 import cz.cvut.fel.kos.Period;
@@ -42,18 +45,15 @@ import cz.cvut.fel.kos.Period;
 public class ProjectControllerTest extends AbstractControllerTest {
 	@Autowired
 	private WebApplicationContext webApplicationContext;
-
 	private MockMvc mockMvc;
-
 	@Autowired
 	private ProjectRepository projectRepository;
-
+	@Autowired
+	private SecurityService securityService;
 	@Autowired
 	private UserRepository userRepository;
-
 	@Autowired
 	private RequestMappingHandlerAdapter handlerAdapter;
-
 	@Autowired
 	private RequestMappingHandlerMapping handlerMapping;
 
@@ -202,7 +202,8 @@ public class ProjectControllerTest extends AbstractControllerTest {
 			.andExpect(model().attributeExists("project"))
 			.andExpect(model().attribute("project", project))
 			.andExpect(view().name("project-view"))
-			.andExpect(content().string(new Contains(project.getName())));
+			.andExpect(content().string(new Contains(project.getName())))
+			.andExpect(content().string(new Contains("approved")));
 	}
 
 	@Test
@@ -216,19 +217,31 @@ public class ProjectControllerTest extends AbstractControllerTest {
 			.andExpect(model().attributeExists("project"))
 			.andExpect(model().attribute("project", project))
 			.andExpect(view().name("project-view"))
-			.andExpect(content().string(new Contains(project.getName())));
+			.andExpect(content().string(new Contains(project.getName())))
+			.andExpect(content().string(new Contains("declined")));
+	}
+
+	private Project getNotOwnedProjectInstnace() {
+		List<Project> projects = projectRepository.findAll();
+		for (Project project : projects) {
+			if (!project.getOwner().equals(securityService.getCurrentUser())) {
+				return project;
+			}
+		}
+		throw new IllegalStateException("Proect of other user not found!");
 	}
 
 	@Test
 	@Transactional
 	public void testJoinProject() throws Exception {
-		Project project = getProjectInstnace();
+		Project project = getNotOwnedProjectInstnace();
 		mockMvc.perform(get("/project/join/" + project.getId()))
 			.andExpect(status().isOk())
 			.andExpect(model().attributeExists("project"))
 			.andExpect(model().attribute("project", project))
 			.andExpect(view().name("project-view"))
-			.andExpect(content().string(new Contains(project.getName())));
+			.andExpect(content().string(new Contains(project.getName())))
+			.andExpect(content().string(new Contains(securityService.getCurrentUser().getFullName())));
 	}
 
 }
