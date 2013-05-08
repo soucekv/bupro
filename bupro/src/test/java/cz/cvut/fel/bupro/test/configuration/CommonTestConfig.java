@@ -38,6 +38,8 @@ public class CommonTestConfig {
 		user.setId(3L);
 		user.setUsername("test");
 		user.setEmail("test@email");
+		user.setFirstName("Test");
+		user.setLastName("Test");
 		Mockito.stub(securityService.getCurrentUser()).toReturn(user);
 		return securityService;
 	}
