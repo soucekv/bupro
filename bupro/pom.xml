@@ -29,11 +29,6 @@
 		    <name>CVUT Repository Local</name>
 		    <url>http://repository.fit.cvut.cz/maven/local-repos/</url>
 		</repository>
-		<repository>
-		  <id>oauth</id>
-		  <name>OAuth Repository</name>
-		  <url>http://oauth.googlecode.com/svn/code/maven</url>
-		</repository>
 	</repositories>
 
 	<dependencies>
@@ -302,7 +297,12 @@
 			<version>2.2.9</version>
 			<scope>test</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>2.32.0</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>
