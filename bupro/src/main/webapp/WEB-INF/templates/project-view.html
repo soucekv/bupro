@@ -16,7 +16,7 @@
 		<tr th:include="commons :: label" th:with="label=#{creation.time},value=*{#dates.format(creationTime,'yyyy-MM-dd')}"></tr>
 		<tr th:include="commons :: label" th:with="label=#{project.start},value=*{startSemester.name}"></tr>
 		<tr th:include="commons :: label" th:with="label=#{project.end},value=*{endSemester.name}"></tr>
-		<tr th:include="commons :: label" th:with="label=#{project.end},value=#{project.capacity(*{approvedCount}, *{waitingApprovalCount}, *{capacity})}"></tr>
+		<tr th:include="commons :: label" th:with="label=#{project.capacity.label},value=#{project.capacity(*{approvedCount}, *{waitingApprovalCount}, *{capacity})}"></tr>
 	</table>
 	<h3 th:text="#{project.description}">description:</h3>
 	<div>
