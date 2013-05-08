@@ -5,7 +5,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
-import cz.cvut.fel.bupro.model.Email;
 import cz.cvut.fel.bupro.service.EmailService;
 
 @Primary

@@ -11,9 +11,9 @@ import cz.cvut.fel.bupro.security.SecurityService;
 import cz.cvut.fel.bupro.security.SpringSecurityService;
 
 @Configuration
-@Import({TestJpaConfig.class})
+@Import({JpaTestConfig.class})
 @ComponentScan({ "cz.cvut.fel.bupro.controller", "cz.cvut.fel.bupro.service", "cz.cvut.fel.bupro.test.mock" })
-public class CommonTestConfig {
+public class IntegrationTestConfig {
 
 	@Bean
 	public SecurityService securityService() {

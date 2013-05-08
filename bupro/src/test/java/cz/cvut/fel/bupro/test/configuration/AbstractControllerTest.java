@@ -10,7 +10,7 @@ import cz.cvut.fel.bupro.config.ReposapiConfig;
 import cz.cvut.fel.bupro.config.SecurityConfig;
 
 @WebAppConfiguration
-@ContextConfiguration(classes = {CommonTestConfig.class, ContextConfig.class, MvcConfig.class, KosConfig.class, SecurityConfig.class, ReposapiConfig.class})
+@ContextConfiguration(classes = {IntegrationTestConfig.class, ContextConfig.class, MvcConfig.class, KosConfig.class, SecurityConfig.class, ReposapiConfig.class})
 public class AbstractControllerTest {
 
 }

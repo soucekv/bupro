@@ -15,10 +15,10 @@ import cz.cvut.fel.bupro.dao.UserRepository;
 import cz.cvut.fel.bupro.model.Project;
 import cz.cvut.fel.bupro.model.SemesterCode;
 import cz.cvut.fel.bupro.model.User;
-import cz.cvut.fel.bupro.test.configuration.TestJpaConfig;
+import cz.cvut.fel.bupro.test.configuration.JpaTestConfig;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {TestJpaConfig.class})
+@ContextConfiguration(classes = {JpaTestConfig.class})
 public class ProjectTest {
 
 	@Autowired
