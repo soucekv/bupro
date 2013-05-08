@@ -24,7 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories
+@EnableJpaRepositories(basePackages = "cz.cvut.fel.bupro.dao")
 @EnableTransactionManagement
 @PropertySource({ "classpath:cfg/persistence.properties" })
 public class JpaConfig {
