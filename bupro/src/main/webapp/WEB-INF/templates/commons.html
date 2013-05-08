@@ -2,11 +2,20 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-	<title>Autocomplete</title>
+	<title>Commons</title>
 </head>
 <body>
-	<div th:fragment="label">
-		<span class="label" th:text="${label}"></span>&nbsp;<span class="value" th:text="${value}"></span>
-	</div>
+	<table>
+		<tr th:fragment="label">
+			<td><span class="label" th:text="${label}">Label:</span></td>
+			<td><span class="value" th:text="${value}">Value</span></td>
+		</tr>
+	</table>
+	<table>
+		<tr th:fragment="labelLink">
+			<td><span class="label" th:text="${label}">Label:</span></td>
+			<td><a class="value"  th:href="${url}" th:text="${value}">Value</a></td>
+		</tr>
+	</table>
 </body>
 </html>
