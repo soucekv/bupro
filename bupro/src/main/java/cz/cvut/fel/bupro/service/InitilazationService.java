@@ -58,8 +58,12 @@ public class InitilazationService {
 	@PostConstruct
 	public void initializeApplication() {
 		log.info("Web application bootstrap Initilzation Service - initialize application");
-		initializeRoles();
-		initializeAdminAccount();
+		try {
+			initializeRoles();
+			initializeAdminAccount();
+		} catch (Exception exception) {
+			log.error(exception);
+		}
 		//initDevelService.initDevelData();
 	}
 }
