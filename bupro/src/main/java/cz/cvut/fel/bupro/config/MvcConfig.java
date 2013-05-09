@@ -38,9 +38,9 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 
 	@Override
 	protected void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/css/**").addResourceLocations("classpath:/WEB-INF/resources/css/");
-		registry.addResourceHandler("/js/**").addResourceLocations("classpath:/WEB-INF/resources/js/");
-		registry.addResourceHandler("/images/**").addResourceLocations("classpath:/WEB-INF/resources/images/");
+		registry.addResourceHandler("/css/**").addResourceLocations("/css/", "classpath:/WEB-INF/resources/css/");
+		registry.addResourceHandler("/js/**").addResourceLocations("/js/","classpath:/WEB-INF/resources/js/");
+		registry.addResourceHandler("/images/**").addResourceLocations("/images/","classpath:/WEB-INF/resources/images/");
 	}
 
 	@Override
