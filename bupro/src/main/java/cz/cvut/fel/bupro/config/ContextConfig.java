@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +17,7 @@ import org.springframework.core.io.support.PropertiesLoaderUtils;
 
 @Configuration
 public class ContextConfig {
+	private final Log log = LogFactory.getLog(getClass());
 
 	@Autowired
 	@Qualifier("application.properties")
@@ -33,7 +36,20 @@ public class ContextConfig {
 		Properties mail = new Properties();
 		for (Map.Entry<Object, Object> e : properties.entrySet()) {
 			if (String.valueOf(e.getKey()).startsWith("mail")) {
-				mail.put(e.getKey(), e.getValue());
+				String value = String.valueOf(e.getValue());
+				if (value.startsWith(":")) {
+					String env = System.getenv(value.substring(1));
+					if (env == null) {
+						env = "";
+						log.error("Application property '" + e.getKey() + "' not found using environment key '" + value.substring(1) + "'");
+					}
+					mail.put(e.getKey(), env);
+				} else {
+					if (value == null || value.trim().isEmpty()) {
+						log.warn("Application property '" + e.getKey() + " has empty value");
+					}
+					mail.put(e.getKey(), e.getValue());
+				}
 			}
 		}
 		return mail;
