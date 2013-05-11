@@ -19,10 +19,7 @@
 			<span sec:authentication="name">Username</span>
 			<a class="button" href="login.html" th:href="@{/j_spring_security_logout}">Logout</a>
 			<a class="button" href="http://localhost:8080/" th:href="@{'/user/view/'+${#authentication.name}}" th:text="#{user.profile}">my profile</a>
-			<div style="float:right;">
-				<a class="button" href="login.html" th:href="@{/project/list(lang='cs')}">Česky</a>
-				<a class="button" href="login.html" th:href="@{/project/list(lang='en')}">English</a>
-			</div>
+			<div th:include="commons :: lang" style="float:right;"></div>
 		</div>
 		<div class="menu">
 			<a class="button" href="http://localhost:8080/" th:href="@{/course/list/}" th:text="#{course.list}">Subjects</a>

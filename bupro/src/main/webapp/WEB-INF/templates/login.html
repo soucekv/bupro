@@ -4,10 +4,7 @@
 <title th:text="#{login.title}">Bupro - login</title>
 </head>
 <body>
-	<div style="float:right;">
-		<a class="button" href="login.html" th:href="@{/login(lang='cs')}">Česky</a>
-		<a class="button" href="login.html" th:href="@{/login(lang='en')}">English</a>
-	</div>
+	<div th:include="commons :: lang" style="float:right;"></div>
 	<h1 th:text="#{login.title}" >Login page</h1>
 	<p th:if="${loginError}"><span th:text="#{login.error}">Wrong user or password</span></p>
 	<form th:action="@{/j_spring_security_check}" method="post">

@@ -5,6 +5,10 @@
 	<title>Commons</title>
 </head>
 <body>
+	<div th:fragment="lang">
+		<a class="button" href="login.html" th:href="@{/project/list(lang='cs')}" th:text="#{cs}">Česky</a>
+		<a class="button" href="login.html" th:href="@{/project/list(lang='en')}" th:text="#{en}">English</a>
+	</div>
 	<table>
 		<tr th:fragment="label">
 			<td><span class="label" th:text="${label}">Label:</span></td>
