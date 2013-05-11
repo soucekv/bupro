@@ -1,7 +1,7 @@
 cd ../kos-client/
-mvn install
+mvn clean install
 cd ../reposapi/
-mvn install
+mvn clean install
 cd ../bupro/
-mvn install -Dmaven.test.skip=true
+mvn clean install -Dmaven.test.skip=true
 cd ../scripts/
