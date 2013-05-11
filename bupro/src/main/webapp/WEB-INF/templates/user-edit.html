@@ -1,0 +1,44 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-spring3-3.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head th:include="header :: head">
+	<title th:text="#{user.edit}">User change password</title>
+</head>
+<body>
+	<div th:include="header :: menu"></div>
+	<h1 th:text="#{user.edit}">User change password</h1>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<a th:href="@{/user/resetpwd(user=${user.id})}" th:text="#{user.reset.password}" >Reset password</a>
+	</div>
+	<form th:action="@{/user/change}" th:object="${changePassword}" method="post" accept-charset="UTF-8">
+		<input type="hidden" th:field="*{id}" />
+		<table>
+		<tbody>
+			<tr>
+				<td><label th:for="${'oldPassword'}" th:text="#{user.change.password.old}" >Old password:</label></td>
+				<td>
+					<input type="password" th:field="*{oldPassword}" th:class="${#fields.hasErrors('oldPassword')}? 'field-error'" />
+					<span th:if="${#fields.hasErrors('oldPassword')}" th:errors="*{oldPassword}" class="field-error" >Wrong password</span>
+				</td>
+			</tr>
+			<tr>
+				<td><label th:for="${'newPassword'}" th:text="#{user.change.password.new}" >New password:</label></td>
+				<td>
+					<input type="password" th:field="*{newPassword}" th:class="${#fields.hasErrors('newPassword')}? 'field-error'" />
+					<span th:if="${#fields.hasErrors('newPassword')}" th:errors="*{newPassword}" class="field-error" >Wrong password</span>
+				</td>
+			</tr>
+			<tr>
+				<td><label th:for="${'reNewPassword'}" th:text="#{user.change.password.new.re}" >Repeat new password:</label></td>
+				<td>
+					<input type="password" th:field="*{reNewPassword}" th:class="${#fields.hasErrors('reNewPassword')}? 'field-error'" />
+					<span th:if="${#fields.hasErrors('reNewPassword')}" th:errors="*{reNewPassword}" class="field-error" >Wrong password</span>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2"><input type="submit" th:value="#{save}" /></td>
+			</tr>
+		</tbody>
+		</table>
+	</form>
+</body>
+</html>

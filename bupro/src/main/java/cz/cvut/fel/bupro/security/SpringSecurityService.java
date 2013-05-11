@@ -59,4 +59,15 @@ public class SpringSecurityService implements SecurityService {
 		return userService.createNewUserAccount(user.getUsername(), locale);
 	}
 
+	public void changePassword(User user, String password) {
+		userService.changePassword(user, password);
+	}
+
+	public void resetPassword(User user, Locale locale) {
+		userService.resetPassword(user, locale);
+	}
+
+	public boolean checkPassword(User user, String password) {
+		return userService.checkPassword(user, password);
+	}
 }

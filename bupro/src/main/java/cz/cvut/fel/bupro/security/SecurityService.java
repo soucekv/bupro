@@ -12,4 +12,10 @@ public interface SecurityService {
 	User getCurrentUser();
 
 	User createUser(User user, Locale locale);
+
+	void changePassword(User user, String password);
+
+	void resetPassword(User user, Locale locale);
+
+	boolean checkPassword(User user, String password);
 }

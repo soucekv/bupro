@@ -60,10 +60,10 @@ public class InitilazationService {
 		log.info("Web application bootstrap Initilzation Service - initialize application");
 		try {
 			initializeRoles();
+			//initDevelService.initDevelData();
 			initializeAdminAccount();
 		} catch (Exception exception) {
 			log.error(exception);
 		}
-		//initDevelService.initDevelData();
 	}
 }

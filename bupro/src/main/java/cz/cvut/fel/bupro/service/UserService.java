@@ -105,6 +105,20 @@ public class UserService {
 		return user;
 	}
 
+	public boolean checkPassword(User user, String password) {
+		return passwordEncoder.matches(password, user.getPassword());
+	}
+
+	public void changePassword(User user, String password) {
+		user.setPassword(passwordEncoder.encode(password));
+	}
+
+	public void resetPassword(User user, Locale locale) {
+		String password = passwordGenerator.generate(8);
+		changePassword(user, password);
+		emailService.sendRegistrationEmail(user, password, locale);
+	}
+
 	@Transactional
 	public List<User> getAllUsers() {
 		log.info("get all users");

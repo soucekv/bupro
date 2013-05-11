@@ -6,7 +6,11 @@
 <body>
 	<div th:include="header :: menu"></div>
 	<h1 th:text="${user.fullName}">User name</h1>
+	<div sec:authorize="hasRole('ROLE_ADMIN')">
+		<a class="button" th:href="@{'/user/edit/'+${user.id}}" th:text="#{user.change.password}">Change password</a>
+	</div>
 	<div th:if="${profile}" >
+		<a class="button" th:href="@{'/user/edit/'+${user.id}}" th:text="#{user.change.password}">Change password</a>
 		<form th:action="@{/user/save}" th:object="${user}" method="post" accept-charset="UTF-8">
 			<input type="hidden" th:field="*{id}" />
 			<div>
