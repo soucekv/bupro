@@ -97,7 +97,7 @@ public class Tag extends BaseEntity implements Serializable {
 	public static void sortByRanking(List<Tag> tags) {
 		Collections.sort(tags, Collections.reverseOrder(new Comparator<Tag>() {
 			public int compare(Tag t1, Tag t2) {
-				return Integer.compare(t1.getRanking(), t2.getRanking());
+				return Integer.valueOf(t1.getRanking()).compareTo(Integer.valueOf(t2.getRanking()));
 			}
 		}));
 	}
