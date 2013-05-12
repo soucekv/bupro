@@ -38,10 +38,12 @@ public class ContextConfig {
 			if (String.valueOf(e.getKey()).startsWith("mail")) {
 				String value = String.valueOf(e.getValue());
 				if (value.startsWith(":")) {
-					String env = System.getenv(value.substring(1));
+					value = value.substring(1);
+					log.info("Application property '" + e.getKey() + "' value is configured as env variable '" + value + "'");
+					String env = System.getenv(value);
 					if (env == null) {
 						env = "";
-						log.error("Application property '" + e.getKey() + "' not found using environment key '" + value.substring(1) + "'");
+						log.error("Application property '" + e.getKey() + "' not found using environment key '" + value + "'");
 					}
 					mail.put(e.getKey(), env);
 				} else {
