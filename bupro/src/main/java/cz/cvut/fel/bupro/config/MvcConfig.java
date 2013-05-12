@@ -97,7 +97,7 @@ public class MvcConfig extends WebMvcConfigurationSupport {
 	public SpringTemplateEngine templateEngine() {
 		SpringTemplateEngine templateEngine = new SpringTemplateEngine();
 		templateEngine.setTemplateResolver(templateResolver());
-		templateEngine.setCacheManager(null); // FIXME devel prevent caching
+		//templateEngine.setCacheManager(null); // FIXME devel prevent caching
 		templateEngine.addDialect(new SpringSecurityDialect());
 		return templateEngine;
 	}
