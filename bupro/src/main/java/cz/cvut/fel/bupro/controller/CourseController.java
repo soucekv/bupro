@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -41,6 +42,7 @@ public class CourseController {
 	}
 
 	@RequestMapping({ "/course/edit/{id}" })
+	@Secured({"ROLE_ADMIN"})
 	@Transactional
 	public String edit(Model model, Locale locale, @PathVariable Long id) {
 		ProjectCourse projectCourse = courseService.getProjectCourse(id);
@@ -49,6 +51,7 @@ public class CourseController {
 	}
 
 	@RequestMapping({ "/course/create" })
+	@Secured({"ROLE_ADMIN"})
 	@Transactional
 	public String create(Model model, Locale locale) {
 		log.trace("SubjectController.createProject()");
@@ -57,6 +60,7 @@ public class CourseController {
 	}
 
 	@RequestMapping({ "/course/save" })
+	@Secured({"ROLE_ADMIN"})
 	@Transactional
 	public String save(@Valid ProjectCourse projectCourse, BindingResult bindingResult, Model model) {
 		if (bindingResult.hasErrors()) {

@@ -29,6 +29,10 @@
 		<sec:intercept-url pattern="/logout" access="ROLE_ANONYMOUS,ROLE_STUDENT,ROLE_TEACHER,ROLE_ADMIN" />
 		<sec:intercept-url pattern="/project/create" access="ROLE_TEACHER" />
 		<sec:intercept-url pattern="/project/edit" access="ROLE_TEACHER" />
+		<sec:intercept-url pattern="/project/save" access="ROLE_TEACHER" />
+		<sec:intercept-url pattern="/project/membership/*" access="ROLE_TEACHER" />
+		<sec:intercept-url pattern="/course/edit" access="ROLE_ADMIN" />
+		<sec:intercept-url pattern="/course/create" access="ROLE_ADMIN" />
 		<sec:intercept-url pattern="/**" access="ROLE_STUDENT,ROLE_TEACHER,ROLE_ADMIN" />
 	</sec:http>
 

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefaults;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -138,6 +139,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "/project/edit/{id}" })
+	@Secured({"ROLE_TEACHER"})
 	@Transactional
 	public String editProjectDetail(Model model, Locale locale, @PathVariable Long id) {
 		log.trace("ProjectManagementController.editProjectDetail()");
@@ -148,6 +150,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "/project/create" })
+	@Secured({"ROLE_TEACHER"})
 	@Transactional
 	public String createProject(Model model, Locale locale) {
 		log.trace("ProjectManagementController.createProject()");
@@ -159,6 +162,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "/project/save" })
+	@Secured({"ROLE_TEACHER"})
 	@Transactional
 	public String saveProject(@Valid Project project, BindingResult bindingResult, Model model, Locale locale) {
 		User user = securityService.getCurrentUser();
@@ -223,6 +227,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "/project/membership/approve" })
+	@Secured({"ROLE_TEACHER"})
 	@Transactional
 	public String approveMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId, HttpServletRequest request) {
@@ -248,6 +253,7 @@ public class ProjectController {
 	}
 
 	@RequestMapping({ "/project/membership/decline" })
+	@Secured({"ROLE_TEACHER"})
 	@Transactional
 	public String declineMember(Model model, Locale locale, @RequestParam(value = "projectId", required = true) Long projectId,
 			@RequestParam(value = "userId", required = true) Long userId, HttpServletRequest request) {
