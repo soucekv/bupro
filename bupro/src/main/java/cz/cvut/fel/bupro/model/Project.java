@@ -24,8 +24,10 @@ import javax.persistence.Transient;
 import javax.validation.constraints.Min;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.util.StringUtils;
 
 import cz.cvut.fel.bupro.TimeUtils;
+import cz.cvut.fel.reposapi.ServiceProvider;
 
 @Entity
 public class Project extends CommentableEntity implements Serializable {
@@ -229,6 +231,10 @@ public class Project extends CommentableEntity implements Serializable {
 	@Override
 	public String toString() {
 		return getClass().getName() + " [id=" + getId() + ", name=" + name + ", owner=" + owner + ", tags=" + getTags() + "]";
+	}
+
+	public boolean hasRepository() {
+		return getRepository().getRepositoryProvider() != null;
 	}
 
 }

@@ -3,6 +3,7 @@ package cz.cvut.fel.bupro.controller;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -46,8 +47,10 @@ import cz.cvut.fel.bupro.service.SemesterService;
 import cz.cvut.fel.bupro.service.TagService;
 import cz.cvut.fel.bupro.service.UserService;
 import cz.cvut.fel.kos.Translator;
+import cz.cvut.fel.reposapi.Commit;
 import cz.cvut.fel.reposapi.Issue;
 import cz.cvut.fel.reposapi.IssueState;
+import cz.cvut.fel.reposapi.Repository;
 import cz.cvut.fel.reposapi.ServiceProvider;
 
 @Controller
@@ -269,18 +272,28 @@ public class ProjectController {
 	@Transactional
 	public String projectLog(Model model, Locale locale, @PathVariable Long id) {
 		Project project = projectService.getProject(id, locale);
-		Collection<Issue> openedIssues = codeRepositoryService.getIssues(project, IssueState.OPEN);
-		Collection<Issue> closedIssues = codeRepositoryService.getIssues(project, IssueState.CLOSED);
+		Repository repository = null;
+		List<Issue> openedIssues = null;
+		List<Issue> closedIssues = null;
+		List<Commit> commits = Collections.emptyList();
+		List<Issue> updatedIssues = Collections.emptyList();
+		if (project.hasRepository()) {
+			openedIssues = codeRepositoryService.getIssues(project, IssueState.OPEN);
+			closedIssues = codeRepositoryService.getIssues(project, IssueState.CLOSED);
+			repository = codeRepositoryService.getRepository(project);
+			commits = codeRepositoryService.getCommits(project, LOG_LIMIT);
+			updatedIssues = codeRepositoryService.getUpdatedIssues(project, LOG_LIMIT);
+		}
 		String open = (openedIssues == null) ? "?" : String.valueOf(openedIssues.size());
 		String closed = (closedIssues == null) ? "?" : String.valueOf(closedIssues.size());
 		String total = (openedIssues == null || closedIssues == null) ? "?" : String.valueOf(openedIssues.size() + closedIssues.size());
 		model.addAttribute("project", project);
-		model.addAttribute("repository", codeRepositoryService.getRepository(project));
-		model.addAttribute("commits", codeRepositoryService.getCommits(project, LOG_LIMIT));
+		model.addAttribute("repository", repository);
+		model.addAttribute("commits", commits);
 		model.addAttribute("open", open);
 		model.addAttribute("closed", closed);
 		model.addAttribute("total", total);
-		model.addAttribute("issues", codeRepositoryService.getUpdatedIssues(project, LOG_LIMIT));
+		model.addAttribute("issues", updatedIssues);
 		return "project-log";
 	}
 
